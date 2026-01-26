@@ -1,12 +1,11 @@
 'use client'
 
-import type { PayloadAdminBarProps, PayloadMeUser } from '@payloadcms/admin-bar'
+import type { PayloadMeUser } from '@payloadcms/admin-bar'
 
 import { cn } from '@/utilities/ui'
-import { useSelectedLayoutSegments } from 'next/navigation'
-import { PayloadAdminBar } from '@payloadcms/admin-bar'
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 import './index.scss'
 
@@ -14,75 +13,82 @@ import { getClientSideURL } from '@/utilities/getURL'
 
 const baseClass = 'admin-bar'
 
-const collectionLabels = {
-  pages: {
-    plural: 'Pages',
-    singular: 'Page',
-  },
-  posts: {
-    plural: 'Posts',
-    singular: 'Post',
-  },
-  projects: {
-    plural: 'Projects',
-    singular: 'Project',
-  },
-}
-
-const Title: React.FC = () => <span>Dashboard</span>
-
-export const AdminBar: React.FC<{
-  adminBarProps?: PayloadAdminBarProps
-}> = (props) => {
-  const { adminBarProps } = props || {}
-  const segments = useSelectedLayoutSegments()
+export const AdminBar: React.FC = () => {
   const [show, setShow] = useState(false)
-  const collection = (
-    collectionLabels[segments?.[1] as keyof typeof collectionLabels] ? segments[1] : 'pages'
-  ) as keyof typeof collectionLabels
+  const [user, setUser] = useState<PayloadMeUser | null>(null)
   const router = useRouter()
 
-  const onAuthChange = React.useCallback((user: PayloadMeUser) => {
-    setShow(Boolean(user?.id))
+  // Check user on mount
+  React.useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const res = await fetch(`${getClientSideURL()}/api/users/me`, {
+          credentials: 'include',
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data?.user?.id) {
+            setUser(data.user)
+            setShow(true)
+          } else {
+            setShow(false)
+          }
+        }
+      } catch {
+        setShow(false)
+      }
+    }
+    checkUser()
   }, [])
+
+  const handleLogout = useCallback(async () => {
+    try {
+      await fetch(`${getClientSideURL()}/api/users/logout`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      setUser(null)
+      setShow(false)
+      router.refresh()
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }, [router])
+
+  if (!show) return null
 
   return (
     <div
-      className={cn(baseClass, 'py-2 bg-black text-white', {
-        block: show,
-        hidden: !show,
-      })}
+      className={cn(baseClass, 'fixed top-0 left-0 right-0 py-2 bg-black text-white z-50')}
     >
-      <div className="container">
-        <PayloadAdminBar
-          {...adminBarProps}
-          className="py-2 text-white"
-          classNames={{
-            controls: 'font-medium text-white',
-            logo: 'text-white',
-            user: 'text-white',
-          }}
-          cmsURL={getClientSideURL()}
-          collectionSlug={collection}
-          collectionLabels={{
-            plural: collectionLabels[collection]?.plural || 'Pages',
-            singular: collectionLabels[collection]?.singular || 'Page',
-          }}
-          logo={<Title />}
-          onAuthChange={onAuthChange}
-          onPreviewExit={() => {
-            fetch('/next/exit-preview').then(() => {
-              router.push('/')
-              router.refresh()
-            })
-          }}
-          style={{
-            backgroundColor: 'transparent',
-            padding: 0,
-            position: 'relative',
-            zIndex: 'unset',
-          }}
-        />
+      <div className="container mx-auto flex justify-between items-center px-4">
+        {/* Left side: Logo + Dashboard */}
+        <div className="flex items-center gap-4">
+          <Link href="/admin" className="text-white hover:text-gray-300 transition-colors">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+            </svg>
+          </Link>
+          <Link 
+            href="/admin" 
+            className="text-sm font-medium text-white hover:text-gray-300 transition-colors"
+          >
+            Dashboard
+          </Link>
+          {user?.email && (
+            <span className="text-sm text-gray-400">{user.email}</span>
+          )}
+        </div>
+
+        {/* Right side: Logout only */}
+        <div className="flex items-center gap-4">
+          <button
+            onClick={handleLogout}
+            className="text-sm text-white hover:text-gray-300 transition-colors"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </div>
   )

@@ -7,6 +7,18 @@ import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+// Hotel blocks
+import { HeroBlock } from '../../blocks/HeroBlock/config'
+import { RoomsGridBlock } from '../../blocks/RoomsGridBlock/config'
+import { ServicesBlock } from '../../blocks/ServicesBlock/config'
+import { OffersBlock } from '../../blocks/OffersBlock/config'
+import { GalleryBlock } from '../../blocks/GalleryBlock/config'
+import { LocationBlock } from '../../blocks/LocationBlock/config'
+import { DescriptionBlock } from '../../blocks/DescriptionBlock/config'
+import { MomentBlock } from '../../blocks/MomentBlock/config'
+import { OurServicesBlock } from '../../blocks/OurServicesBlock/config'
+import { LocalLifeBlock } from '../../blocks/LocalLifeBlock/config'
+import { ContentImageBlock } from '../../blocks/ContentImageBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +84,26 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [
+                // Default blocks
+                CallToAction, 
+                Content, 
+                MediaBlock, 
+                Archive, 
+                FormBlock,
+                // Hotel blocks
+                HeroBlock,
+                DescriptionBlock,
+                RoomsGridBlock,
+                ServicesBlock,
+                OffersBlock,
+                GalleryBlock,
+                LocationBlock,
+                MomentBlock,
+                OurServicesBlock,
+                LocalLifeBlock,
+                ContentImageBlock,
+              ],
               required: true,
               admin: {
                 initCollapsed: true,

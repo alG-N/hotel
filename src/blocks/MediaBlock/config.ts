@@ -1,4 +1,6 @@
 import type { Block } from 'payload'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 export const MediaBlock: Block = {
   slug: 'mediaBlock',
@@ -10,5 +12,9 @@ export const MediaBlock: Block = {
       relationTo: 'media',
       required: true,
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
 }

@@ -106,16 +106,18 @@ export interface Config {
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
   };
   db: {
-    defaultIDType: string;
+    defaultIDType: number;
   };
   fallbackLocale: null;
   globals: {
     header: Header;
     footer: Footer;
+    'theme-settings': ThemeSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'theme-settings': ThemeSettingsSelect<false> | ThemeSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -155,7 +157,7 @@ export interface UserAuthOperations {
  * via the `definition` "pages".
  */
 export interface Page {
-  id: string;
+  id: number;
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
@@ -182,11 +184,11 @@ export interface Page {
             reference?:
               | ({
                   relationTo: 'pages';
-                  value: string | Page;
+                  value: number | Page;
                 } | null)
               | ({
                   relationTo: 'posts';
-                  value: string | Post;
+                  value: number | Post;
                 } | null);
             url?: string | null;
             label: string;
@@ -198,15 +200,32 @@ export interface Page {
           id?: string | null;
         }[]
       | null;
-    media?: (string | null) | Media;
+    media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | HeroBlockType
+    | DescriptionBlockType
+    | RoomsGridBlockType
+    | ServicesBlockType
+    | OffersBlockType
+    | GalleryBlockType
+    | LocationBlockType
+    | MomentBlock
+    | OurServicesBlock
+    | LocalLifeBlock
+    | ContentImageBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
@@ -224,9 +243,9 @@ export interface Page {
  * via the `definition` "posts".
  */
 export interface Post {
-  id: string;
+  id: number;
   title: string;
-  heroImage?: (string | null) | Media;
+  heroImage?: (number | null) | Media;
   content: {
     root: {
       type: string;
@@ -242,18 +261,18 @@ export interface Post {
     };
     [k: string]: unknown;
   };
-  relatedPosts?: (string | Post)[] | null;
-  categories?: (string | Category)[] | null;
+  relatedPosts?: (number | Post)[] | null;
+  categories?: (number | Category)[] | null;
   meta?: {
     title?: string | null;
     /**
      * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
      */
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
     description?: string | null;
   };
   publishedAt?: string | null;
-  authors?: (string | User)[] | null;
+  authors?: (number | User)[] | null;
   populatedAuthors?:
     | {
         id?: string | null;
@@ -274,7 +293,7 @@ export interface Post {
  * via the `definition` "media".
  */
 export interface Media {
-  id: string;
+  id: number;
   alt?: string | null;
   caption?: {
     root: {
@@ -291,7 +310,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -367,18 +386,18 @@ export interface Media {
  * via the `definition` "payload-folders".
  */
 export interface FolderInterface {
-  id: string;
+  id: number;
   name: string;
-  folder?: (string | null) | FolderInterface;
+  folder?: (number | null) | FolderInterface;
   documentsAndFolders?: {
     docs?: (
       | {
           relationTo?: 'payload-folders';
-          value: string | FolderInterface;
+          value: number | FolderInterface;
         }
       | {
           relationTo?: 'media';
-          value: string | Media;
+          value: number | Media;
         }
     )[];
     hasNextPage?: boolean;
@@ -393,17 +412,17 @@ export interface FolderInterface {
  * via the `definition` "categories".
  */
 export interface Category {
-  id: string;
+  id: number;
   title: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (string | null) | Category;
+  parent?: (number | null) | Category;
   breadcrumbs?:
     | {
-        doc?: (string | null) | Category;
+        doc?: (number | null) | Category;
         url?: string | null;
         label?: string | null;
         id?: string | null;
@@ -417,7 +436,7 @@ export interface Category {
  * via the `definition` "users".
  */
 export interface User {
-  id: string;
+  id: number;
   name?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -465,11 +484,11 @@ export interface CallToActionBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -481,6 +500,85 @@ export interface CallToActionBlock {
         id?: string | null;
       }[]
     | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'cta';
@@ -515,11 +613,11 @@ export interface ContentBlock {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -531,6 +629,85 @@ export interface ContentBlock {
         id?: string | null;
       }[]
     | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'content';
@@ -540,7 +717,86 @@ export interface ContentBlock {
  * via the `definition` "MediaBlock".
  */
 export interface MediaBlock {
-  media: string | Media;
+  media: number | Media;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'mediaBlock';
@@ -567,14 +823,93 @@ export interface ArchiveBlock {
   } | null;
   populateBy?: ('collection' | 'selection') | null;
   relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
+  categories?: (number | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       }[]
     | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'archive';
@@ -584,7 +919,7 @@ export interface ArchiveBlock {
  * via the `definition` "FormBlock".
  */
 export interface FormBlock {
-  form: string | Form;
+  form: number | Form;
   enableIntro?: boolean | null;
   introContent?: {
     root: {
@@ -601,6 +936,85 @@ export interface FormBlock {
     };
     [k: string]: unknown;
   } | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'formBlock';
@@ -610,7 +1024,7 @@ export interface FormBlock {
  * via the `definition` "forms".
  */
 export interface Form {
-  id: string;
+  id: number;
   title: string;
   fields?:
     | (
@@ -781,10 +1195,1226 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlockType".
+ */
+export interface HeroBlockType {
+  name: string;
+  tagline?: string | null;
+  /**
+   * Thêm nhiều ảnh để bật slideshow
+   */
+  heroImage?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  /**
+   * Chiều cao của hero section
+   */
+  height?: ('full' | 'large' | 'medium' | 'small') | null;
+  /**
+   * Căn chỉnh nội dung theo chiều ngang
+   */
+  textPosition?: ('left' | 'center' | 'right') | null;
+  /**
+   * Căn chỉnh nội dung theo chiều dọc
+   */
+  verticalAlign?: ('top' | 'center' | 'bottom') | null;
+  /**
+   * Độ tối của lớp phủ trên ảnh
+   */
+  overlayOpacity?: ('none' | 'light' | 'medium' | 'dark') | null;
+  /**
+   * Tự động chuyển ảnh khi có nhiều hơn 1 ảnh
+   */
+  enableSlideshow?: boolean | null;
+  /**
+   * Thời gian chuyển ảnh
+   */
+  slideshowSpeed?: ('3000' | '5000' | '7000') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'hero';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DescriptionBlockType".
+ */
+export interface DescriptionBlockType {
+  /**
+   * Ví dụ: "Haute Couture Meets Hill Tribe Artistry"
+   */
+  title: string;
+  description: string;
+  /**
+   * Địa chỉ đầy đủ của hotel
+   */
+  address?: string | null;
+  addressLink?: string | null;
+  phone?: string | null;
+  /**
+   * Ví dụ: tel:+84214363999
+   */
+  phoneLink?: string | null;
+  backgroundColor?: ('light' | 'dark' | 'transparent') | null;
+  textAlign?: ('left' | 'center' | 'right') | null;
+  titleStyle?: ('italic' | 'normal' | 'bold') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'description';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RoomsGridBlockType".
+ */
+export interface RoomsGridBlockType {
+  sectionTitle?: string | null;
+  viewAllText?: string | null;
+  viewAllLink?: string | null;
+  tabs?:
+    | {
+        /**
+         * Ví dụ: Room, Suite
+         */
+        tabName: string;
+        rooms?:
+          | {
+              roomName: string;
+              /**
+               * Ví dụ: 2 Single Size Beds, 1 King Size Bed
+               */
+              roomSubtitle?: string | null;
+              /**
+               * Ví dụ: KING SIZE BED(S) X1
+               */
+              bedType?: string | null;
+              /**
+               * Ví dụ: 33 M²/355SQFT
+               */
+              roomSize?: string | null;
+              /**
+               * Ví dụ: 3 PERSONS
+               */
+              maxPersons?: string | null;
+              roomDescription?: string | null;
+              roomImage?: (number | null) | Media;
+              ratesLink?: string | null;
+              detailsLink?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  backgroundColor?: ('light' | 'dark') | null;
+  /**
+   * Màu cho tab active và nút
+   */
+  accentColor?: string | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'rooms-grid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlockType".
+ */
+export interface ServicesBlockType {
+  sectionTitle?: string | null;
+  viewAllText?: string | null;
+  viewAllLink?: string | null;
+  tabs?:
+    | {
+        /**
+         * Ví dụ: Restaurants, Bars, Breakfasts
+         */
+        tabName: string;
+        items?:
+          | {
+              itemName: string;
+              /**
+               * Ví dụ: CAFE, FRENCH, BAR
+               */
+              itemCategory?: string | null;
+              itemDescription?: string | null;
+              itemImage?: (number | null) | Media;
+              itemLink?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  backgroundColor?: ('light' | 'dark') | null;
+  /**
+   * Màu cho tab active và nút
+   */
+  accentColor?: string | null;
+  columns?: ('2' | '3' | '4') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'services';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersBlockType".
+ */
+export interface OffersBlockType {
+  sectionTitle?: string | null;
+  offers?:
+    | {
+        offerTitle?: string | null;
+        offerDescription?: string | null;
+        offerImage?: (number | null) | Media;
+        offerLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Số cột hiển thị
+   */
+  columns?: ('1' | '2' | '3') | null;
+  /**
+   * Khoảng cách giữa các cards
+   */
+  gap?: ('small' | 'medium' | 'large') | null;
+  /**
+   * Cách bố trí ảnh và nội dung
+   */
+  layout?: ('horizontal' | 'vertical') | null;
+  backgroundColor?: ('dark' | 'darker' | 'transparent') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'offers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlockType".
+ */
+export interface GalleryBlockType {
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  seeAllText?: string | null;
+  seeAllLink?: string | null;
+  height?: ('medium' | 'large' | 'full') | null;
+  showCounter?: boolean | null;
+  showSeeAll?: boolean | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'gallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBlockType".
+ */
+export interface LocationBlockType {
+  sectionTitle?: string | null;
+  description?: string | null;
+  locationImage?: (number | null) | Media;
+  address?: string | null;
+  /**
+   * Link Google Maps để mở trong tab mới
+   */
+  googleMapUrl?: string | null;
+  /**
+   * Chiều cao của section
+   */
+  height?: ('small' | 'medium' | 'large' | 'full') | null;
+  textPosition?:
+    | (
+        | 'top-left'
+        | 'top-center'
+        | 'top-right'
+        | 'center-left'
+        | 'center'
+        | 'center-right'
+        | 'bottom-left'
+        | 'bottom-center'
+        | 'bottom-right'
+      )
+    | null;
+  overlayOpacity?: ('none' | 'light' | 'medium' | 'dark') | null;
+  showButton?: boolean | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'location';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MomentBlock".
+ */
+export interface MomentBlock {
+  sectionTitle?: string | null;
+  /**
+   * Ví dụ: "HÔTEL DE LA COUPOLE - MGALLERY"
+   */
+  hotelName?: string | null;
+  /**
+   * Ví dụ: "Cloud Hunting in Sapa"
+   */
+  momentTitle: string;
+  momentDescription?: string | null;
+  momentImage: number | Media;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  /**
+   * Mã màu hex, ví dụ: #f5e6e0 (hồng nhạt)
+   */
+  backgroundColor?: string | null;
+  layout?: ('image-left' | 'image-right') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'moment';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OurServicesBlock".
+ */
+export interface OurServicesBlock {
+  sectionTitle?: string | null;
+  services?:
+    | {
+        /**
+         * Ví dụ: WELLNESS, BREAKFAST, OCCASIONS
+         */
+        category?: string | null;
+        serviceName: string;
+        serviceDescription?: string | null;
+        serviceImage?: (number | null) | Media;
+        serviceLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  columns?: ('2' | '3' | '4') | null;
+  backgroundColor?: ('light' | 'dark') | null;
+  accentColor?: string | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'our-services';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocalLifeBlock".
+ */
+export interface LocalLifeBlock {
+  sectionTitle?: string | null;
+  /**
+   * Mô tả ngắn về địa phương
+   */
+  sectionDescription?: string | null;
+  items?:
+    | {
+        itemTitle: string;
+        itemDescription?: string | null;
+        itemImage?: (number | null) | Media;
+        itemLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  backgroundColor?: ('light' | 'dark') | null;
+  accentColor?: string | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'local-life';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentImageBlock".
+ */
+export interface ContentImageBlock {
+  subtitle?: string | null;
+  imagePosition?: ('left' | 'right') | null;
+  title: string;
+  description: string;
+  image: number | Media;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'content-image';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
-  id: string;
+  id: number;
   /**
    * You will need to rebuild the website when changing this field.
    */
@@ -794,11 +2424,11 @@ export interface Redirect {
     reference?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     url?: string | null;
   };
@@ -810,8 +2440,8 @@ export interface Redirect {
  * via the `definition` "form-submissions".
  */
 export interface FormSubmission {
-  id: string;
-  form: string | Form;
+  id: number;
+  form: number | Form;
   submissionData?:
     | {
         field: string;
@@ -829,18 +2459,18 @@ export interface FormSubmission {
  * via the `definition` "search".
  */
 export interface Search {
-  id: string;
+  id: number;
   title?: string | null;
   priority?: number | null;
   doc: {
     relationTo: 'posts';
-    value: string | Post;
+    value: number | Post;
   };
   slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
-    image?: (string | null) | Media;
+    image?: (number | null) | Media;
   };
   categories?:
     | {
@@ -858,7 +2488,7 @@ export interface Search {
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: string;
+  id: number;
   key: string;
   data:
     | {
@@ -875,7 +2505,7 @@ export interface PayloadKv {
  * via the `definition` "payload-jobs".
  */
 export interface PayloadJob {
-  id: string;
+  id: number;
   /**
    * Input data provided to the job
    */
@@ -967,52 +2597,52 @@ export interface PayloadJob {
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: string;
+  id: number;
   document?:
     | ({
         relationTo: 'pages';
-        value: string | Page;
+        value: number | Page;
       } | null)
     | ({
         relationTo: 'posts';
-        value: string | Post;
+        value: number | Post;
       } | null)
     | ({
         relationTo: 'media';
-        value: string | Media;
+        value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
-        value: string | Category;
+        value: number | Category;
       } | null)
     | ({
         relationTo: 'users';
-        value: string | User;
+        value: number | User;
       } | null)
     | ({
         relationTo: 'redirects';
-        value: string | Redirect;
+        value: number | Redirect;
       } | null)
     | ({
         relationTo: 'forms';
-        value: string | Form;
+        value: number | Form;
       } | null)
     | ({
         relationTo: 'form-submissions';
-        value: string | FormSubmission;
+        value: number | FormSubmission;
       } | null)
     | ({
         relationTo: 'search';
-        value: string | Search;
+        value: number | Search;
       } | null)
     | ({
         relationTo: 'payload-folders';
-        value: string | FolderInterface;
+        value: number | FolderInterface;
       } | null);
   globalSlug?: string | null;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   updatedAt: string;
   createdAt: string;
@@ -1022,10 +2652,10 @@ export interface PayloadLockedDocument {
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: string;
+  id: number;
   user: {
     relationTo: 'users';
-    value: string | User;
+    value: number | User;
   };
   key?: string | null;
   value?:
@@ -1045,7 +2675,7 @@ export interface PayloadPreference {
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: string;
+  id: number;
   name?: string | null;
   batch?: number | null;
   updatedAt: string;
@@ -1087,6 +2717,17 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        hero?: T | HeroBlockTypeSelect<T>;
+        description?: T | DescriptionBlockTypeSelect<T>;
+        'rooms-grid'?: T | RoomsGridBlockTypeSelect<T>;
+        services?: T | ServicesBlockTypeSelect<T>;
+        offers?: T | OffersBlockTypeSelect<T>;
+        gallery?: T | GalleryBlockTypeSelect<T>;
+        location?: T | LocationBlockTypeSelect<T>;
+        moment?: T | MomentBlockSelect<T>;
+        'our-services'?: T | OurServicesBlockSelect<T>;
+        'local-life'?: T | LocalLifeBlockSelect<T>;
+        'content-image'?: T | ContentImageBlockSelect<T>;
       };
   meta?:
     | T
@@ -1123,6 +2764,29 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -1149,6 +2813,29 @@ export interface ContentBlockSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -1158,6 +2845,29 @@ export interface ContentBlockSelect<T extends boolean = true> {
  */
 export interface MediaBlockSelect<T extends boolean = true> {
   media?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -1172,6 +2882,29 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   categories?: T;
   limit?: T;
   selectedDocs?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -1183,6 +2916,519 @@ export interface FormBlockSelect<T extends boolean = true> {
   form?: T;
   enableIntro?: T;
   introContent?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlockType_select".
+ */
+export interface HeroBlockTypeSelect<T extends boolean = true> {
+  name?: T;
+  tagline?: T;
+  heroImage?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  ctaText?: T;
+  ctaLink?: T;
+  height?: T;
+  textPosition?: T;
+  verticalAlign?: T;
+  overlayOpacity?: T;
+  enableSlideshow?: T;
+  slideshowSpeed?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DescriptionBlockType_select".
+ */
+export interface DescriptionBlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  address?: T;
+  addressLink?: T;
+  phone?: T;
+  phoneLink?: T;
+  backgroundColor?: T;
+  textAlign?: T;
+  titleStyle?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "RoomsGridBlockType_select".
+ */
+export interface RoomsGridBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  viewAllText?: T;
+  viewAllLink?: T;
+  tabs?:
+    | T
+    | {
+        tabName?: T;
+        rooms?:
+          | T
+          | {
+              roomName?: T;
+              roomSubtitle?: T;
+              bedType?: T;
+              roomSize?: T;
+              maxPersons?: T;
+              roomDescription?: T;
+              roomImage?: T;
+              ratesLink?: T;
+              detailsLink?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  backgroundColor?: T;
+  accentColor?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ServicesBlockType_select".
+ */
+export interface ServicesBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  viewAllText?: T;
+  viewAllLink?: T;
+  tabs?:
+    | T
+    | {
+        tabName?: T;
+        items?:
+          | T
+          | {
+              itemName?: T;
+              itemCategory?: T;
+              itemDescription?: T;
+              itemImage?: T;
+              itemLink?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  backgroundColor?: T;
+  accentColor?: T;
+  columns?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersBlockType_select".
+ */
+export interface OffersBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  offers?:
+    | T
+    | {
+        offerTitle?: T;
+        offerDescription?: T;
+        offerImage?: T;
+        offerLink?: T;
+        id?: T;
+      };
+  columns?: T;
+  gap?: T;
+  layout?: T;
+  backgroundColor?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "GalleryBlockType_select".
+ */
+export interface GalleryBlockTypeSelect<T extends boolean = true> {
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  seeAllText?: T;
+  seeAllLink?: T;
+  height?: T;
+  showCounter?: T;
+  showSeeAll?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocationBlockType_select".
+ */
+export interface LocationBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  description?: T;
+  locationImage?: T;
+  address?: T;
+  googleMapUrl?: T;
+  height?: T;
+  textPosition?: T;
+  overlayOpacity?: T;
+  showButton?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MomentBlock_select".
+ */
+export interface MomentBlockSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  hotelName?: T;
+  momentTitle?: T;
+  momentDescription?: T;
+  momentImage?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  backgroundColor?: T;
+  layout?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OurServicesBlock_select".
+ */
+export interface OurServicesBlockSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  services?:
+    | T
+    | {
+        category?: T;
+        serviceName?: T;
+        serviceDescription?: T;
+        serviceImage?: T;
+        serviceLink?: T;
+        id?: T;
+      };
+  columns?: T;
+  backgroundColor?: T;
+  accentColor?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LocalLifeBlock_select".
+ */
+export interface LocalLifeBlockSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  sectionDescription?: T;
+  items?:
+    | T
+    | {
+        itemTitle?: T;
+        itemDescription?: T;
+        itemImage?: T;
+        itemLink?: T;
+        id?: T;
+      };
+  backgroundColor?: T;
+  accentColor?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentImageBlock_select".
+ */
+export interface ContentImageBlockSelect<T extends boolean = true> {
+  subtitle?: T;
+  imagePosition?: T;
+  title?: T;
+  description?: T;
+  image?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
   id?: T;
   blockName?: T;
 }
@@ -1634,7 +3880,11 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  * via the `definition` "header".
  */
 export interface Header {
-  id: string;
+  id: number;
+  logo?: (number | null) | Media;
+  logoWidth?: number | null;
+  logoHeight?: number | null;
+  logoLink?: string | null;
   navItems?:
     | {
         link: {
@@ -1643,11 +3893,11 @@ export interface Header {
           reference?:
             | ({
                 relationTo: 'pages';
-                value: string | Page;
+                value: number | Page;
               } | null)
             | ({
                 relationTo: 'posts';
-                value: string | Post;
+                value: number | Post;
               } | null);
           url?: string | null;
           label: string;
@@ -1655,6 +3905,17 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  showAuth?: boolean | null;
+  signInText?: string | null;
+  signInLink?: string | null;
+  signUpText?: string | null;
+  signUpLink?: string | null;
+  /**
+   * Để trống nếu muốn trong suốt. Ví dụ: #ffffff, rgba(0,0,0,0.5)
+   */
+  backgroundColor?: string | null;
+  textColor?: ('light' | 'dark') | null;
+  paddingSize?: ('small' | 'medium' | 'large') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1663,27 +3924,113 @@ export interface Header {
  * via the `definition` "footer".
  */
 export interface Footer {
-  id: string;
-  navItems?:
+  id: number;
+  logo?: (number | null) | Media;
+  socialLinks?:
     | {
-        link: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-        };
+        platform: 'facebook' | 'youtube' | 'instagram' | 'linkedin' | 'pinterest';
+        url: string;
         id?: string | null;
       }[]
     | null;
+  subscribeSection?: {
+    title?: string | null;
+    buttonText?: string | null;
+    buttonLink?: string | null;
+  };
+  helpSection?: {
+    title?: string | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom') | null;
+            newTab?: boolean | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'posts';
+                  value: number | Post;
+                } | null);
+            url?: string | null;
+            label: string;
+          };
+          id?: string | null;
+        }[]
+      | null;
+  };
+  columns?:
+    | {
+        title: string;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: number | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  copyrightText?: string | null;
+  backgroundColor?: string | null;
+  textColor?: string | null;
+  accentColor?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme-settings".
+ */
+export interface ThemeSetting {
+  id: number;
+  /**
+   * Nhập hex (#000000) hoặc "transparent"
+   */
+  headerBackgroundColor?: string | null;
+  headerTextColor?: ('light' | 'dark') | null;
+  /**
+   * Màu nền Header khi scroll xuống
+   */
+  headerScrolledBackgroundColor?: string | null;
+  footerBackgroundColor?: string | null;
+  footerTextColor?: string | null;
+  /**
+   * Dùng cho hover, links
+   */
+  footerAccentColor?: string | null;
+  footerBorderColor?: string | null;
+  /**
+   * Màu nền sidebar, header admin
+   */
+  adminPrimaryColor?: string | null;
+  /**
+   * Màu button, link, hover
+   */
+  adminAccentColor?: string | null;
+  adminBgColor?: string | null;
+  adminTextColor?: string | null;
+  defaultBlockBg?: string | null;
+  defaultBlockText?: string | null;
+  defaultTitleFont?: string | null;
+  defaultBodyFont?: string | null;
+  blockSpacing?: ('small' | 'normal' | 'large' | 'xlarge') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1692,6 +4039,10 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
+  logoWidth?: T;
+  logoHeight?: T;
+  logoLink?: T;
   navItems?:
     | T
     | {
@@ -1706,6 +4057,14 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  showAuth?: T;
+  signInText?: T;
+  signInLink?: T;
+  signUpText?: T;
+  signUpLink?: T;
+  backgroundColor?: T;
+  textColor?: T;
+  paddingSize?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1715,20 +4074,89 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  navItems?:
+  logo?: T;
+  socialLinks?:
     | T
     | {
-        link?:
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  subscribeSection?:
+    | T
+    | {
+        title?: T;
+        buttonText?: T;
+        buttonLink?: T;
+      };
+  helpSection?:
+    | T
+    | {
+        title?: T;
+        links?:
           | T
           | {
-              type?: T;
-              newTab?: T;
-              reference?: T;
-              url?: T;
-              label?: T;
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
+      };
+  columns?:
+    | T
+    | {
+        title?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
             };
         id?: T;
       };
+  copyrightText?: T;
+  backgroundColor?: T;
+  textColor?: T;
+  accentColor?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "theme-settings_select".
+ */
+export interface ThemeSettingsSelect<T extends boolean = true> {
+  headerBackgroundColor?: T;
+  headerTextColor?: T;
+  headerScrolledBackgroundColor?: T;
+  footerBackgroundColor?: T;
+  footerTextColor?: T;
+  footerAccentColor?: T;
+  footerBorderColor?: T;
+  adminPrimaryColor?: T;
+  adminAccentColor?: T;
+  adminBgColor?: T;
+  adminTextColor?: T;
+  defaultBlockBg?: T;
+  defaultBlockText?: T;
+  defaultTitleFont?: T;
+  defaultBodyFont?: T;
+  blockSpacing?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1744,14 +4172,14 @@ export interface TaskSchedulePublish {
     doc?:
       | ({
           relationTo: 'pages';
-          value: string | Page;
+          value: number | Page;
         } | null)
       | ({
           relationTo: 'posts';
-          value: string | Post;
+          value: number | Post;
         } | null);
     global?: string | null;
-    user?: (string | null) | User;
+    user?: (number | null) | User;
   };
   output?: unknown;
 }
@@ -1776,6 +4204,85 @@ export interface BannerBlock {
     };
     [k: string]: unknown;
   };
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'banner';
@@ -1787,6 +4294,85 @@ export interface BannerBlock {
 export interface CodeBlock {
   language?: ('typescript' | 'javascript' | 'css') | null;
   code: string;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'code';

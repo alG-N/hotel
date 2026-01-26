@@ -5,6 +5,8 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 export const Banner: Block = {
   slug: 'banner',
@@ -32,6 +34,10 @@ export const Banner: Block = {
       label: false,
       required: true,
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
   interfaceName: 'BannerBlock',
 }

@@ -6,6 +6,8 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 export const FormBlock: Block = {
   slug: 'formBlock',
@@ -40,6 +42,10 @@ export const FormBlock: Block = {
       }),
       label: 'Intro Content',
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
   graphQL: {
     singularName: 'FormBlock',

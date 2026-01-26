@@ -8,6 +8,8 @@ import {
 } from '@payloadcms/richtext-lexical'
 
 import { link } from '@/fields/link'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 const columnFields: Field[] = [
   {
@@ -75,5 +77,9 @@ export const Content: Block = {
       },
       fields: columnFields,
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
 }

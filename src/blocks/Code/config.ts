@@ -1,4 +1,6 @@
 import type { Block } from 'payload'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 export const Code: Block = {
   slug: 'code',
@@ -29,5 +31,9 @@ export const Code: Block = {
       label: false,
       required: true,
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
 }

@@ -6,6 +6,8 @@ import {
   InlineToolbarFeature,
   lexicalEditor,
 } from '@payloadcms/richtext-lexical'
+import { typographyFields } from '@/fields/typography'
+import { blockStyleFields } from '@/fields/blockBackground'
 
 export const Archive: Block = {
   slug: 'archive',
@@ -86,6 +88,10 @@ export const Archive: Block = {
       label: 'Selection',
       relationTo: ['posts'],
     },
+    // Typography
+    ...typographyFields,
+    // Background Styles
+    ...blockStyleFields,
   ],
   labels: {
     plural: 'Archives',
