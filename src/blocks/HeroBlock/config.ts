@@ -65,9 +65,7 @@ export const HeroBlock: Block = {
       defaultValue: '/booking',
     },
 
-    // ═══════════════════════════════════════════
     // SETTINGS
-    // ═══════════════════════════════════════════
     {
       name: 'height',
       type: 'select',
