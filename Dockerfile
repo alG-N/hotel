@@ -38,8 +38,8 @@ ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-# Run migrations before build (--accept-warnings to skip interactive prompt)
-RUN npm run payload migrate -- --accept-warnings
+# Note: Migrations should be run manually or via a separate CI step, not during build
+# The database already has data migrated from local development
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
