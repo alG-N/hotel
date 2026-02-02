@@ -1,0 +1,7 @@
+[build]
+builder = "dockerfile"
+
+[build.args]
+DATABASE_URI = "${{DATABASE_URI}}"
+PAYLOAD_SECRET = "${{PAYLOAD_SECRET}}"
+NEXT_PUBLIC_SERVER_URL = "${{NEXT_PUBLIC_SERVER_URL}}"
