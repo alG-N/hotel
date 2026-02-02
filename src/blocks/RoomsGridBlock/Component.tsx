@@ -1,9 +1,11 @@
 'use client'
 
-import React, { useState, useRef } from 'react'
+import React, { useState, useMemo } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
+import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { Bed, Monitor, Bath, Wifi, Tv, Wind, Sofa, Sun, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface TypographySettings {
   font?: string
@@ -14,98 +16,83 @@ interface TypographySettings {
   color?: string
 }
 
-interface Room {
-  roomName?: string
-  roomSubtitle?: string
-  bedType?: string
-  roomSize?: string
-  maxPersons?: string
-  roomDescription?: string
-  roomImage?: Media | number
-  ratesLink?: string
-  detailsLink?: string
+interface AmenityItem {
+  icon?: 'bed' | 'desk' | 'bath' | 'wifi' | 'tv' | 'ac' | 'sofa' | 'window'
+  text?: string
 }
 
-interface Tab {
-  tabName?: string
-  rooms?: Room[]
+interface ImageItem {
+  image?: Media | number
+}
+
+interface CustomCategory {
+  name?: string
+}
+
+interface RoomItem {
+  category?: 'regular' | 'deluxe' | 'family' | 'suites' | string
+  name?: string
+  subtitle?: string
+  images?: ImageItem[]
+  amenities?: AmenityItem[]
+  bookLink?: string
 }
 
 interface RoomsGridBlockProps {
   blockType: 'rooms-grid'
-  sectionTitle?: string
-  viewAllText?: string
-  viewAllLink?: string
-  tabs?: Tab[]
-  // New style fields
+  enabledCategories?: ('regular' | 'deluxe' | 'family' | 'suites')[]
+  customCategories?: CustomCategory[]
+  rooms?: RoomItem[]
+  // Style fields
   bgStyle?: string
   bgCustom?: string
   txtStyle?: 'auto' | 'dark' | 'light'
   tTitle?: TypographySettings
   tBody?: TypographySettings
-  // Legacy settings
-  backgroundColor?: 'light' | 'dark'
-  accentColor?: string
-  titleFont?: string
-  bodyFont?: string
 }
 
 /**
- * ACCOMMODATIONS BLOCK COMPONENT
+ * ACCOMMODATIONS BLOCK (Type 1) COMPONENT
  * 
- * Hiển thị phòng với tabs và horizontal scroll
+ * List layout with line dividers between rooms
  */
 export function RoomsGridBlockComponent({
-  sectionTitle = 'Accommodations',
-  viewAllText = 'View all accommodations',
-  viewAllLink = '/accommodations',
-  tabs = [],
-  // New style fields
+  enabledCategories = ['regular', 'deluxe', 'family', 'suites'],
+  customCategories = [],
+  rooms = [],
   bgStyle,
   bgCustom,
   txtStyle,
   tTitle,
   tBody,
-  // Legacy
-  backgroundColor = 'light',
-  accentColor = '#8b6f47',
-  titleFont = 'Georgia, serif',
-  bodyFont = 'system-ui, -apple-system, sans-serif',
 }: RoomsGridBlockProps) {
-  const [activeTab, setActiveTab] = useState(0)
-  const scrollRef = useRef<HTMLDivElement>(null)
+  const [activeCategory, setActiveCategory] = useState<string | null>(null)
+  const [imageIndexes, setImageIndexes] = useState<Record<number, number>>({})
 
-  // Get colors from new style system, fallback to legacy
+  // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
-  const legacyIsDark = backgroundColor === 'dark'
   const styles = hasNewStyles 
     ? getBlockStyles(blockSettings)
-    : { 
-        backgroundColor: legacyIsDark ? '#1a1a1a' : 'transparent', 
-        color: legacyIsDark ? '#ffffff' : '#333333' 
-      }
-  const isDark = hasNewStyles 
-    ? (styles.color === '#ffffff') 
-    : legacyIsDark
-  
-  const textColor = styles.color
-  const mutedColor = isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'
-  const bgColor = styles.backgroundColor
+    : { backgroundColor: '#ffffff', color: '#1a1a1a' }
 
-  // Title styles
+  const textColor = styles.color || '#1a1a1a'
+  const mutedColor = txtStyle === 'light' ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.6)'
+  const borderColor = txtStyle === 'light' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)'
+
+  // Title typography
   const titleStyles: React.CSSProperties = {
-    fontFamily: tTitle?.font || titleFont,
+    fontFamily: tTitle?.font || 'Georgia, serif',
     fontSize: tTitle?.size || undefined,
-    fontWeight: tTitle?.weight || '300',
-    lineHeight: tTitle?.lh || '1.2',
-    letterSpacing: tTitle?.ls || '0.02em',
+    fontWeight: tTitle?.weight || '400',
+    lineHeight: tTitle?.lh || '1.3',
+    letterSpacing: tTitle?.ls || '0',
     color: tTitle?.color || textColor,
   }
 
-  // Body styles
-  const bodyStylesCSS: React.CSSProperties = {
-    fontFamily: tBody?.font || bodyFont,
+  // Body typography
+  const bodyStyles: React.CSSProperties = {
+    fontFamily: tBody?.font || 'system-ui, -apple-system, sans-serif',
     fontSize: tBody?.size || undefined,
     fontWeight: tBody?.weight || '400',
     lineHeight: tBody?.lh || '1.6',
@@ -113,182 +100,223 @@ export function RoomsGridBlockComponent({
     color: tBody?.color || mutedColor,
   }
 
-  const currentRooms = tabs[activeTab]?.rooms || []
+  // Build categories with auto count
+  const categoryLabels: Record<string, string> = {
+    regular: 'Regular',
+    deluxe: 'Deluxe',
+    family: 'Family',
+    suites: 'Suites',
+  }
 
-  const scrollLeft = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: -400, behavior: 'smooth' })
+  const categoriesWithCount = useMemo(() => {
+    // Count rooms per category
+    const counts: Record<string, number> = {}
+    rooms.forEach(room => {
+      const cat = room.category?.toLowerCase() || 'regular'
+      counts[cat] = (counts[cat] || 0) + 1
+    })
+
+    // Build enabled categories
+    const cats: { value: string; label: string; count: number }[] = enabledCategories.map(cat => ({
+      value: cat,
+      label: categoryLabels[cat] || cat,
+      count: counts[cat] || 0,
+    }))
+
+    // Add custom categories
+    customCategories.forEach(custom => {
+      if (custom.name) {
+        const val = custom.name.toLowerCase()
+        cats.push({
+          value: val,
+          label: custom.name,
+          count: counts[val] || 0,
+        })
+      }
+    })
+
+    return cats
+  }, [enabledCategories, customCategories, rooms])
+
+  // Filter rooms by category
+  const filteredRooms = activeCategory 
+    ? rooms.filter(room => room.category?.toLowerCase() === activeCategory.toLowerCase())
+    : rooms
+
+  // Icon renderer
+  const renderIcon = (iconType?: string) => {
+    const iconProps = { className: 'w-4 h-4 flex-shrink-0', strokeWidth: 1.5 }
+    switch (iconType) {
+      case 'bed': return <Bed {...iconProps} />
+      case 'desk': return <Monitor {...iconProps} />
+      case 'bath': return <Bath {...iconProps} />
+      case 'wifi': return <Wifi {...iconProps} />
+      case 'tv': return <Tv {...iconProps} />
+      case 'ac': return <Wind {...iconProps} />
+      case 'sofa': return <Sofa {...iconProps} />
+      case 'window': return <Sun {...iconProps} />
+      default: return <Bed {...iconProps} />
     }
   }
 
-  const scrollRight = () => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollBy({ left: 400, behavior: 'smooth' })
-    }
+  // Image slider handlers
+  const prevImage = (roomIndex: number, totalImages: number) => {
+    setImageIndexes(prev => ({
+      ...prev,
+      [roomIndex]: ((prev[roomIndex] || 0) - 1 + totalImages) % totalImages
+    }))
+  }
+
+  const nextImage = (roomIndex: number, totalImages: number) => {
+    setImageIndexes(prev => ({
+      ...prev,
+      [roomIndex]: ((prev[roomIndex] || 0) + 1) % totalImages
+    }))
   }
 
   return (
     <section 
-      className="py-16 md:py-24"
-      style={{ backgroundColor: bgColor }}
+      className="py-16 md:py-24 px-4"
+      style={{ backgroundColor: styles.backgroundColor }}
     >
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 
-            className="text-3xl md:text-4xl font-light tracking-wide"
-            style={titleStyles}
+      <div className="max-w-5xl mx-auto">
+        {/* Filter Tabs - rectangular buttons, not too rounded */}
+        <div className="flex flex-wrap gap-2 mb-10">
+          {/* All button */}
+          <button
+            onClick={() => setActiveCategory(null)}
+            className={`px-4 py-2 text-sm border transition-colors rounded ${
+              activeCategory === null 
+                ? 'bg-neutral-900 text-white border-neutral-900' 
+                : 'bg-transparent border-neutral-300 hover:border-neutral-500'
+            }`}
+            style={{ color: activeCategory === null ? '#fff' : textColor }}
           >
-            {sectionTitle}
-          </h2>
+            All ({rooms.length})
+          </button>
           
-          {viewAllLink && (
-            <a 
-              href={viewAllLink}
-              className="flex items-center gap-2 text-sm hover:opacity-80 transition-opacity"
-              style={{ color: accentColor }}
+          {categoriesWithCount.map((cat, idx) => (
+            <button
+              key={idx}
+              onClick={() => setActiveCategory(cat.value)}
+              className={`px-4 py-2 text-sm border transition-colors rounded ${
+                activeCategory === cat.value 
+                  ? 'bg-neutral-900 text-white border-neutral-900' 
+                  : 'bg-transparent border-neutral-300 hover:border-neutral-500'
+              }`}
+              style={{ color: activeCategory === cat.value ? '#fff' : textColor }}
             >
-              {viewAllText}
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-              </svg>
-            </a>
-          )}
+              {cat.label} ({cat.count})
+            </button>
+          ))}
         </div>
 
-        {/* Tabs */}
-        {tabs.length > 1 && (
-          <div className="flex gap-8 mb-8 border-b" style={{ borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }}>
-            {tabs.map((tab, index) => (
-              <button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                className="pb-3 text-sm font-medium transition-all relative"
-                style={{ 
-                  color: activeTab === index ? textColor : mutedColor,
-                }}
-              >
-                {tab.tabName}
-                {activeTab === index && (
-                  <span 
-                    className="absolute bottom-0 left-0 right-0 h-0.5"
-                    style={{ backgroundColor: accentColor }}
-                  />
-                )}
-              </button>
-            ))}
-          </div>
-        )}
+        {/* Rooms List with line dividers */}
+        <div className="flex flex-col">
+          {filteredRooms.map((room, roomIndex) => {
+            // Parse images
+            const images = room.images
+              ?.map(item => typeof item.image === 'object' ? item.image as Media : null)
+              .filter((img): img is Media => img !== null && !!img?.url) || []
+            
+            const currentImageIndex = imageIndexes[roomIndex] || 0
+            const currentImage = images[currentImageIndex]
 
-        {/* Rooms Carousel */}
-        <div className="relative">
-          {/* Scroll Buttons */}
-          {currentRooms.length > 3 && (
-            <>
-              <button
-                onClick={scrollLeft}
-                className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all"
-              >
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-              </button>
-              <button
-                onClick={scrollRight}
-                className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-10 h-10 rounded-full bg-white shadow-lg flex items-center justify-center hover:bg-gray-50 transition-all"
-              >
-                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            </>
-          )}
-
-          {/* Rooms Grid - Horizontal Scroll */}
-          <div 
-            ref={scrollRef}
-            className="flex gap-6 overflow-x-auto pb-4 scrollbar-hide"
-            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-          >
-            {currentRooms.map((room, index) => {
-              const image = typeof room.roomImage === 'object' ? room.roomImage as Media : null
-
-              return (
+            return (
+              <div key={roomIndex}>
+                {/* Line divider - top border for each item */}
                 <div 
-                  key={index}
-                  className="flex-shrink-0 w-[350px] flex flex-col"
+                  className="border-t py-6"
+                  style={{ borderColor }}
                 >
-                  {/* Room Image */}
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-lg mb-4">
-                    {image?.url && (
-                      <Image
-                        src={image.url}
-                        alt={room.roomName || 'Room'}
-                        fill
-                        className="object-cover"
-                      />
-                    )}
-                  </div>
+                  <div className="flex flex-col md:flex-row gap-8">
+                    {/* Image Slider */}
+                    <div className="relative w-full md:w-[400px] flex-shrink-0">
+                      <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
+                        {currentImage?.url && (
+                          <Image
+                            src={currentImage.url}
+                            alt={room.name || 'Room'}
+                            fill
+                            className="object-cover"
+                          />
+                        )}
 
-                  {/* Room Info */}
-                  <div className="flex flex-col flex-1">
-                    <h3 
-                      className="text-lg font-medium mb-1"
-                      style={titleStyles}
-                    >
-                      {room.roomName}
-                      {room.roomSubtitle && <span className="font-normal">, {room.roomSubtitle}</span>}
-                    </h3>
-
-                    {/* Room Details */}
-                    <div 
-                      className="flex flex-wrap items-center gap-2 text-xs mb-3"
-                      style={{ color: accentColor }}
-                    >
-                      {room.bedType && <span>{room.bedType}</span>}
-                      {room.bedType && room.roomSize && <span>•</span>}
-                      {room.roomSize && <span>{room.roomSize}</span>}
-                      {room.roomSize && room.maxPersons && <span>•</span>}
-                      {room.maxPersons && <span>{room.maxPersons}</span>}
+                        {/* Slider Navigation */}
+                        {images.length > 1 && (
+                          <div className="absolute bottom-3 left-3 flex gap-1">
+                            <button
+                              onClick={() => prevImage(roomIndex, images.length)}
+                              className="w-7 h-7 bg-white/90 rounded flex items-center justify-center hover:bg-white transition-colors"
+                            >
+                              <ChevronLeft className="w-4 h-4 text-neutral-700" />
+                            </button>
+                            <button
+                              onClick={() => nextImage(roomIndex, images.length)}
+                              className="w-7 h-7 bg-white/90 rounded flex items-center justify-center hover:bg-white transition-colors"
+                            >
+                              <ChevronRight className="w-4 h-4 text-neutral-700" />
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Description */}
-                    <p 
-                      className="text-sm line-clamp-2 mb-4 flex-1"
-                      style={{ ...bodyStylesCSS, minHeight: '2.5rem' }}
-                    >
-                      {room.roomDescription || ''}
-                    </p>
-
-                    {/* Buttons */}
-                    <div className="flex items-center gap-4 mt-auto">
-                      {room.ratesLink && (
-                        <a
-                          href={room.ratesLink}
-                          className="px-6 py-2 text-xs font-medium text-white uppercase tracking-wider transition-opacity hover:opacity-90"
-                          style={{ backgroundColor: accentColor }}
+                    {/* Room Info */}
+                    <div className="flex flex-col flex-grow">
+                      {/* Title */}
+                      {room.name && (
+                        <h3 
+                          className="text-xl md:text-2xl mb-2"
+                          style={titleStyles}
                         >
-                          See Rates
-                        </a>
+                          {room.name}
+                        </h3>
                       )}
-                      {room.detailsLink && (
-                        <a
-                          href={room.detailsLink}
-                          className="flex items-center gap-1 text-sm hover:opacity-80 transition-opacity"
-                          style={{ color: textColor }}
+
+                      {/* Subtitle */}
+                      {room.subtitle && (
+                        <p 
+                          className="text-sm mb-4"
+                          style={bodyStyles}
                         >
-                          View details
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                          </svg>
-                        </a>
+                          {room.subtitle}
+                        </p>
+                      )}
+
+                      {/* Amenities */}
+                      {room.amenities && room.amenities.length > 0 && (
+                        <div className="flex flex-col gap-2 mb-5">
+                          {room.amenities.map((amenity, amenityIdx) => (
+                            <div 
+                              key={amenityIdx}
+                              className="flex items-center gap-3 text-sm"
+                              style={{ color: mutedColor }}
+                            >
+                              {renderIcon(amenity.icon)}
+                              <span>{amenity.text}</span>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Book Button */}
+                      {room.bookLink && (
+                        <Link
+                          href={room.bookLink}
+                          className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 transition-colors w-fit mt-auto"
+                        >
+                          Book now
+                        </Link>
                       )}
                     </div>
                   </div>
                 </div>
-              )
-            })}
-          </div>
+              </div>
+            )
+          })}
+          {/* Bottom border */}
+          <div className="border-t" style={{ borderColor }} />
         </div>
       </div>
     </section>

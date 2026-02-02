@@ -10,15 +10,21 @@ import { MediaBlock } from '../../blocks/MediaBlock/config'
 // Hotel blocks
 import { HeroBlock } from '../../blocks/HeroBlock/config'
 import { RoomsGridBlock } from '../../blocks/RoomsGridBlock/config'
-import { ServicesBlock } from '../../blocks/ServicesBlock/config'
+import { FoodDrinkBlock } from '../../blocks/FoodDrinkBlock/config'
 import { OffersBlock } from '../../blocks/OffersBlock/config'
 import { GalleryBlock } from '../../blocks/GalleryBlock/config'
 import { LocationBlock } from '../../blocks/LocationBlock/config'
 import { DescriptionBlock } from '../../blocks/DescriptionBlock/config'
-import { MomentBlock } from '../../blocks/MomentBlock/config'
 import { OurServicesBlock } from '../../blocks/OurServicesBlock/config'
-import { LocalLifeBlock } from '../../blocks/LocalLifeBlock/config'
 import { ContentImageBlock } from '../../blocks/ContentImageBlock/config'
+import { AccommodationsType2Block } from '../../blocks/AccommodationsType2Block/config'
+import { PhotoGalleryBlock } from '../../blocks/PhotoGalleryBlock/config'
+import { TheSpaceBlock } from '../../blocks/TheSpaceBlock/config'
+import { SpecialOffersBlock } from '../../blocks/SpecialOffersBlock/config'
+import { VisionBlock } from '../../blocks/VisionBlock/config'
+import { DesignedBlock } from '../../blocks/DesignedBlock/config'
+import { CollaborationBlock } from '../../blocks/CollaborationBlock/config'
+import { DescriptionType2Block } from '../../blocks/DescriptionType2Block/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -95,14 +101,20 @@ export const Pages: CollectionConfig<'pages'> = {
                 HeroBlock,
                 DescriptionBlock,
                 RoomsGridBlock,
-                ServicesBlock,
+                AccommodationsType2Block,
+                FoodDrinkBlock,
                 OffersBlock,
                 GalleryBlock,
+                PhotoGalleryBlock,
                 LocationBlock,
-                MomentBlock,
                 OurServicesBlock,
-                LocalLifeBlock,
                 ContentImageBlock,
+                TheSpaceBlock,
+                SpecialOffersBlock,
+                VisionBlock,
+                DesignedBlock,
+                CollaborationBlock,
+                DescriptionType2Block,
               ],
               required: true,
               admin: {

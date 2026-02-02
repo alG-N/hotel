@@ -11,14 +11,20 @@ import { MediaBlock } from '@/blocks/MediaBlock/Component'
 import { HeroBlockComponent } from '@/blocks/HeroBlock/Component'
 import { DescriptionBlockComponent } from '@/blocks/DescriptionBlock/Component'
 import { RoomsGridBlockComponent } from '@/blocks/RoomsGridBlock/Component'
-import { ServicesBlockComponent } from '@/blocks/ServicesBlock/Component'
+import { FoodDrinkBlockComponent } from '@/blocks/FoodDrinkBlock/Component'
 import { OffersBlockComponent } from '@/blocks/OffersBlock/Component'
 import { GalleryBlockComponent } from '@/blocks/GalleryBlock/Component'
 import { LocationBlockComponent } from '@/blocks/LocationBlock/Component'
-import { MomentBlockComponent } from '@/blocks/MomentBlock/Component'
 import { OurServicesBlockComponent } from '@/blocks/OurServicesBlock/Component'
-import { LocalLifeBlockComponent } from '@/blocks/LocalLifeBlock/Component'
 import { ContentImageBlockComponent } from '@/blocks/ContentImageBlock/Component'
+import { AccommodationsType2Component } from '@/blocks/AccommodationsType2Block/Component'
+import { PhotoGalleryBlockComponent } from '@/blocks/PhotoGalleryBlock/Component'
+import { TheSpaceBlockComponent } from '@/blocks/TheSpaceBlock/Component'
+import { SpecialOffersBlockComponent } from '@/blocks/SpecialOffersBlock/Component'
+import { VisionBlockComponent } from '@/blocks/VisionBlock/Component'
+import { DesignedBlockComponent } from '@/blocks/DesignedBlock/Component'
+import { CollaborationBlockComponent } from '@/blocks/CollaborationBlock/Component'
+import { DescriptionType2BlockComponent } from '@/blocks/DescriptionType2Block/Component'
 
 const blockComponents = {
   // Default blocks
@@ -31,14 +37,20 @@ const blockComponents = {
   hero: HeroBlockComponent,
   description: DescriptionBlockComponent,
   'rooms-grid': RoomsGridBlockComponent,
-  services: ServicesBlockComponent,
+  'accommodations-type2': AccommodationsType2Component,
+  'food-drink': FoodDrinkBlockComponent,
   offers: OffersBlockComponent,
   gallery: GalleryBlockComponent,
+  'photo-gallery': PhotoGalleryBlockComponent,
   location: LocationBlockComponent,
-  moment: MomentBlockComponent,
   'our-services': OurServicesBlockComponent,
-  'local-life': LocalLifeBlockComponent,
   'content-image': ContentImageBlockComponent,
+  'the-space': TheSpaceBlockComponent,
+  'special-offers': SpecialOffersBlockComponent,
+  vision: VisionBlockComponent,
+  designed: DesignedBlockComponent,
+  collaboration: CollaborationBlockComponent,
+  'description-type2': DescriptionType2BlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

@@ -1,6 +1,8 @@
 import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
+import Link from 'next/link'
+import { MapPin, Phone, Mail } from 'lucide-react'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
 
 interface TypographySettings {
@@ -14,169 +16,185 @@ interface TypographySettings {
 
 interface LocationBlockProps {
   blockType: 'location'
-  sectionTitle?: string
-  description?: string
-  locationImage?: Media | number
-  address?: string
-  googleMapUrl?: string
-  // Settings
-  height?: 'small' | 'medium' | 'large' | 'full'
-  textPosition?: 'top-left' | 'top-center' | 'top-right' | 'center-left' | 'center' | 'center-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
-  overlayOpacity?: 'none' | 'light' | 'medium' | 'dark'
-  showButton?: boolean
-  // New style fields
+  // Addresses
+  address1Label?: string
+  address1?: string
+  address2Label?: string
+  address2?: string
+  // Contact
+  hotlineLabel?: string
+  hotline?: string
+  emailLabel?: string
+  email?: string
+  // CTA
+  ctaText?: string
+  ctaLink?: string
+  // Map
+  mapImage?: Media | number
+  // Style fields
   bgStyle?: string
   bgCustom?: string
   txtStyle?: 'auto' | 'dark' | 'light'
   tTitle?: TypographySettings
   tBody?: TypographySettings
-  // Legacy
-  titleFont?: string
-  bodyFont?: string
-}
-
-// Maps
-const heightMap = { small: '40vh', medium: '60vh', large: '80vh', full: '100vh' }
-const overlayMap = {
-  none: 'transparent',
-  light: 'rgba(0, 0, 0, 0.3)',
-  medium: 'rgba(0, 0, 0, 0.5)',
-  dark: 'rgba(0, 0, 0, 0.7)',
-}
-
-// Position mapping
-const getPositionClasses = (position: string) => {
-  const positionMap: Record<string, string> = {
-    'top-left': 'items-start justify-start text-left',
-    'top-center': 'items-start justify-center text-center',
-    'top-right': 'items-start justify-end text-right',
-    'center-left': 'items-center justify-start text-left',
-    'center': 'items-center justify-center text-center',
-    'center-right': 'items-center justify-end text-right',
-    'bottom-left': 'items-end justify-start text-left',
-    'bottom-center': 'items-end justify-center text-center',
-    'bottom-right': 'items-end justify-end text-right',
-  }
-  return positionMap[position] || positionMap['center']
 }
 
 /**
  * LOCATION BLOCK COMPONENT
+ * 
+ * Layout:
+ * ┌─────────────────────────────────────────────────────┐
+ * │  Address 1  │  Hotline    │                         │
+ * │  Address 2  │  Email      │  [Contact Us]           │
+ * ├─────────────────────────────────────────────────────┤
+ * │                   Map Image                          │
+ * └─────────────────────────────────────────────────────┘
  */
 export function LocationBlockComponent({
-  sectionTitle,
-  description,
-  locationImage,
-  address,
-  googleMapUrl,
-  height = 'large',
-  textPosition = 'center',
-  overlayOpacity = 'medium',
-  showButton = true,
-  // New style fields
+  address1Label = 'Address 1',
+  address1,
+  address2Label = 'Address 2',
+  address2,
+  hotlineLabel = 'Hotline',
+  hotline,
+  emailLabel = 'Email',
+  email,
+  ctaText = 'Contact Us',
+  ctaLink = '/contact',
+  mapImage,
   bgStyle,
   bgCustom,
   txtStyle,
   tTitle,
   tBody,
-  // Legacy
-  titleFont = 'Georgia, serif',
-  bodyFont = 'system-ui, -apple-system, sans-serif',
 }: LocationBlockProps) {
-  const img = typeof locationImage === 'object' ? locationImage as Media : null
-  const positionClasses = getPositionClasses(textPosition)
+  // Parse map image
+  const mapImg = typeof mapImage === 'object' ? mapImage as Media : null
 
-  // Get colors from new style system, fallback to legacy
+  // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
   const styles = hasNewStyles 
     ? getBlockStyles(blockSettings)
-    : { backgroundColor: 'transparent', color: '#ffffff' }
+    : { backgroundColor: '#f5f3f0', color: '#1a1a1a' }
 
-  // Title styles
-  const titleStyles: React.CSSProperties = {
-    fontFamily: tTitle?.font || titleFont,
-    fontSize: tTitle?.size || undefined,
-    fontWeight: tTitle?.weight || '300',
-    lineHeight: tTitle?.lh || '1.2',
-    letterSpacing: tTitle?.ls || '0.02em',
-    color: tTitle?.color || '#ffffff',
-  }
+  const textColor = styles.color || '#1a1a1a'
 
-  // Body styles
+  // Body typography
   const bodyStyles: React.CSSProperties = {
-    fontFamily: tBody?.font || bodyFont,
-    fontSize: tBody?.size || undefined,
-    fontWeight: tBody?.weight || '300',
+    fontFamily: tBody?.font || 'system-ui, -apple-system, sans-serif',
+    fontWeight: tBody?.weight || '400',
     lineHeight: tBody?.lh || '1.6',
     letterSpacing: tBody?.ls || '0',
-    color: tBody?.color || 'rgba(255,255,255,0.8)',
+    color: tBody?.color || textColor,
   }
 
   return (
     <section 
-      className="relative overflow-hidden"
+      className="py-12 md:py-16 px-4"
       style={{ 
-        height: heightMap[height],
-        minHeight: '400px',
+        backgroundColor: styles.backgroundColor,
+        color: textColor,
       }}
     >
-      {/* Background Image */}
-      {img?.url && (
-        <Image
-          src={img.url}
-          alt={sectionTitle || 'Location'}
-          fill
-          className="object-cover"
-        />
-      )}
-
-      {/* Overlay */}
-      <div 
-        className="absolute inset-0"
-        style={{ background: overlayMap[overlayOpacity] }}
-      />
-
-      {/* Content */}
-      <div 
-        className={`relative z-10 h-full flex flex-col p-8 ${positionClasses}`}
-      >
-        <div className="max-w-2xl">
-          {sectionTitle && (
-            <h2 
-              className="text-3xl md:text-5xl font-light text-white mb-4 tracking-wide"
-              style={titleStyles}
-            >
-              {sectionTitle}
-            </h2>
-          )}
+      <div className="max-w-6xl mx-auto">
+        {/* Contact Info - 2 rows layout */}
+        <div className="space-y-4 mb-10">
           
-          {description && (
-            <p 
-              className="text-lg text-white/80 mb-4 font-light"
-              style={bodyStyles}
-            >
-              {description}
-            </p>
-          )}
+          {/* Row 1: Address1 (with label) | Hotline (with label) | (empty) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-12 items-start">
+            {/* Address 1 - with label */}
+            <div>
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
+                <MapPin size={14} />
+                <span>{address1Label || 'Address 1'}</span>
+              </div>
+              {address1 && (
+                <p className="text-base font-medium" style={{ ...bodyStyles, color: '#2c5545' }}>
+                  {address1}
+                </p>
+              )}
+            </div>
 
-          {address && (
-            <p className="text-amber-400 mb-6 text-lg">
-              📍 {address}
-            </p>
-          )}
+            {/* Hotline - with label */}
+            <div>
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
+                <Phone size={14} />
+                <span>{hotlineLabel || 'Hotline'}</span>
+              </div>
+              {hotline && (
+                <a 
+                  href={`tel:${hotline.replace(/\s/g, '')}`}
+                  className="text-base font-medium hover:underline block"
+                  style={bodyStyles}
+                >
+                  {hotline}
+                </a>
+              )}
+            </div>
 
-          {showButton && googleMapUrl && (
-            <a 
-              href={googleMapUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 uppercase tracking-widest text-sm"
-            >
-              Xem bản đồ
-            </a>
-          )}
+            {/* Empty - button is in row 2 */}
+            <div></div>
+          </div>
+
+          {/* Row 2: Address2 (with label) | Email (with label) | Button */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-12 items-start">
+            {/* Address 2 - with label */}
+            <div>
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
+                <MapPin size={14} />
+                <span>{address2Label || 'Address 2'}</span>
+              </div>
+              {address2 && (
+                <p className="text-base font-medium" style={{ ...bodyStyles, color: '#2c5545' }}>
+                  {address2}
+                </p>
+              )}
+            </div>
+
+            {/* Email - with label */}
+            <div>
+              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
+                <Mail size={14} />
+                <span>{emailLabel || 'Email'}</span>
+              </div>
+              {email && (
+                <a 
+                  href={`mailto:${email}`}
+                  className="text-base font-medium hover:underline block"
+                  style={bodyStyles}
+                >
+                  {email}
+                </a>
+              )}
+            </div>
+
+            {/* CTA Button - in row 2 */}
+            <div className="flex items-start justify-start md:justify-end">
+              {ctaText && ctaLink && (
+                <Link
+                  href={ctaLink}
+                  className="inline-block px-8 py-3 bg-[#2a2a28] text-white text-sm tracking-wider hover:bg-[#1a1a18] transition-colors"
+                >
+                  {ctaText}
+                </Link>
+              )}
+            </div>
+          </div>
+
         </div>
+
+        {/* Map Image */}
+        {mapImg?.url && (
+          <div className="relative w-full aspect-[16/7] overflow-hidden">
+            <Image
+              src={mapImg.url}
+              alt="Location Map"
+              fill
+              className="object-cover"
+            />
+          </div>
+        )}
       </div>
     </section>
   )

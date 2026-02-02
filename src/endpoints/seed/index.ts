@@ -48,9 +48,7 @@ export const seed = async ({
     globals.map((global) =>
       payload.updateGlobal({
         slug: global,
-        data: {
-          navItems: [],
-        },
+        data: {},
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -221,12 +219,54 @@ export const seed = async ({
     payload.updateGlobal({
       slug: 'header',
       data: {
-        navItems: [
+        showTopBar: true,
+        contactPhone: '+84 777 4340',
+        showLanguageSelector: true,
+        languages: [
+          { code: 'en', label: 'ENG' },
+          { code: 'vi', label: 'VIE' },
+        ],
+        showCurrencySelector: true,
+        currencies: [
+          { code: 'usd', label: 'USD' },
+          { code: 'vnd', label: 'VND' },
+        ],
+        navItemsLeft: [
           {
             link: {
               type: 'custom',
-              label: 'Posts',
-              url: '/posts',
+              label: 'Home',
+              url: '/',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Rooms',
+              url: '/rooms',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Dining',
+              url: '/dining',
+            },
+          },
+        ],
+        navItemsRight: [
+          {
+            link: {
+              type: 'custom',
+              label: 'Experiences',
+              url: '/experiences',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Offers',
+              url: '/offers',
             },
           },
           {
@@ -240,36 +280,80 @@ export const seed = async ({
             },
           },
         ],
+        showCTA: true,
+        ctaText: 'Book Your Stay',
+        ctaLink: '/booking',
+        backgroundColor: '#ffffff',
+        textColor: 'dark',
+        scrolledBackgroundColor: '#ffffff',
+        fontFamily: 'system-ui, -apple-system, sans-serif',
+        fontWeight: '500',
+        fontSize: '14px',
+        letterSpacing: '1px',
       },
     }),
     payload.updateGlobal({
       slug: 'footer',
       data: {
-        navItems: [
+        subscribeTitle: 'Get the latest news & discounts',
+        subscribeSubtitle: 'Subscribe to our newsletter to stay on updated',
+        subscribeButtonText: 'Subscribe',
+        subscribeButtonLink: '/subscribe',
+        addresses: [
+          { address: '123 Fansipan Street, Sa Pa, Lào Cai, Vietnam' },
+          { address: '456 Muong Hoa Valley, Sa Pa, Vietnam' },
+        ],
+        phone: '+84 777 4340',
+        email: 'Calanthehotel@gmail.com',
+        findUsText: 'Find us',
+        socialLinks: [
+          { platform: 'facebook', url: 'https://facebook.com' },
+          { platform: 'instagram', url: 'https://instagram.com' },
+          { platform: 'youtube', url: 'https://youtube.com' },
+          { platform: 'pinterest', url: 'https://pinterest.com' },
+        ],
+        navLinks: [
           {
             link: {
               type: 'custom',
-              label: 'Admin',
-              url: '/admin',
+              label: 'Home',
+              url: '/',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
+              label: 'Rooms',
+              url: '/rooms',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
+              label: 'Dining',
+              url: '/dining',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Offers',
+              url: '/offers',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Contact',
+              url: '/contact',
             },
           },
         ],
+        copyrightText: '© 2026 Sapa Hotel. All rights reserved.',
+        backgroundColor: '#ffffff',
+        textColor: '#1a1a1a',
+        borderColor: '#e5e5e5',
+        subscribeBackgroundColor: '#1a1a1a',
       },
     }),
   ])

@@ -3,151 +3,144 @@ import { typographyFields } from '@/fields/typography'
 import { blockStyleFields } from '@/fields/blockBackground'
 
 /**
- * ACCOMMODATIONS BLOCK
+ * ACCOMMODATIONS BLOCK (Type 1)
  * 
- * Hiển thị phòng với tabs Room/Suite
- * - Mỗi phòng có: tên, loại giường, diện tích, số người, mô tả, nút xem chi tiết
+ * List layout với:
+ * - Filter tabs (All, Regular, Deluxe, Family, Suites)
+ * - Mỗi phòng: Image slider trái, info phải (title, subtitle, amenities list, book button)
  */
 export const RoomsGridBlock: Block = {
   slug: 'rooms-grid',
   
   labels: {
-    singular: 'Accommodations',
-    plural: 'Accommodations',
+    singular: 'Accommodations (Type 1)',
+    plural: 'Accommodations (Type 1)',
   },
 
   interfaceName: 'RoomsGridBlockType',
   
   fields: [
-    // CONTENT
+    // Filter Categories - predefined options
     {
-      name: 'sectionTitle',
-      type: 'text',
-      label: 'Tiêu đề Section',
-      defaultValue: 'Accommodations',
+      name: 'enabledCategories',
+      type: 'select',
+      label: 'Loại phòng hiển thị',
+      hasMany: true,
+      options: [
+        { label: 'Regular', value: 'regular' },
+        { label: 'Deluxe', value: 'deluxe' },
+        { label: 'Family', value: 'family' },
+        { label: 'Suites', value: 'suites' },
+      ],
+      defaultValue: ['regular', 'deluxe', 'family', 'suites'],
+      admin: {
+        description: 'Chọn các loại phòng muốn hiển thị trong filter',
+      },
     },
+    // Custom categories (optional)
     {
-      name: 'viewAllText',
-      type: 'text',
-      label: 'Text link xem tất cả',
-      defaultValue: 'View all accommodations',
-    },
-    {
-      name: 'viewAllLink',
-      type: 'text',
-      label: 'Link xem tất cả',
-      defaultValue: '/accommodations',
-    },
-
-    // TABS
-    {
-      name: 'tabs',
+      name: 'customCategories',
       type: 'array',
-      label: 'Tabs',
-      minRows: 1,
+      label: 'Loại phòng tùy chỉnh',
+      admin: {
+        description: 'Thêm loại phòng khác ngoài các loại mặc định',
+      },
       fields: [
         {
-          name: 'tabName',
+          name: 'name',
           type: 'text',
-          label: 'Tên Tab',
+          label: 'Tên loại',
           required: true,
-          admin: {
-            description: 'Ví dụ: Room, Suite',
-          },
+        },
+      ],
+    },
+
+    // Rooms List
+    {
+      name: 'rooms',
+      type: 'array',
+      label: 'Danh sách phòng',
+      fields: [
+        {
+          name: 'category',
+          type: 'select',
+          label: 'Loại phòng',
+          options: [
+            { label: 'Regular', value: 'regular' },
+            { label: 'Deluxe', value: 'deluxe' },
+            { label: 'Family', value: 'family' },
+            { label: 'Suites', value: 'suites' },
+          ],
+          defaultValue: 'regular',
         },
         {
-          name: 'rooms',
+          name: 'name',
+          type: 'text',
+          label: 'Tên phòng',
+          required: true,
+        },
+        {
+          name: 'subtitle',
+          type: 'text',
+          label: 'Mô tả ngắn',
+          admin: {
+            description: 'Ví dụ: Ideal for short stays and business travelers...',
+          },
+        },
+        // Images for slider
+        {
+          name: 'images',
           type: 'array',
-          label: 'Danh sách phòng',
+          label: 'Ảnh phòng (slider)',
+          minRows: 1,
           fields: [
             {
-              name: 'roomName',
-              type: 'text',
-              label: 'Tên phòng',
-              required: true,
-            },
-            {
-              name: 'roomSubtitle',
-              type: 'text',
-              label: 'Phụ đề',
-              admin: {
-                description: 'Ví dụ: 2 Single Size Beds, 1 King Size Bed',
-              },
-            },
-            {
-              name: 'bedType',
-              type: 'text',
-              label: 'Loại giường',
-              admin: {
-                description: 'Ví dụ: KING SIZE BED(S) X1',
-              },
-            },
-            {
-              name: 'roomSize',
-              type: 'text',
-              label: 'Diện tích',
-              admin: {
-                description: 'Ví dụ: 33 M²/355SQFT',
-              },
-            },
-            {
-              name: 'maxPersons',
-              type: 'text',
-              label: 'Số người tối đa',
-              admin: {
-                description: 'Ví dụ: 3 PERSONS',
-              },
-            },
-            {
-              name: 'roomDescription',
-              type: 'textarea',
-              label: 'Mô tả phòng',
-            },
-            {
-              name: 'roomImage',
+              name: 'image',
               type: 'upload',
               relationTo: 'media',
-              label: 'Ảnh phòng',
-            },
-            {
-              name: 'ratesLink',
-              type: 'text',
-              label: 'Link xem giá',
-            },
-            {
-              name: 'detailsLink',
-              type: 'text',
-              label: 'Link xem chi tiết',
+              required: true,
             },
           ],
         },
+        // Amenities
+        {
+          name: 'amenities',
+          type: 'array',
+          label: 'Tiện nghi',
+          fields: [
+            {
+              name: 'icon',
+              type: 'select',
+              label: 'Icon',
+              options: [
+                { label: 'Giường (Bed)', value: 'bed' },
+                { label: 'Bàn làm việc (Desk)', value: 'desk' },
+                { label: 'Phòng tắm (Bath)', value: 'bath' },
+                { label: 'Wifi', value: 'wifi' },
+                { label: 'TV', value: 'tv' },
+                { label: 'Điều hòa (AC)', value: 'ac' },
+                { label: 'Sofa', value: 'sofa' },
+                { label: 'Cửa sổ (Window)', value: 'window' },
+              ],
+              defaultValue: 'bed',
+            },
+            {
+              name: 'text',
+              type: 'text',
+              label: 'Mô tả',
+              required: true,
+            },
+          ],
+        },
+        {
+          name: 'bookLink',
+          type: 'text',
+          label: 'Link đặt phòng',
+          defaultValue: '/booking',
+        },
       ],
     },
 
-    // SETTINGS
-    {
-      name: 'backgroundColor',
-      type: 'select',
-      label: 'Màu nền',
-      defaultValue: 'light',
-      options: [
-        { label: 'Sáng', value: 'light' },
-        { label: 'Tối', value: 'dark' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'accentColor',
-      type: 'text',
-      label: 'Màu accent',
-      defaultValue: '#8b6f47',
-      admin: {
-        position: 'sidebar',
-        description: 'Màu cho tab active và nút',
-      },
-    },
     // Typography
     ...typographyFields,
     // Background Styles

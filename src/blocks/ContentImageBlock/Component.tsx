@@ -2,6 +2,7 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Check } from 'lucide-react'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
 
 interface TypographySettings {
@@ -13,13 +14,23 @@ interface TypographySettings {
   color?: string
 }
 
+interface HighlightItem {
+  text?: string
+}
+
+interface HighlightSection {
+  title?: string
+  items?: HighlightItem[]
+}
+
 interface ContentImageBlockProps {
   blockType: 'content-image'
   title?: string
-  subtitle?: string
   description?: string
+  highlightSection?: HighlightSection
   image?: Media | number
   imagePosition?: 'left' | 'right'
+  showBorder?: boolean
   ctaText?: string
   ctaLink?: string
   // New style fields (short names)
@@ -36,16 +47,17 @@ interface ContentImageBlockProps {
 }
 
 /**
- * CONTENT + IMAGE BLOCK COMPONENT
+ * CONTENT & IMAGE BLOCK COMPONENT
  * 
- * Flexible content block with image that can be positioned on left or right
+ * Flexible content block with image, optional highlight section with checklist
  */
 export function ContentImageBlockComponent({
   title,
-  subtitle,
   description,
+  highlightSection,
   image,
   imagePosition = 'right',
+  showBorder = true,
   ctaText,
   ctaLink,
   bgStyle,
@@ -59,6 +71,14 @@ export function ContentImageBlockComponent({
   textColor,
 }: ContentImageBlockProps) {
   const img = typeof image === 'object' ? image as Media : null
+  
+  // Debug - xem dữ liệu image
+  console.log('ContentImageBlock DEBUG:', { 
+    imageType: typeof image,
+    imageValue: image,
+    imgResult: img,
+    imgUrl: img?.url 
+  })
 
   // Get colors from new style system, fallback to legacy
   const blockSettings: BlockStyleSettings = {
@@ -68,7 +88,7 @@ export function ContentImageBlockComponent({
   }
   const styles = bgStyle 
     ? getBlockStyles(blockSettings) 
-    : { backgroundColor: backgroundColor || 'transparent', color: textColor || '#1a1a1a' }
+    : { backgroundColor: backgroundColor || '#f8f7f5', color: textColor || '#1a1a1a' }
 
   // Title styles
   const titleStyles: React.CSSProperties = {
@@ -88,7 +108,7 @@ export function ContentImageBlockComponent({
     lineHeight: tBody?.lh || '1.75',
     letterSpacing: tBody?.ls || '0',
     color: tBody?.color || styles.color,
-    opacity: 0.9,
+    opacity: 0.8,
   }
 
   return (
@@ -101,43 +121,15 @@ export function ContentImageBlockComponent({
     >
       <div className="container mx-auto px-4 md:px-8">
         <div 
-          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center ${
-            imagePosition === 'left' ? 'lg:flex-row-reverse' : ''
-          }`}
+          className={`grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center`}
         >
-          {/* Image Section */}
-          <div 
-            className={`relative aspect-[4/3] overflow-hidden ${
-              imagePosition === 'left' ? 'lg:order-1' : 'lg:order-2'
-            }`}
-          >
-            {img?.url && (
-              <Image
-                src={img.url}
-                alt={title || 'Content image'}
-                fill
-                className="object-cover"
-              />
-            )}
-          </div>
-
           {/* Content Section */}
           <div 
-            className={`space-y-6 ${
+            className={`space-y-5 ${
               imagePosition === 'left' ? 'lg:order-2' : 'lg:order-1'
             }`}
             style={{ textAlign }}
           >
-            {/* Subtitle */}
-            {subtitle && (
-              <p 
-                className="text-sm uppercase tracking-widest"
-                style={{ color: styles.color, opacity: 0.7 }}
-              >
-                {subtitle}
-              </p>
-            )}
-
             {/* Title */}
             {title && (
               <h2 
@@ -148,14 +140,48 @@ export function ContentImageBlockComponent({
               </h2>
             )}
 
-            {/* Description */}
+            {/* Description with line above */}
             {description && (
-              <p 
-                className="text-base md:text-lg leading-relaxed"
-                style={bodyStyles}
-              >
-                {description}
-              </p>
+              <div className="pt-4 border-t border-[#e0ddd8]">
+                <p 
+                  className="text-sm md:text-base leading-relaxed"
+                  style={bodyStyles}
+                >
+                  {description}
+                </p>
+              </div>
+            )}
+
+            {/* Highlight Section with Checklist */}
+            {highlightSection?.title && (
+              <div className="pt-4 space-y-4">
+                <h3 
+                  className="text-sm font-semibold"
+                  style={{ color: styles.color }}
+                >
+                  {highlightSection.title}
+                </h3>
+                
+                {highlightSection.items && highlightSection.items.length > 0 && (
+                  <ul className="space-y-2">
+                    {highlightSection.items.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-3">
+                        <Check 
+                          className="w-4 h-4 mt-0.5 flex-shrink-0" 
+                          strokeWidth={2}
+                          style={{ color: styles.color, opacity: 0.6 }}
+                        />
+                        <span 
+                          className="text-sm"
+                          style={{ ...bodyStyles, opacity: 0.85 }}
+                        >
+                          {item.text}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
 
             {/* CTA Button */}
@@ -177,6 +203,27 @@ export function ContentImageBlockComponent({
                     <path d="M5 10h10M10 5l5 5-5 5" />
                   </svg>
                 </Link>
+              </div>
+            )}
+          </div>
+
+          {/* Image Section */}
+          <div 
+            className={`relative aspect-[5/4] lg:aspect-[4/3] overflow-hidden max-w-md lg:max-w-none mx-auto min-h-[300px] lg:min-h-[400px] ${
+              imagePosition === 'left' ? 'lg:order-1' : 'lg:order-2'
+            }`}
+          >
+            {img?.url ? (
+              <Image
+                src={img.url}
+                alt={img.alt || title || 'Content image'}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                No image
               </div>
             )}
           </div>

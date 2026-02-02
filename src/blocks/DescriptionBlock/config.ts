@@ -3,110 +3,102 @@ import { typographyFields } from '@/fields/typography'
 import { blockStyleFields } from '@/fields/blockBackground'
 
 /**
- * DESCRIPTION BLOCK
+ * DESCRIPTION BLOCK (Type 1)
  * 
- * Block giới thiệu tổng quan về hotel
- * - Tiêu đề chính (italic style)
- * - Mô tả chi tiết
- * - Địa chỉ với icon
- * - Số điện thoại với icon
+ * Block giới thiệu với layout 2 cột:
+ * - Cột trái: Text + CTA + Image nhỏ
+ * - Cột phải: Image lớn + Text
  */
 export const DescriptionBlock: Block = {
   slug: 'description',
   
   labels: {
-    singular: 'Description Section',
-    plural: 'Description Sections',
+    singular: 'Description (Type 1)',
+    plural: 'Description (Type 1)',
   },
 
   interfaceName: 'DescriptionBlockType',
   
   fields: [
+    // Title - full width
     {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
       required: true,
       admin: {
-        description: 'Ví dụ: "Haute Couture Meets Hill Tribe Artistry"',
-      },
-    },
-    {
-      name: 'description',
-      type: 'textarea',
-      label: 'Mô tả chi tiết',
-      required: true,
-    },
-    {
-      name: 'address',
-      type: 'text',
-      label: 'Địa chỉ',
-      admin: {
-        description: 'Địa chỉ đầy đủ của hotel',
-      },
-    },
-    {
-      name: 'addressLink',
-      type: 'text',
-      label: 'Link Google Maps',
-    },
-    {
-      name: 'phone',
-      type: 'text',
-      label: 'Số điện thoại',
-    },
-    {
-      name: 'phoneLink',
-      type: 'text',
-      label: 'Link gọi điện',
-      admin: {
-        description: 'Ví dụ: tel:+84214363999',
+        description: 'Ví dụ: "A Refined Stay, Thoughtfully Designed"',
       },
     },
 
-    // SETTINGS
+    // === LEFT COLUMN ===
     {
-      name: 'backgroundColor',
-      type: 'select',
-      label: 'Màu nền',
-      defaultValue: 'light',
-      options: [
-        { label: 'Sáng', value: 'light' },
-        { label: 'Tối', value: 'dark' },
-        { label: 'Trong suốt', value: 'transparent' },
-      ],
+      type: 'collapsible',
+      label: 'Cột trái (Text + CTA + Ảnh nhỏ)',
       admin: {
-        position: 'sidebar',
+        initCollapsed: false,
       },
+      fields: [
+        {
+          name: 'leftText',
+          type: 'textarea',
+          label: 'Text',
+          admin: {
+            description: 'Mô tả ngắn về khách sạn',
+          },
+        },
+        {
+          name: 'ctaText',
+          type: 'text',
+          label: 'CTA Text',
+          defaultValue: 'More About Us',
+        },
+        {
+          name: 'ctaLink',
+          type: 'text',
+          label: 'CTA Link',
+          defaultValue: '/about',
+        },
+        {
+          name: 'image1',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Ảnh nhỏ (portrait)',
+          admin: {
+            description: 'Ảnh dọc nhỏ hiển thị dưới CTA',
+          },
+        },
+      ],
     },
+
+    // === RIGHT COLUMN ===
     {
-      name: 'textAlign',
-      type: 'select',
-      label: 'Căn chỉnh',
-      defaultValue: 'center',
-      options: [
-        { label: 'Trái', value: 'left' },
-        { label: 'Giữa', value: 'center' },
-        { label: 'Phải', value: 'right' },
-      ],
+      type: 'collapsible',
+      label: 'Cột phải (Ảnh lớn + Text)',
       admin: {
-        position: 'sidebar',
+        initCollapsed: false,
       },
-    },
-    {
-      name: 'titleStyle',
-      type: 'select',
-      label: 'Kiểu tiêu đề',
-      defaultValue: 'italic',
-      options: [
-        { label: 'Italic', value: 'italic' },
-        { label: 'Normal', value: 'normal' },
-        { label: 'Bold', value: 'bold' },
+      fields: [
+        {
+          name: 'image2',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Ảnh lớn (landscape)',
+          admin: {
+            description: 'Ảnh ngang lớn',
+          },
+        },
+        {
+          name: 'rightText',
+          type: 'textarea',
+          label: 'Text dưới ảnh',
+          admin: {
+            description: 'Nội dung hiển thị dưới ảnh lớn',
+          },
+        },
       ],
-      admin: {
-        position: 'sidebar',
-      },
     },
+
     // Typography
     ...typographyFields,
     // Background Styles

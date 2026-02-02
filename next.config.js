@@ -18,6 +18,11 @@ const nextConfig = {
           protocol: url.protocol.replace(':', ''),
         }
       }),
+      // Allow cloudflare tunnel images
+      {
+        hostname: '**',
+        protocol: 'https',
+      },
     ],
   },
   webpack: (webpackConfig) => {
@@ -31,6 +36,7 @@ const nextConfig = {
   },
   reactStrictMode: true,
   redirects,
+  allowedDevOrigins: ['*.trycloudflare.com'],
 }
 
 export default withPayload(nextConfig, { devBundleServerPackages: false })

@@ -67,14 +67,14 @@ export default async function Page({ params: paramsPromise }: Args) {
   const { hero, layout } = page
 
   return (
-    <article className="pt-16 pb-24">
+    <article className="bg-white">
       <PageClient />
       {/* Allows redirects for valid pages too */}
       <PayloadRedirects disableNotFound url={url} />
 
       {draft && <LivePreviewListener />}
 
-      <RenderHero {...hero} />
+      {hero && hero.type && hero.type !== 'none' && <RenderHero {...hero} />}
       <RenderBlocks blocks={layout} />
     </article>
   )
@@ -100,6 +100,7 @@ const queryPageBySlug = cache(async ({ slug }: { slug: string }) => {
     collection: 'pages',
     draft,
     limit: 1,
+    depth: 3,
     pagination: false,
     overrideAccess: draft,
     where: {

@@ -2,20 +2,50 @@ import { Block } from 'payload'
 import { typographyFields } from '@/fields/typography'
 import { blockStyleFields } from '@/fields/blockBackground'
 
+/**
+ * SERVICES BLOCK (Dining section style)
+ * 
+ * Layout:
+ * - Header: Title bên trái, Description bên phải
+ * - Content: 3 cards với ảnh dọc, title và description overlay
+ */
 export const OurServicesBlock: Block = {
   slug: 'our-services',
   interfaceName: 'OurServicesBlock',
   labels: {
-    singular: 'Our Services Block',
-    plural: 'Our Services Blocks',
+    singular: 'Services',
+    plural: 'Services',
   },
   fields: [
+    // Header Section
     {
-      name: 'sectionTitle',
-      type: 'text',
-      label: 'Tiêu đề Section',
-      defaultValue: 'Our Services',
+      type: 'collapsible',
+      label: 'Header',
+      admin: {
+        initCollapsed: false,
+      },
+      fields: [
+        {
+          name: 'sectionTitle',
+          type: 'text',
+          label: 'Tiêu đề Section',
+          defaultValue: 'Dining That Complements Your Stay',
+          admin: {
+            description: 'Tiêu đề lớn bên trái',
+          },
+        },
+        {
+          name: 'sectionDescription',
+          type: 'textarea',
+          label: 'Mô tả Section',
+          admin: {
+            description: 'Mô tả ngắn bên phải tiêu đề',
+          },
+        },
+      ],
     },
+
+    // Service Cards
     {
       name: 'services',
       type: 'array',
@@ -24,11 +54,13 @@ export const OurServicesBlock: Block = {
       maxRows: 6,
       fields: [
         {
-          name: 'category',
-          type: 'text',
-          label: 'Danh mục',
+          name: 'serviceImage',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Hình ảnh',
+          required: true,
           admin: {
-            description: 'Ví dụ: WELLNESS, BREAKFAST, OCCASIONS',
+            description: 'Ảnh dọc (portrait) cho card',
           },
         },
         {
@@ -36,25 +68,21 @@ export const OurServicesBlock: Block = {
           type: 'text',
           label: 'Tên dịch vụ',
           required: true,
+          admin: {
+            description: 'Ví dụ: Calm Space, Balanced Drinks',
+          },
         },
         {
           name: 'serviceDescription',
           type: 'textarea',
           label: 'Mô tả',
-        },
-        {
-          name: 'serviceImage',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Hình ảnh',
-        },
-        {
-          name: 'serviceLink',
-          type: 'text',
-          label: 'Link chi tiết',
+          admin: {
+            description: 'Mô tả ngắn hiển thị trên card',
+          },
         },
       ],
     },
+
     // Settings
     {
       type: 'collapsible',
@@ -74,24 +102,9 @@ export const OurServicesBlock: Block = {
             { label: '4 cột', value: '4' },
           ],
         },
-        {
-          name: 'backgroundColor',
-          type: 'select',
-          label: 'Màu nền',
-          defaultValue: 'light',
-          options: [
-            { label: 'Sáng', value: 'light' },
-            { label: 'Tối', value: 'dark' },
-          ],
-        },
-        {
-          name: 'accentColor',
-          type: 'text',
-          label: 'Màu nhấn',
-          defaultValue: '#8b6f47',
-        },
       ],
     },
+
     // Typography
     ...typographyFields,
     // Background Styles

@@ -5,8 +5,14 @@ import { blockStyleFields } from '@/fields/blockBackground'
 /**
  * LOCATION BLOCK
  * 
- * Hiển thị vị trí hotel với background image
- * + Settings để customize layout
+ * Layout mới:
+ * ┌─────────────────────────────────────────────────────┐
+ * │  Address 1  │  Hotline    │                         │
+ * │  Address 2  │  Email      │  [Contact Us]           │
+ * ├─────────────────────────────────────────────────────┤
+ * │                   Map Image                          │
+ * │                 (with markers)                       │
+ * └─────────────────────────────────────────────────────┘
  */
 export const LocationBlock: Block = {
   slug: 'location',
@@ -19,99 +25,112 @@ export const LocationBlock: Block = {
   interfaceName: 'LocationBlockType',
   
   fields: [
-    // CONTENT
+    // === ADDRESSES ===
     {
-      name: 'sectionTitle',
-      type: 'text',
-      label: 'Tiêu đề Section',
-      defaultValue: 'Our Location',
+      type: 'collapsible',
+      label: 'Địa chỉ',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'address1Label',
+          type: 'text',
+          label: 'Label địa chỉ 1',
+          defaultValue: 'Address 1',
+        },
+        {
+          name: 'address1',
+          type: 'text',
+          label: 'Địa chỉ 1',
+          admin: {
+            description: 'Ví dụ: 12 Anchor Road, Sai Kung',
+          },
+        },
+        {
+          name: 'address2Label',
+          type: 'text',
+          label: 'Label địa chỉ 2',
+          defaultValue: 'Address 2',
+        },
+        {
+          name: 'address2',
+          type: 'text',
+          label: 'Địa chỉ 2',
+          admin: {
+            description: 'Ví dụ: 8 Seashell Drive, Lantau Island',
+          },
+        },
+      ],
     },
+
+    // === CONTACT INFO ===
     {
-      name: 'description',
-      type: 'textarea',
-      label: 'Mô tả vị trí',
+      type: 'collapsible',
+      label: 'Thông tin liên hệ',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'hotlineLabel',
+          type: 'text',
+          label: 'Label Hotline',
+          defaultValue: 'Hotline',
+        },
+        {
+          name: 'hotline',
+          type: 'text',
+          label: 'Số hotline',
+          admin: {
+            description: 'Ví dụ: +84 777 4340',
+          },
+        },
+        {
+          name: 'emailLabel',
+          type: 'text',
+          label: 'Label Email',
+          defaultValue: 'Email',
+        },
+        {
+          name: 'email',
+          type: 'text',
+          label: 'Email',
+          admin: {
+            description: 'Ví dụ: Calanthehotel@gmail.com',
+          },
+        },
+      ],
     },
+
+    // === CTA BUTTON ===
     {
-      name: 'locationImage',
+      type: 'collapsible',
+      label: 'Nút CTA',
+      admin: { initCollapsed: false },
+      fields: [
+        {
+          name: 'ctaText',
+          type: 'text',
+          label: 'Text nút',
+          defaultValue: 'Contact Us',
+        },
+        {
+          name: 'ctaLink',
+          type: 'text',
+          label: 'Link nút',
+          defaultValue: '/contact',
+        },
+      ],
+    },
+
+    // === MAP IMAGE ===
+    {
+      name: 'mapImage',
       type: 'upload',
       relationTo: 'media',
-      label: 'Hình ảnh/Bản đồ',
-    },
-    {
-      name: 'address',
-      type: 'text',
-      label: 'Địa chỉ',
-    },
-    {
-      name: 'googleMapUrl',
-      type: 'text',
-      label: 'Google Maps Link',
+      label: 'Hình bản đồ',
       admin: {
-        description: 'Link Google Maps để mở trong tab mới',
+        description: 'Upload hình bản đồ với markers',
       },
     },
-    
-    // SETTINGS
-    {
-      name: 'height',
-      type: 'select',
-      label: 'Chiều cao section',
-      defaultValue: 'large',
-      options: [
-        { label: 'Nhỏ (40vh)', value: 'small' },
-        { label: 'Vừa (60vh)', value: 'medium' },
-        { label: 'Lớn (80vh)', value: 'large' },
-        { label: 'Full (100vh)', value: 'full' },
-      ],
-      admin: {
-        position: 'sidebar',
-        description: 'Chiều cao của section',
-      },
-    },
-    {
-      name: 'textPosition',
-      type: 'select',
-      label: 'Vị trí nội dung',
-      defaultValue: 'center',
-      options: [
-        { label: 'Trên trái', value: 'top-left' },
-        { label: 'Trên giữa', value: 'top-center' },
-        { label: 'Trên phải', value: 'top-right' },
-        { label: 'Giữa trái', value: 'center-left' },
-        { label: 'Giữa', value: 'center' },
-        { label: 'Giữa phải', value: 'center-right' },
-        { label: 'Dưới trái', value: 'bottom-left' },
-        { label: 'Dưới giữa', value: 'bottom-center' },
-        { label: 'Dưới phải', value: 'bottom-right' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'overlayOpacity',
-      type: 'select',
-      label: 'Độ tối overlay',
-      defaultValue: 'medium',
-      options: [
-        { label: 'Không', value: 'none' },
-        { label: 'Nhẹ (30%)', value: 'light' },
-        { label: 'Vừa (50%)', value: 'medium' },
-        { label: 'Đậm (70%)', value: 'dark' },
-      ],
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'showButton',
-      type: 'checkbox',
-      label: 'Hiển thị nút xem bản đồ',
-      defaultValue: true,
-      admin: {
-        position: 'sidebar',
-      },
-    },
+
     // Typography
     ...typographyFields,
     // Background Styles

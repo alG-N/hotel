@@ -5,110 +5,160 @@ import { blockStyleFields } from '@/fields/blockBackground'
 /**
  * OFFERS BLOCK
  * 
- * Hiển thị các ưu đãi đặc biệt
- * - offerTitle, offerDescription, offerImage
- * + Settings để customize layout
+ * Hiển thị ưu đãi đặc biệt với layout:
+ * - Ảnh bên trái
+ * - Nội dung bên phải với title, description, price, features list, CTA button
  */
 export const OffersBlock: Block = {
   slug: 'offers',
   
   labels: {
-    singular: 'Special Offers',
-    plural: 'Special Offers',
+    singular: 'Exclusive Offers',
+    plural: 'Exclusive Offers',
   },
 
   interfaceName: 'OffersBlockType',
   
   fields: [
+    // Image
     {
-      name: 'sectionTitle',
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Hình ảnh',
+    },
+    // Content
+    {
+      name: 'title',
       type: 'text',
-      label: 'Tiêu đề Section',
-      defaultValue: 'Special Offers',
+      label: 'Tiêu đề',
+      defaultValue: 'Exclusive Offers, Thoughtfully Curated',
     },
     {
-      name: 'offers',
+      name: 'description',
+      type: 'textarea',
+      label: 'Mô tả',
+      admin: {
+        description: 'Mô tả ngắn về ưu đãi. Có thể chứa giá với format đặc biệt.',
+      },
+    },
+    {
+      name: 'priceHighlight',
+      type: 'text',
+      label: 'Giá nổi bật',
+      defaultValue: '$89 per night',
+      admin: {
+        description: 'Phần giá sẽ được in đậm và nghiêng',
+      },
+    },
+    // Features
+    {
+      name: 'featuresTitle',
+      type: 'text',
+      label: 'Tiêu đề features',
+      defaultValue: "What's Included:",
+    },
+    {
+      name: 'features',
       type: 'array',
-      label: 'Danh sách ưu đãi',
+      label: 'Features/Bao gồm',
       fields: [
         {
-          name: 'offerTitle',
+          name: 'feature',
           type: 'text',
-          label: 'Tiêu đề ưu đãi',
-        },
-        {
-          name: 'offerDescription',
-          type: 'textarea',
-          label: 'Mô tả ưu đãi',
-        },
-        {
-          name: 'offerImage',
-          type: 'upload',
-          relationTo: 'media',
-          label: 'Hình ảnh',
-        },
-        {
-          name: 'offerLink',
-          type: 'text',
-          label: 'Link chi tiết',
+          required: true,
         },
       ],
+    },
+    // Section style for checkmarks
+    {
+      name: 'sectionStyle',
+      type: 'select',
+      label: 'Style section',
+      defaultValue: 'dark',
+      options: [
+        { label: 'Tối (text sáng)', value: 'dark' },
+        { label: 'Sáng (text tối)', value: 'light' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description: 'Điều chỉnh màu checkmarks và text theo nền',
+      },
+    },
+    // CTA
+    {
+      name: 'ctaText',
+      type: 'text',
+      label: 'Nút CTA',
+      defaultValue: 'Book Now',
+    },
+    {
+      name: 'ctaLink',
+      type: 'text',
+      label: 'Link CTA',
+      defaultValue: '/booking',
     },
 
     // SETTINGS
     {
-      name: 'columns',
+      name: 'imagePosition',
       type: 'select',
-      label: 'Số cột',
-      defaultValue: '2',
+      label: 'Vị trí ảnh',
+      defaultValue: 'left',
       options: [
-        { label: '1 cột', value: '1' },
-        { label: '2 cột', value: '2' },
-        { label: '3 cột', value: '3' },
+        { label: 'Trái', value: 'left' },
+        { label: 'Phải', value: 'right' },
       ],
       admin: {
         position: 'sidebar',
-        description: 'Số cột hiển thị',
       },
     },
     {
-      name: 'gap',
+      name: 'textAlign',
       type: 'select',
-      label: 'Khoảng cách',
-      defaultValue: 'medium',
+      label: 'Căn chỉnh text',
+      defaultValue: 'center',
       options: [
-        { label: 'Nhỏ (1rem)', value: 'small' },
-        { label: 'Vừa (2rem)', value: 'medium' },
-        { label: 'Lớn (3rem)', value: 'large' },
+        { label: 'Trái', value: 'left' },
+        { label: 'Giữa', value: 'center' },
+        { label: 'Phải', value: 'right' },
       ],
       admin: {
         position: 'sidebar',
-        description: 'Khoảng cách giữa các cards',
       },
     },
     {
-      name: 'layout',
-      type: 'select',
-      label: 'Bố cục card',
-      defaultValue: 'horizontal',
-      options: [
-        { label: 'Ngang (ảnh trái)', value: 'horizontal' },
-        { label: 'Dọc (ảnh trên)', value: 'vertical' },
-      ],
+      name: 'imageWidth',
+      type: 'text',
+      label: 'Chiều rộng ảnh',
+      defaultValue: '100%',
       admin: {
         position: 'sidebar',
-        description: 'Cách bố trí ảnh và nội dung',
+        description: 'VD: 100%, 400px, 50vw',
       },
     },
     {
-      name: 'backgroundColor',
+      name: 'imageHeight',
+      type: 'text',
+      label: 'Chiều cao ảnh',
+      defaultValue: 'auto',
+      admin: {
+        position: 'sidebar',
+        description: 'VD: auto, 500px, 60vh',
+      },
+    },
+    {
+      name: 'imageAspectRatio',
       type: 'select',
-      label: 'Màu nền section',
-      defaultValue: 'dark',
+      label: 'Tỷ lệ ảnh',
+      defaultValue: 'auto',
       options: [
-        { label: 'Tối', value: 'dark' },
-        { label: 'Tối hơn', value: 'darker' },
-        { label: 'Trong suốt', value: 'transparent' },
+        { label: 'Tự động', value: 'auto' },
+        { label: '1:1 (Vuông)', value: '1/1' },
+        { label: '4:3', value: '4/3' },
+        { label: '3:4', value: '3/4' },
+        { label: '16:9', value: '16/9' },
+        { label: '9:16', value: '9/16' },
       ],
       admin: {
         position: 'sidebar',

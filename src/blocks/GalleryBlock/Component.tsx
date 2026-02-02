@@ -41,8 +41,6 @@ const heightMap = {
 
 /**
  * PHOTO GALLERY BLOCK COMPONENT
- * 
- * Full-width gallery với navigation arrows
  */
 export function GalleryBlockComponent({
   gallery,

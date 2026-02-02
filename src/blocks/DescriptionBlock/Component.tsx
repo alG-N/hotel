@@ -1,5 +1,9 @@
 import React from 'react'
+import type { Media } from '@/payload-types'
+import Image from 'next/image'
+import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { ArrowUpRight } from 'lucide-react'
 
 interface TypographySettings {
   font?: string
@@ -13,14 +17,12 @@ interface TypographySettings {
 interface DescriptionBlockProps {
   blockType: 'description'
   title?: string
-  description?: string
-  address?: string
-  addressLink?: string
-  phone?: string
-  phoneLink?: string
-  // Settings
-  textAlign?: 'left' | 'center' | 'right'
-  titleStyle?: 'italic' | 'normal' | 'bold'
+  leftText?: string
+  ctaText?: string
+  ctaLink?: string
+  image1?: Media | number
+  image2?: Media | number
+  rightText?: string
   // New style fields
   bgStyle?: string
   bgCustom?: string
@@ -31,19 +33,20 @@ interface DescriptionBlockProps {
 }
 
 /**
- * DESCRIPTION BLOCK COMPONENT
+ * DESCRIPTION BLOCK COMPONENT (Type 1)
  * 
- * Hiển thị thông tin tổng quan về hotel
+ * Layout theo design reference (Pasted Image 2):
+ * - Title ở trên full width
+ * - 4 columns: [Text+CTA nhỏ] [Image portrait nhỏ] [Image landscape lớn] [Text bên dưới image 2]
  */
 export function DescriptionBlockComponent({
   title,
-  description,
-  address,
-  addressLink,
-  phone,
-  phoneLink,
-  textAlign = 'center',
-  titleStyle = 'italic',
+  leftText,
+  ctaText = 'More About Us',
+  ctaLink = '/about',
+  image1,
+  image2,
+  rightText,
   // New fields
   bgStyle,
   bgCustom,
@@ -53,21 +56,23 @@ export function DescriptionBlockComponent({
 }: DescriptionBlockProps) {
   // Use new style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
-  const styles = getBlockStyles(blockSettings)
-  
-  const mutedColor = styles.color === '#ffffff' || styles.color === '#fff' 
-    ? 'rgba(255,255,255,0.7)' 
-    : 'rgba(0,0,0,0.7)'
+  const hasNewStyles = !!bgStyle && bgStyle !== 'default'
+  const styles = hasNewStyles 
+    ? getBlockStyles(blockSettings)
+    : { backgroundColor: '#f5f5f0', color: '#1a1a1a' }
+
+  const textColor = styles.color || '#1a1a1a'
+  const mutedColor = txtStyle === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)'
 
   // Title typography
   const titleStyles: React.CSSProperties = {
     fontFamily: tTitle?.font || 'Georgia, serif',
     fontSize: tTitle?.size || undefined,
-    fontWeight: tTitle?.weight || (titleStyle === 'bold' ? '700' : '300'),
-    fontStyle: tTitle?.font ? 'normal' : (titleStyle === 'italic' ? 'italic' : 'normal'),
+    fontWeight: tTitle?.weight || '300',
+    fontStyle: 'italic',
     lineHeight: tTitle?.lh || '1.2',
     letterSpacing: tTitle?.ls || '0.02em',
-    color: tTitle?.color || styles.color,
+    color: tTitle?.color || textColor,
   }
 
   // Body typography
@@ -80,73 +85,99 @@ export function DescriptionBlockComponent({
     color: tBody?.color || mutedColor,
   }
 
+  const img1 = typeof image1 === 'object' ? image1 as Media : null
+  const img2 = typeof image2 === 'object' ? image2 as Media : null
+
   return (
     <section 
       className="py-16 md:py-24 px-4"
       style={{ 
         backgroundColor: styles.backgroundColor,
-        color: styles.color,
+        color: textColor,
       }}
     >
-      <div 
-        className="max-w-4xl mx-auto"
-        style={{ textAlign }}
-      >
-        {/* Title */}
-        {title && (
-          <h2 
-            className="text-3xl md:text-4xl lg:text-5xl mb-8 tracking-wide"
-            style={titleStyles}
-          >
-            {title}
-          </h2>
-        )}
-
-        {/* Description */}
-        {description && (
-          <p 
-            className="text-base md:text-lg leading-relaxed mb-10"
-            style={bodyStyles}
-          >
-            {description}
-          </p>
-        )}
-
-        {/* Contact Info */}
-        {(address || phone) && (
-          <div className="flex flex-wrap items-center justify-center gap-8 pt-4">
-            {/* Address */}
-            {address && (
-              <a 
-                href={addressLink || '#'}
-                target={addressLink ? '_blank' : undefined}
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                style={{ color: '#8b7355' }}
+      <div className="max-w-5xl mx-auto">
+        {/* 2 Column Layout - closer together */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 lg:gap-4">
+          
+          {/* LEFT SIDE: Title + Text + CTA + Image */}
+          <div className="flex flex-col">
+            {/* Title - split into 2 lines */}
+            {title && (
+              <h2 
+                className="text-3xl md:text-4xl lg:text-5xl mb-8 lg:mb-10"
+                style={titleStyles}
               >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                <span className="underline underline-offset-4">{address}</span>
-              </a>
+                {title.split(',').map((part, idx) => (
+                  <span key={idx}>
+                    {part.trim()}{idx === 0 ? ',' : ''}
+                    {idx === 0 && <br />}
+                  </span>
+                ))}
+              </h2>
             )}
+            
+            {/* Text + CTA + Image in a row */}
+            <div className="flex gap-4 items-start">
+              {/* Text + CTA - narrower width, 4 lines */}
+              <div className="w-36 md:w-44 flex-shrink-0">
+                {leftText && (
+                  <p className="text-sm leading-relaxed mb-4 line-clamp-4" style={bodyStyles}>
+                    {leftText}
+                  </p>
+                )}
+                {ctaText && ctaLink && (
+                  <Link 
+                    href={ctaLink}
+                    className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
+                    style={{ color: textColor }}
+                  >
+                    {ctaText}
+                    <ArrowUpRight className="w-4 h-4" />
+                  </Link>
+                )}
+              </div>
+              
+              {/* Portrait image - larger */}
+              {img1?.url && (
+                <div className="flex-1">
+                  <div className="relative aspect-[3/4] w-full max-w-[220px]">
+                    <Image
+                      src={img1.url}
+                      alt={img1.alt || 'Image 1'}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
 
-            {/* Phone */}
-            {phone && (
-              <a 
-                href={phoneLink || `tel:${phone}`}
-                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-                style={{ color: '#8b7355' }}
-              >
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                </svg>
-                <span>{phone}</span>
-              </a>
+          {/* RIGHT SIDE: Large Image on TOP, Text BELOW */}
+          <div className="flex flex-col">
+            {/* Large landscape image - smaller aspect ratio */}
+            {img2?.url && (
+              <div className="relative aspect-[16/9] w-full max-w-lg ml-auto mb-6">
+                <Image
+                  src={img2.url}
+                  alt={img2.alt || 'Image 2'}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+            
+            {/* Text below image - max width to match image */}
+            {rightText && (
+              <div className="text-sm leading-relaxed max-w-lg ml-auto" style={bodyStyles}>
+                {rightText.split('\n\n').map((paragraph, index) => (
+                  <p key={index} className="mb-3 last:mb-0">{paragraph}</p>
+                ))}
+              </div>
             )}
           </div>
-        )}
+        </div>
       </div>
     </section>
   )

@@ -39,6 +39,22 @@ export const hero: Field = {
       required: true,
     },
     {
+      name: 'height',
+      type: 'select',
+      label: 'Hero Height',
+      defaultValue: 'full',
+      options: [
+        { label: 'Full Screen (100vh)', value: 'full' },
+        { label: 'Large (85vh)', value: 'large' },
+        { label: 'Medium (70vh)', value: 'medium' },
+        { label: 'Small (50vh)', value: 'small' },
+        { label: 'Compact (40vh)', value: 'compact' },
+      ],
+      admin: {
+        condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),
+      },
+    },
+    {
       name: 'richText',
       type: 'richText',
       editor: lexicalEditor({

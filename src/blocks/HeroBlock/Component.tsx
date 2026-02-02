@@ -16,9 +16,11 @@ interface TypographySettings {
 
 interface HeroBlockProps {
   blockType: 'hero'
+  subtitle?: string
   name?: string
   tagline?: string
   heroImage?: Array<{ image: Media | number }> | Media | number
+  showCTA?: boolean
   ctaText?: string
   ctaLink?: string
   // Settings
@@ -127,9 +129,11 @@ function HeroSlideshow({
  * Full-width hero with flexible text positioning and optional slideshow
  */
 export function HeroBlockComponent({
+  subtitle,
   name,
   tagline,
   heroImage,
+  showCTA = false,
   ctaText,
   ctaLink,
   // Settings with defaults
@@ -200,6 +204,12 @@ export function HeroBlockComponent({
 
   const positionClasses = getPositionClasses(position, verticalAlign)
 
+  // Don't render anything if no valid images
+  const hasValidImage = firstImage?.url || images.length > 0
+  if (!hasValidImage) {
+    return null
+  }
+
   return (
     <section 
       className="relative overflow-hidden"
@@ -209,7 +219,7 @@ export function HeroBlockComponent({
       }}
     >
       {/* Background: Single image or Slideshow */}
-      {showSlideshow ? (
+      {showSlideshow && hasMultipleImages ? (
         <HeroSlideshow 
           images={images} 
           interval={parseInt(slideshowSpeed)} 
@@ -235,6 +245,16 @@ export function HeroBlockComponent({
         className={`relative z-10 h-full flex flex-col px-8 md:px-16 lg:px-24 ${positionClasses}`}
       >
         <div className={`max-w-4xl ${position === 'center' ? 'mx-auto' : ''}`}>
+          {/* Subtitle (e.g. "Welcome to") */}
+          {subtitle && (
+            <p 
+              className="text-sm md:text-base uppercase tracking-[0.3em] text-white/80 mb-4"
+              style={{ fontFamily: bodyStyles.fontFamily }}
+            >
+              {subtitle}
+            </p>
+          )}
+          
           {name && (
             <h1 
               className="text-4xl md:text-6xl lg:text-7xl font-light text-white mb-4 tracking-wide"
@@ -246,14 +266,14 @@ export function HeroBlockComponent({
           
           {tagline && (
             <p 
-              className="text-lg md:text-xl text-white/90 mb-8 font-light tracking-wider"
+              className="text-lg md:text-xl text-white/90 mb-8 font-light tracking-wider max-w-2xl"
               style={bodyStyles}
             >
               {tagline}
             </p>
           )}
           
-          {ctaText && ctaLink && (
+          {showCTA && ctaText && ctaLink && (
             <a 
               href={ctaLink}
               className="inline-block px-8 py-3 border-2 border-white text-white hover:bg-white hover:text-black transition-all duration-300 uppercase tracking-widest text-sm"

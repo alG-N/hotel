@@ -1,5 +1,6 @@
 import type { GlobalConfig } from 'payload'
 import { revalidateTheme } from './hooks/revalidateTheme'
+import { fontOptions, fontWeightOptions, letterSpacingOptions } from '@/fields/typography'
 
 export const ThemeSettings: GlobalConfig = {
   slug: 'theme-settings',
@@ -20,8 +21,9 @@ export const ThemeSettings: GlobalConfig = {
         // Header Colors Tab
         {
           label: 'Header',
-          description: 'Cài đặt màu sắc cho Header',
+          description: 'Cài đặt giao diện cho Header',
           fields: [
+            // Colors
             {
               type: 'row',
               fields: [
@@ -29,7 +31,7 @@ export const ThemeSettings: GlobalConfig = {
                   name: 'headerBackgroundColor',
                   type: 'text',
                   label: 'Màu nền Header',
-                  defaultValue: 'transparent',
+                  defaultValue: '#ffffff',
                   admin: {
                     width: '50%',
                     description: 'Nhập hex (#000000) hoặc "transparent"',
@@ -39,7 +41,7 @@ export const ThemeSettings: GlobalConfig = {
                   name: 'headerTextColor',
                   type: 'select',
                   label: 'Màu chữ Header',
-                  defaultValue: 'light',
+                  defaultValue: 'dark',
                   options: [
                     { label: 'Sáng (trắng)', value: 'light' },
                     { label: 'Tối (đen)', value: 'dark' },
@@ -58,6 +60,62 @@ export const ThemeSettings: GlobalConfig = {
               admin: {
                 description: 'Màu nền Header khi scroll xuống',
               },
+            },
+            // Typography
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'headerFont',
+                  type: 'select',
+                  label: 'Font chữ Header',
+                  defaultValue: 'system-ui, -apple-system, sans-serif',
+                  options: fontOptions,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'headerFontWeight',
+                  type: 'select',
+                  label: 'Độ đậm chữ',
+                  defaultValue: '500',
+                  options: fontWeightOptions,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
+            },
+            {
+              type: 'row',
+              fields: [
+                {
+                  name: 'headerFontSize',
+                  type: 'select',
+                  label: 'Kích thước chữ',
+                  defaultValue: '14px',
+                  options: [
+                    { label: 'Nhỏ (12px)', value: '12px' },
+                    { label: 'Bình thường (14px)', value: '14px' },
+                    { label: 'Vừa (15px)', value: '15px' },
+                    { label: 'Lớn (16px)', value: '16px' },
+                  ],
+                  admin: {
+                    width: '50%',
+                  },
+                },
+                {
+                  name: 'headerLetterSpacing',
+                  type: 'select',
+                  label: 'Khoảng cách chữ',
+                  defaultValue: '1px',
+                  options: letterSpacingOptions,
+                  admin: {
+                    width: '50%',
+                  },
+                },
+              ],
             },
           ],
         },
@@ -115,126 +173,7 @@ export const ThemeSettings: GlobalConfig = {
             },
           ],
         },
-        // Admin Panel Tab
-        {
-          label: 'Admin Panel',
-          description: 'Tùy chỉnh giao diện Admin Dashboard',
-          fields: [
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'adminPrimaryColor',
-                  type: 'text',
-                  label: 'Màu chính Admin',
-                  defaultValue: '#0f172a',
-                  admin: {
-                    width: '50%',
-                    description: 'Màu nền sidebar, header admin',
-                  },
-                },
-                {
-                  name: 'adminAccentColor',
-                  type: 'text',
-                  label: 'Màu nhấn Admin',
-                  defaultValue: '#8b6f47',
-                  admin: {
-                    width: '50%',
-                    description: 'Màu button, link, hover',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'adminBgColor',
-                  type: 'text',
-                  label: 'Màu nền trang Admin',
-                  defaultValue: '#f8fafc',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'adminTextColor',
-                  type: 'text',
-                  label: 'Màu chữ Admin',
-                  defaultValue: '#1e293b',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-          ],
-        },
-        // Global Block Defaults Tab
-        {
-          label: 'Block mặc định',
-          description: 'Cài đặt mặc định cho tất cả các block',
-          fields: [
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'defaultBlockBg',
-                  type: 'text',
-                  label: 'Màu nền block mặc định',
-                  defaultValue: 'transparent',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'defaultBlockText',
-                  type: 'text',
-                  label: 'Màu chữ block mặc định',
-                  defaultValue: '#1a1a1a',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              type: 'row',
-              fields: [
-                {
-                  name: 'defaultTitleFont',
-                  type: 'text',
-                  label: 'Font tiêu đề mặc định',
-                  defaultValue: 'Georgia, serif',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-                {
-                  name: 'defaultBodyFont',
-                  type: 'text',
-                  label: 'Font body mặc định',
-                  defaultValue: 'system-ui, -apple-system, sans-serif',
-                  admin: {
-                    width: '50%',
-                  },
-                },
-              ],
-            },
-            {
-              name: 'blockSpacing',
-              type: 'select',
-              label: 'Khoảng cách giữa các block',
-              defaultValue: 'normal',
-              options: [
-                { label: 'Nhỏ (8px)', value: 'small' },
-                { label: 'Bình thường (0)', value: 'normal' },
-                { label: 'Lớn (16px)', value: 'large' },
-                { label: 'Rất lớn (32px)', value: 'xlarge' },
-              ],
-            },
-          ],
-        },
+
       ],
     },
   ],

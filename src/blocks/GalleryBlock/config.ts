@@ -3,7 +3,7 @@ import { typographyFields } from '@/fields/typography'
 import { blockStyleFields } from '@/fields/blockBackground'
 
 /**
- * PHOTO GALLERY BLOCK
+ * GALLERY SLIDESHOW BLOCK
  * 
  * Gallery ảnh full-width với navigation arrows
  * - Hiển thị 1 ảnh lớn với 2 nút chuyển ảnh
@@ -13,8 +13,8 @@ export const GalleryBlock: Block = {
   slug: 'gallery',
   
   labels: {
-    singular: 'Photo Gallery',
-    plural: 'Photo Galleries',
+    singular: 'Gallery Slideshow',
+    plural: 'Gallery Slideshows',
   },
 
   interfaceName: 'GalleryBlockType',

@@ -6,21 +6,13 @@ export const ContentImageBlock: Block = {
   slug: 'content-image',
   interfaceName: 'ContentImageBlock',
   labels: {
-    singular: 'Content + Image Block',
-    plural: 'Content + Image Blocks',
+    singular: 'Content & Image Block',
+    plural: 'Content & Image Blocks',
   },
   fields: [
     {
       type: 'row',
       fields: [
-        {
-          name: 'subtitle',
-          type: 'text',
-          label: 'Subtitle (Optional)',
-          admin: {
-            width: '50%',
-          },
-        },
         {
           name: 'imagePosition',
           type: 'select',
@@ -40,6 +32,15 @@ export const ContentImageBlock: Block = {
             width: '50%',
           },
         },
+        {
+          name: 'showBorder',
+          type: 'checkbox',
+          label: 'Show Left Border',
+          defaultValue: true,
+          admin: {
+            width: '50%',
+          },
+        },
       ],
     },
     {
@@ -52,7 +53,35 @@ export const ContentImageBlock: Block = {
       name: 'description',
       type: 'textarea',
       label: 'Description',
-      required: true,
+    },
+    {
+      name: 'highlightSection',
+      type: 'group',
+      label: 'Highlight Section (Optional)',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Section Title',
+          admin: {
+            placeholder: 'e.g., What we achieve',
+          },
+        },
+        {
+          name: 'items',
+          type: 'array',
+          label: 'Highlight Items',
+          maxRows: 6,
+          fields: [
+            {
+              name: 'text',
+              type: 'text',
+              label: 'Item Text',
+              required: true,
+            },
+          ],
+        },
+      ],
     },
     {
       name: 'image',

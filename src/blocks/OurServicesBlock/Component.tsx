@@ -3,7 +3,6 @@
 import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
-import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
 
 interface TypographySettings {
@@ -16,16 +15,15 @@ interface TypographySettings {
 }
 
 interface ServiceItem {
-  category?: string
   serviceName?: string
   serviceDescription?: string
   serviceImage?: Media | number
-  serviceLink?: string
 }
 
 interface OurServicesBlockProps {
   blockType: 'our-services'
   sectionTitle?: string
+  sectionDescription?: string
   services?: ServiceItem[]
   // Settings
   columns?: '2' | '3' | '4'
@@ -35,66 +33,54 @@ interface OurServicesBlockProps {
   txtStyle?: 'auto' | 'dark' | 'light'
   tTitle?: TypographySettings
   tBody?: TypographySettings
-  // Legacy
-  backgroundColor?: 'light' | 'dark'
-  accentColor?: string
-  titleFont?: string
-  bodyFont?: string
 }
 
 /**
- * OUR SERVICES BLOCK COMPONENT
+ * SERVICES BLOCK COMPONENT
  * 
- * Grid of services (Wellness, Breakfast, Occasions, etc.)
+ * Dining-style layout:
+ * - Header: Title left, description right
+ * - Cards: Portrait images with title + description OVERLAY at bottom (inside image)
  */
 export function OurServicesBlockComponent({
-  sectionTitle = 'Our Services',
+  sectionTitle = 'Dining That Complements Your Stay',
+  sectionDescription,
   services = [],
   columns = '3',
-  // New style fields
   bgStyle,
   bgCustom,
   txtStyle,
   tTitle,
   tBody,
-  // Legacy
-  backgroundColor = 'light',
-  accentColor = '#8b6f47',
-  titleFont = 'Georgia, serif',
-  bodyFont = 'system-ui, -apple-system, sans-serif',
 }: OurServicesBlockProps) {
-  // Get colors from new style system, fallback to legacy
+  // Get colors from new style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
-  const legacyIsDark = backgroundColor === 'dark'
   const styles = hasNewStyles 
     ? getBlockStyles(blockSettings)
-    : { 
-        backgroundColor: legacyIsDark ? '#1a1a1a' : 'transparent', 
-        color: legacyIsDark ? '#ffffff' : '#1a1a1a' 
-      }
-  const isDark = hasNewStyles 
-    ? (styles.color === '#ffffff') 
-    : legacyIsDark
+    : { backgroundColor: '#f5f5f0', color: '#1a1a1a' }
+
+  const textColor = styles.color || '#1a1a1a'
+  const mutedColor = txtStyle === 'light' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)'
 
   // Title styles
   const titleStyles: React.CSSProperties = {
-    fontFamily: tTitle?.font || titleFont,
+    fontFamily: tTitle?.font || 'Georgia, serif',
     fontSize: tTitle?.size || undefined,
-    fontWeight: tTitle?.weight || '300',
+    fontWeight: tTitle?.weight || '400',
     lineHeight: tTitle?.lh || '1.2',
     letterSpacing: tTitle?.ls || '0.02em',
-    color: tTitle?.color || styles.color,
+    color: tTitle?.color || textColor,
   }
 
-  // Body styles
+  // Body styles  
   const bodyStyles: React.CSSProperties = {
-    fontFamily: tBody?.font || bodyFont,
+    fontFamily: tBody?.font || 'system-ui, -apple-system, sans-serif',
     fontSize: tBody?.size || undefined,
     fontWeight: tBody?.weight || '400',
     lineHeight: tBody?.lh || '1.6',
     letterSpacing: tBody?.ls || '0',
-    color: tBody?.color || (isDark ? 'rgba(255,255,255,0.7)' : '#4b5563'),
+    color: tBody?.color || mutedColor,
   }
 
   const getGridCols = () => {
@@ -111,77 +97,69 @@ export function OurServicesBlockComponent({
       className="py-16 md:py-24"
       style={{ backgroundColor: styles.backgroundColor }}
     >
-      <div className="max-w-7xl mx-auto px-4">
-        {/* Section Title */}
-        {sectionTitle && (
-          <h2 
-            className="text-3xl md:text-4xl font-light tracking-wide mb-12"
-            style={titleStyles}
-          >
-            {sectionTitle}
-          </h2>
-        )}
+      <div className="max-w-6xl mx-auto px-4">
+        {/* Header: Title left, Description right */}
+        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-12">
+          {sectionTitle && (
+            <h2 
+              className="text-3xl md:text-4xl lg:text-5xl max-w-md italic"
+              style={titleStyles}
+            >
+              {sectionTitle}
+            </h2>
+          )}
 
-        {/* Services Grid */}
-        <div className={`grid grid-cols-1 ${getGridCols()} gap-8`}>
+          {sectionDescription && (
+            <p 
+              className="text-sm leading-relaxed max-w-xs lg:text-right"
+              style={bodyStyles}
+            >
+              {sectionDescription}
+            </p>
+          )}
+        </div>
+
+        {/* Service Cards Grid */}
+        <div className={`grid grid-cols-1 ${getGridCols()} gap-4`}>
           {services?.map((service, index) => {
             const img = typeof service.serviceImage === 'object' ? service.serviceImage as Media : null
 
             return (
-              <div key={index} className="group">
-                {/* Image */}
-                {img?.url && (
-                  <div className="relative aspect-[4/3] overflow-hidden mb-4">
+              <div key={index} className="group relative">
+                {/* Card: Image with text overlay INSIDE */}
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  {/* Image */}
+                  {img?.url && (
                     <Image
                       src={img.url}
                       alt={service.serviceName || 'Service'}
                       fill
-                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="object-cover"
                     />
+                  )}
+
+                  {/* Dark gradient overlay from bottom */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+
+                  {/* Content overlay at bottom - INSIDE the image */}
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    {/* Service Name */}
+                    {service.serviceName && (
+                      <h3 
+                        className="text-xl md:text-2xl font-normal italic mb-3 text-white"
+                        style={{ fontFamily: titleStyles.fontFamily }}
+                      >
+                        {service.serviceName}
+                      </h3>
+                    )}
+
+                    {/* Service Description */}
+                    {service.serviceDescription && (
+                      <p className="text-sm leading-relaxed text-white/90">
+                        {service.serviceDescription}
+                      </p>
+                    )}
                   </div>
-                )}
-
-                {/* Content */}
-                <div>
-                  {service.category && (
-                    <p 
-                      className="text-xs tracking-[0.15em] uppercase mb-2"
-                      style={{ color: accentColor }}
-                    >
-                      {service.category}
-                    </p>
-                  )}
-
-                  {service.serviceName && (
-                    <h3 
-                      className="text-xl font-light mb-2"
-                      style={titleStyles}
-                    >
-                      {service.serviceName}
-                    </h3>
-                  )}
-
-                  {service.serviceDescription && (
-                    <p 
-                      className="text-sm leading-relaxed"
-                      style={bodyStyles}
-                    >
-                      {service.serviceDescription}
-                    </p>
-                  )}
-
-                  {service.serviceLink && (
-                    <Link
-                      href={service.serviceLink}
-                      className="inline-flex items-center gap-2 text-sm mt-3 hover:gap-3 transition-all"
-                      style={{ color: accentColor }}
-                    >
-                      Learn more
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                      </svg>
-                    </Link>
-                  )}
                 </div>
               </div>
             )

@@ -112,12 +112,10 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
-    'theme-settings': ThemeSetting;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
-    'theme-settings': ThemeSettingsSelect<false> | ThemeSettingsSelect<true>;
   };
   locale: null;
   user: User & {
@@ -161,6 +159,7 @@ export interface Page {
   title: string;
   hero: {
     type: 'none' | 'highImpact' | 'mediumImpact' | 'lowImpact';
+    height?: ('full' | 'large' | 'medium' | 'small' | 'compact') | null;
     richText?: {
       root: {
         type: string;
@@ -211,14 +210,20 @@ export interface Page {
     | HeroBlockType
     | DescriptionBlockType
     | RoomsGridBlockType
-    | ServicesBlockType
+    | AccommodationsType2BlockType
+    | FoodDrinkBlockType
     | OffersBlockType
     | GalleryBlockType
+    | PhotoGalleryBlockType
     | LocationBlockType
-    | MomentBlock
     | OurServicesBlock
-    | LocalLifeBlock
     | ContentImageBlock
+    | TheSpaceBlockType
+    | SpecialOffersBlockType
+    | VisionBlock
+    | DesignedBlock
+    | CollaborationBlock
+    | DescriptionType2BlockType
   )[];
   meta?: {
     title?: string | null;
@@ -1198,6 +1203,10 @@ export interface Form {
  * via the `definition` "HeroBlockType".
  */
 export interface HeroBlockType {
+  /**
+   * Ví dụ: "Welcome to", "Discover"
+   */
+  subtitle?: string | null;
   name: string;
   tagline?: string | null;
   /**
@@ -1209,6 +1218,7 @@ export interface HeroBlockType {
         id?: string | null;
       }[]
     | null;
+  showCTA?: boolean | null;
   ctaText?: string | null;
   ctaLink?: string | null;
   /**
@@ -1324,23 +1334,27 @@ export interface HeroBlockType {
  */
 export interface DescriptionBlockType {
   /**
-   * Ví dụ: "Haute Couture Meets Hill Tribe Artistry"
+   * Ví dụ: "A Refined Stay, Thoughtfully Designed"
    */
   title: string;
-  description: string;
   /**
-   * Địa chỉ đầy đủ của hotel
+   * Mô tả ngắn về khách sạn
    */
-  address?: string | null;
-  addressLink?: string | null;
-  phone?: string | null;
+  leftText?: string | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
   /**
-   * Ví dụ: tel:+84214363999
+   * Ảnh dọc nhỏ hiển thị dưới CTA
    */
-  phoneLink?: string | null;
-  backgroundColor?: ('light' | 'dark' | 'transparent') | null;
-  textAlign?: ('left' | 'center' | 'right') | null;
-  titleStyle?: ('italic' | 'normal' | 'bold') | null;
+  image1?: (number | null) | Media;
+  /**
+   * Ảnh ngang lớn
+   */
+  image2?: (number | null) | Media;
+  /**
+   * Nội dung hiển thị dưới ảnh lớn
+   */
+  rightText?: string | null;
   tTitle?: {
     font?:
       | (
@@ -1429,49 +1443,44 @@ export interface DescriptionBlockType {
  * via the `definition` "RoomsGridBlockType".
  */
 export interface RoomsGridBlockType {
-  sectionTitle?: string | null;
-  viewAllText?: string | null;
-  viewAllLink?: string | null;
-  tabs?:
+  /**
+   * Chọn các loại phòng muốn hiển thị trong filter
+   */
+  enabledCategories?: ('regular' | 'deluxe' | 'family' | 'suites')[] | null;
+  /**
+   * Thêm loại phòng khác ngoài các loại mặc định
+   */
+  customCategories?:
     | {
-        /**
-         * Ví dụ: Room, Suite
-         */
-        tabName: string;
-        rooms?:
-          | {
-              roomName: string;
-              /**
-               * Ví dụ: 2 Single Size Beds, 1 King Size Bed
-               */
-              roomSubtitle?: string | null;
-              /**
-               * Ví dụ: KING SIZE BED(S) X1
-               */
-              bedType?: string | null;
-              /**
-               * Ví dụ: 33 M²/355SQFT
-               */
-              roomSize?: string | null;
-              /**
-               * Ví dụ: 3 PERSONS
-               */
-              maxPersons?: string | null;
-              roomDescription?: string | null;
-              roomImage?: (number | null) | Media;
-              ratesLink?: string | null;
-              detailsLink?: string | null;
-              id?: string | null;
-            }[]
-          | null;
+        name: string;
         id?: string | null;
       }[]
     | null;
-  backgroundColor?: ('light' | 'dark') | null;
-  /**
-   * Màu cho tab active và nút
-   */
-  accentColor?: string | null;
+  rooms?:
+    | {
+        category?: ('regular' | 'deluxe' | 'family' | 'suites') | null;
+        name: string;
+        /**
+         * Ví dụ: Ideal for short stays and business travelers...
+         */
+        subtitle?: string | null;
+        images?:
+          | {
+              image: number | Media;
+              id?: string | null;
+            }[]
+          | null;
+        amenities?:
+          | {
+              icon?: ('bed' | 'desk' | 'bath' | 'wifi' | 'tv' | 'ac' | 'sofa' | 'window') | null;
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        bookLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   tTitle?: {
     font?:
       | (
@@ -1557,40 +1566,43 @@ export interface RoomsGridBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServicesBlockType".
+ * via the `definition` "AccommodationsType2BlockType".
  */
-export interface ServicesBlockType {
-  sectionTitle?: string | null;
-  viewAllText?: string | null;
-  viewAllLink?: string | null;
-  tabs?:
+export interface AccommodationsType2BlockType {
+  /**
+   * Tiêu đề section
+   */
+  title: string;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  rooms?:
     | {
         /**
-         * Ví dụ: Restaurants, Bars, Breakfasts
+         * Ví dụ: Deluxe Room, Premier Room, Junior Suite
          */
-        tabName: string;
-        items?:
+        name: string;
+        /**
+         * Mô tả 1-2 dòng về phòng
+         */
+        description?: string | null;
+        images?:
           | {
-              itemName: string;
-              /**
-               * Ví dụ: CAFE, FRENCH, BAR
-               */
-              itemCategory?: string | null;
-              itemDescription?: string | null;
-              itemImage?: (number | null) | Media;
-              itemLink?: string | null;
+              image: number | Media;
               id?: string | null;
             }[]
           | null;
+        features?:
+          | {
+              icon?: ('bed' | 'desk' | 'bath' | 'window' | 'sofa' | 'star') | null;
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        buttonText?: string | null;
+        buttonLink?: string | null;
         id?: string | null;
       }[]
     | null;
-  backgroundColor?: ('light' | 'dark') | null;
-  /**
-   * Màu cho tab active và nút
-   */
-  accentColor?: string | null;
-  columns?: ('2' | '3' | '4') | null;
   tTitle?: {
     font?:
       | (
@@ -1672,36 +1684,170 @@ export interface ServicesBlockType {
   txtStyle?: ('auto' | 'dark' | 'light') | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'services';
+  blockType: 'accommodations-type2';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FoodDrinkBlockType".
+ */
+export interface FoodDrinkBlockType {
+  title?: string | null;
+  cuisineOptions?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  occasionOptions?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  foodTypeOptions?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  featuredImage: number | Media;
+  featuredTitle: string;
+  featuredDescription?: string | null;
+  featuredLink?: string | null;
+  sideItems?:
+    | {
+        image: number | Media;
+        title: string;
+        description?: string | null;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'food-drink';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "OffersBlockType".
  */
 export interface OffersBlockType {
-  sectionTitle?: string | null;
-  offers?:
+  image?: (number | null) | Media;
+  title?: string | null;
+  /**
+   * Mô tả ngắn về ưu đãi. Có thể chứa giá với format đặc biệt.
+   */
+  description?: string | null;
+  /**
+   * Phần giá sẽ được in đậm và nghiêng
+   */
+  priceHighlight?: string | null;
+  featuresTitle?: string | null;
+  features?:
     | {
-        offerTitle?: string | null;
-        offerDescription?: string | null;
-        offerImage?: (number | null) | Media;
-        offerLink?: string | null;
+        feature: string;
         id?: string | null;
       }[]
     | null;
   /**
-   * Số cột hiển thị
+   * Điều chỉnh màu checkmarks và text theo nền
    */
-  columns?: ('1' | '2' | '3') | null;
+  sectionStyle?: ('dark' | 'light') | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  imagePosition?: ('left' | 'right') | null;
+  textAlign?: ('left' | 'center' | 'right') | null;
   /**
-   * Khoảng cách giữa các cards
+   * VD: 100%, 400px, 50vw
    */
-  gap?: ('small' | 'medium' | 'large') | null;
+  imageWidth?: string | null;
   /**
-   * Cách bố trí ảnh và nội dung
+   * VD: auto, 500px, 60vh
    */
-  layout?: ('horizontal' | 'vertical') | null;
-  backgroundColor?: ('dark' | 'darker' | 'transparent') | null;
+  imageHeight?: string | null;
+  imageAspectRatio?: ('auto' | '1/1' | '4/3' | '3/4' | '16/9' | '9/16') | null;
   tTitle?: {
     font?:
       | (
@@ -1886,36 +2032,141 @@ export interface GalleryBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PhotoGalleryBlockType".
+ */
+export interface PhotoGalleryBlockType {
+  /**
+   * Tiêu đề section (không bắt buộc)
+   */
+  title?: string | null;
+  /**
+   * Chọn kiểu hiển thị gallery
+   */
+  layout?: ('bento' | 'magazine' | 'masonry' | 'rows') | null;
+  /**
+   * Text cho nút load more
+   */
+  loadMoreText?: string | null;
+  images?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'photo-gallery';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "LocationBlockType".
  */
 export interface LocationBlockType {
-  sectionTitle?: string | null;
-  description?: string | null;
-  locationImage?: (number | null) | Media;
-  address?: string | null;
+  address1Label?: string | null;
   /**
-   * Link Google Maps để mở trong tab mới
+   * Ví dụ: 12 Anchor Road, Sai Kung
    */
-  googleMapUrl?: string | null;
+  address1?: string | null;
+  address2Label?: string | null;
   /**
-   * Chiều cao của section
+   * Ví dụ: 8 Seashell Drive, Lantau Island
    */
-  height?: ('small' | 'medium' | 'large' | 'full') | null;
-  textPosition?:
-    | (
-        | 'top-left'
-        | 'top-center'
-        | 'top-right'
-        | 'center-left'
-        | 'center'
-        | 'center-right'
-        | 'bottom-left'
-        | 'bottom-center'
-        | 'bottom-right'
-      )
-    | null;
-  overlayOpacity?: ('none' | 'light' | 'medium' | 'dark') | null;
-  showButton?: boolean | null;
+  address2?: string | null;
+  hotlineLabel?: string | null;
+  /**
+   * Ví dụ: +84 777 4340
+   */
+  hotline?: string | null;
+  emailLabel?: string | null;
+  /**
+   * Ví dụ: Calanthehotel@gmail.com
+   */
+  email?: string | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
+  /**
+   * Upload hình bản đồ với markers
+   */
+  mapImage?: (number | null) | Media;
   tTitle?: {
     font?:
       | (
@@ -2001,132 +2252,35 @@ export interface LocationBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MomentBlock".
- */
-export interface MomentBlock {
-  sectionTitle?: string | null;
-  /**
-   * Ví dụ: "HÔTEL DE LA COUPOLE - MGALLERY"
-   */
-  hotelName?: string | null;
-  /**
-   * Ví dụ: "Cloud Hunting in Sapa"
-   */
-  momentTitle: string;
-  momentDescription?: string | null;
-  momentImage: number | Media;
-  ctaText?: string | null;
-  ctaLink?: string | null;
-  /**
-   * Mã màu hex, ví dụ: #f5e6e0 (hồng nhạt)
-   */
-  backgroundColor?: string | null;
-  layout?: ('image-left' | 'image-right') | null;
-  tTitle?: {
-    font?:
-      | (
-          | 'Georgia, serif'
-          | "'Playfair Display', serif"
-          | "'Times New Roman', serif"
-          | "'Merriweather', serif"
-          | "'Lora', serif"
-          | 'system-ui, -apple-system, sans-serif'
-          | "'Inter', sans-serif"
-          | "'Roboto', sans-serif"
-          | "'Open Sans', sans-serif"
-          | "'Lato', sans-serif"
-        )
-      | null;
-    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
-    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
-    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
-    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
-    color?: string | null;
-  };
-  tBody?: {
-    font?:
-      | (
-          | 'Georgia, serif'
-          | "'Playfair Display', serif"
-          | "'Times New Roman', serif"
-          | "'Merriweather', serif"
-          | "'Lora', serif"
-          | 'system-ui, -apple-system, sans-serif'
-          | "'Inter', sans-serif"
-          | "'Roboto', sans-serif"
-          | "'Open Sans', sans-serif"
-          | "'Lato', sans-serif"
-        )
-      | null;
-    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
-    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
-    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
-    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
-    color?: string | null;
-  };
-  bgStyle?:
-    | (
-        | 'transparent'
-        | 'white'
-        | 'black'
-        | 'gray-50'
-        | 'gray-100'
-        | 'gray-200'
-        | 'gray-300'
-        | 'gray-800'
-        | 'gray-900'
-        | 'cream-light'
-        | 'cream'
-        | 'beige'
-        | 'ivory'
-        | 'brand'
-        | 'brown-dark'
-        | 'chocolate'
-        | 'espresso'
-        | 'navy'
-        | 'slate'
-        | 'teal'
-        | 'olive'
-        | 'sage'
-        | 'forest'
-        | 'gold'
-        | 'burgundy'
-        | 'terracotta'
-        | 'blush'
-        | 'custom'
-      )
-    | null;
-  bgCustom?: string | null;
-  /**
-   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
-   */
-  txtStyle?: ('auto' | 'dark' | 'light') | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'moment';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "OurServicesBlock".
  */
 export interface OurServicesBlock {
+  /**
+   * Tiêu đề lớn bên trái
+   */
   sectionTitle?: string | null;
+  /**
+   * Mô tả ngắn bên phải tiêu đề
+   */
+  sectionDescription?: string | null;
   services?:
     | {
         /**
-         * Ví dụ: WELLNESS, BREAKFAST, OCCASIONS
+         * Ảnh dọc (portrait) cho card
          */
-        category?: string | null;
+        serviceImage: number | Media;
+        /**
+         * Ví dụ: Calm Space, Balanced Drinks
+         */
         serviceName: string;
+        /**
+         * Mô tả ngắn hiển thị trên card
+         */
         serviceDescription?: string | null;
-        serviceImage?: (number | null) | Media;
-        serviceLink?: string | null;
         id?: string | null;
       }[]
     | null;
   columns?: ('2' | '3' | '4') | null;
-  backgroundColor?: ('light' | 'dark') | null;
-  accentColor?: string | null;
   tTitle?: {
     font?:
       | (
@@ -2212,117 +2366,22 @@ export interface OurServicesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LocalLifeBlock".
- */
-export interface LocalLifeBlock {
-  sectionTitle?: string | null;
-  /**
-   * Mô tả ngắn về địa phương
-   */
-  sectionDescription?: string | null;
-  items?:
-    | {
-        itemTitle: string;
-        itemDescription?: string | null;
-        itemImage?: (number | null) | Media;
-        itemLink?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  backgroundColor?: ('light' | 'dark') | null;
-  accentColor?: string | null;
-  tTitle?: {
-    font?:
-      | (
-          | 'Georgia, serif'
-          | "'Playfair Display', serif"
-          | "'Times New Roman', serif"
-          | "'Merriweather', serif"
-          | "'Lora', serif"
-          | 'system-ui, -apple-system, sans-serif'
-          | "'Inter', sans-serif"
-          | "'Roboto', sans-serif"
-          | "'Open Sans', sans-serif"
-          | "'Lato', sans-serif"
-        )
-      | null;
-    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
-    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
-    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
-    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
-    color?: string | null;
-  };
-  tBody?: {
-    font?:
-      | (
-          | 'Georgia, serif'
-          | "'Playfair Display', serif"
-          | "'Times New Roman', serif"
-          | "'Merriweather', serif"
-          | "'Lora', serif"
-          | 'system-ui, -apple-system, sans-serif'
-          | "'Inter', sans-serif"
-          | "'Roboto', sans-serif"
-          | "'Open Sans', sans-serif"
-          | "'Lato', sans-serif"
-        )
-      | null;
-    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
-    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
-    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
-    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
-    color?: string | null;
-  };
-  bgStyle?:
-    | (
-        | 'transparent'
-        | 'white'
-        | 'black'
-        | 'gray-50'
-        | 'gray-100'
-        | 'gray-200'
-        | 'gray-300'
-        | 'gray-800'
-        | 'gray-900'
-        | 'cream-light'
-        | 'cream'
-        | 'beige'
-        | 'ivory'
-        | 'brand'
-        | 'brown-dark'
-        | 'chocolate'
-        | 'espresso'
-        | 'navy'
-        | 'slate'
-        | 'teal'
-        | 'olive'
-        | 'sage'
-        | 'forest'
-        | 'gold'
-        | 'burgundy'
-        | 'terracotta'
-        | 'blush'
-        | 'custom'
-      )
-    | null;
-  bgCustom?: string | null;
-  /**
-   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
-   */
-  txtStyle?: ('auto' | 'dark' | 'light') | null;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'local-life';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "ContentImageBlock".
  */
 export interface ContentImageBlock {
-  subtitle?: string | null;
   imagePosition?: ('left' | 'right') | null;
+  showBorder?: boolean | null;
   title: string;
-  description: string;
+  description?: string | null;
+  highlightSection?: {
+    title?: string | null;
+    items?:
+      | {
+          text: string;
+          id?: string | null;
+        }[]
+      | null;
+  };
   image: number | Media;
   ctaText?: string | null;
   ctaLink?: string | null;
@@ -2408,6 +2467,639 @@ export interface ContentImageBlock {
   id?: string | null;
   blockName?: string | null;
   blockType: 'content-image';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TheSpaceBlockType".
+ */
+export interface TheSpaceBlockType {
+  sectionTitle?: string | null;
+  sectionDescription?: string | null;
+  stats?:
+    | {
+        icon?: ('grid' | 'seats' | 'zones' | 'square' | 'users' | 'clock') | null;
+        /**
+         * Ví dụ: 120 m², 48 Seats, 3 Distinct Zones
+         */
+        value: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  images?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'the-space';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SpecialOffersBlockType".
+ */
+export interface SpecialOffersBlockType {
+  sectionTitle?: string | null;
+  offers?:
+    | {
+        image: number | Media;
+        title: string;
+        description?: string | null;
+        ctaText?: string | null;
+        ctaLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  columns?: ('2' | '3' | '4') | null;
+  showNavigation?: boolean | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'special-offers';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VisionBlock".
+ */
+export interface VisionBlock {
+  mainTitle: string;
+  mainDescription?: string | null;
+  cards?:
+    | {
+        icon?: ('eye' | 'target' | 'compass' | 'heart' | 'star' | 'lightbulb' | 'award' | 'gem') | null;
+        style?: ('dark' | 'light') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'vision';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DesignedBlock".
+ */
+export interface DesignedBlock {
+  title: string;
+  description?: string | null;
+  features?:
+    | {
+        icon?:
+          | (
+              | 'book'
+              | 'smile'
+              | 'volume-off'
+              | 'utensils'
+              | 'palette'
+              | 'accessibility'
+              | 'bed'
+              | 'coffee'
+              | 'wifi'
+              | 'sun'
+              | 'moon'
+              | 'leaf'
+              | 'shield'
+              | 'clock'
+              | 'sparkles'
+            )
+          | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'designed';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CollaborationBlock".
+ */
+export interface CollaborationBlock {
+  title: string;
+  description?: string | null;
+  partners?:
+    | {
+        name: string;
+        logo: number | Media;
+        link?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'collaboration';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DescriptionType2BlockType".
+ */
+export interface DescriptionType2BlockType {
+  /**
+   * Ví dụ: "Why The Calanthe Exists?"
+   */
+  title: string;
+  /**
+   * Ảnh ngang nhỏ
+   */
+  imageLeft?: (number | null) | Media;
+  /**
+   * Nội dung đoạn văn đầu tiên
+   */
+  paragraph1?: string | null;
+  /**
+   * Nội dung đoạn văn thứ hai
+   */
+  paragraph2?: string | null;
+  /**
+   * Ảnh dọc bên trái
+   */
+  imageRight1?: (number | null) | Media;
+  /**
+   * Ảnh dọc bên phải
+   */
+  imageRight2?: (number | null) | Media;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'description-type2';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2691,6 +3383,7 @@ export interface PagesSelect<T extends boolean = true> {
     | T
     | {
         type?: T;
+        height?: T;
         richText?: T;
         links?:
           | T
@@ -2720,14 +3413,20 @@ export interface PagesSelect<T extends boolean = true> {
         hero?: T | HeroBlockTypeSelect<T>;
         description?: T | DescriptionBlockTypeSelect<T>;
         'rooms-grid'?: T | RoomsGridBlockTypeSelect<T>;
-        services?: T | ServicesBlockTypeSelect<T>;
+        'accommodations-type2'?: T | AccommodationsType2BlockTypeSelect<T>;
+        'food-drink'?: T | FoodDrinkBlockTypeSelect<T>;
         offers?: T | OffersBlockTypeSelect<T>;
         gallery?: T | GalleryBlockTypeSelect<T>;
+        'photo-gallery'?: T | PhotoGalleryBlockTypeSelect<T>;
         location?: T | LocationBlockTypeSelect<T>;
-        moment?: T | MomentBlockSelect<T>;
         'our-services'?: T | OurServicesBlockSelect<T>;
-        'local-life'?: T | LocalLifeBlockSelect<T>;
         'content-image'?: T | ContentImageBlockSelect<T>;
+        'the-space'?: T | TheSpaceBlockTypeSelect<T>;
+        'special-offers'?: T | SpecialOffersBlockTypeSelect<T>;
+        vision?: T | VisionBlockSelect<T>;
+        designed?: T | DesignedBlockSelect<T>;
+        collaboration?: T | CollaborationBlockSelect<T>;
+        'description-type2'?: T | DescriptionType2BlockTypeSelect<T>;
       };
   meta?:
     | T
@@ -2947,6 +3646,7 @@ export interface FormBlockSelect<T extends boolean = true> {
  * via the `definition` "HeroBlockType_select".
  */
 export interface HeroBlockTypeSelect<T extends boolean = true> {
+  subtitle?: T;
   name?: T;
   tagline?: T;
   heroImage?:
@@ -2955,6 +3655,7 @@ export interface HeroBlockTypeSelect<T extends boolean = true> {
         image?: T;
         id?: T;
       };
+  showCTA?: T;
   ctaText?: T;
   ctaLink?: T;
   height?: T;
@@ -2995,14 +3696,12 @@ export interface HeroBlockTypeSelect<T extends boolean = true> {
  */
 export interface DescriptionBlockTypeSelect<T extends boolean = true> {
   title?: T;
-  description?: T;
-  address?: T;
-  addressLink?: T;
-  phone?: T;
-  phoneLink?: T;
-  backgroundColor?: T;
-  textAlign?: T;
-  titleStyle?: T;
+  leftText?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  image1?: T;
+  image2?: T;
+  rightText?: T;
   tTitle?:
     | T
     | {
@@ -3034,31 +3733,35 @@ export interface DescriptionBlockTypeSelect<T extends boolean = true> {
  * via the `definition` "RoomsGridBlockType_select".
  */
 export interface RoomsGridBlockTypeSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  viewAllText?: T;
-  viewAllLink?: T;
-  tabs?:
+  enabledCategories?: T;
+  customCategories?:
     | T
     | {
-        tabName?: T;
-        rooms?:
-          | T
-          | {
-              roomName?: T;
-              roomSubtitle?: T;
-              bedType?: T;
-              roomSize?: T;
-              maxPersons?: T;
-              roomDescription?: T;
-              roomImage?: T;
-              ratesLink?: T;
-              detailsLink?: T;
-              id?: T;
-            };
+        name?: T;
         id?: T;
       };
-  backgroundColor?: T;
-  accentColor?: T;
+  rooms?:
+    | T
+    | {
+        category?: T;
+        name?: T;
+        subtitle?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        amenities?:
+          | T
+          | {
+              icon?: T;
+              text?: T;
+              id?: T;
+            };
+        bookLink?: T;
+        id?: T;
+      };
   tTitle?:
     | T
     | {
@@ -3087,31 +3790,100 @@ export interface RoomsGridBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ServicesBlockType_select".
+ * via the `definition` "AccommodationsType2BlockType_select".
  */
-export interface ServicesBlockTypeSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  viewAllText?: T;
-  viewAllLink?: T;
-  tabs?:
+export interface AccommodationsType2BlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  rooms?:
     | T
     | {
-        tabName?: T;
-        items?:
+        name?: T;
+        description?: T;
+        images?:
           | T
           | {
-              itemName?: T;
-              itemCategory?: T;
-              itemDescription?: T;
-              itemImage?: T;
-              itemLink?: T;
+              image?: T;
               id?: T;
             };
+        features?:
+          | T
+          | {
+              icon?: T;
+              text?: T;
+              id?: T;
+            };
+        buttonText?: T;
+        buttonLink?: T;
         id?: T;
       };
-  backgroundColor?: T;
-  accentColor?: T;
-  columns?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FoodDrinkBlockType_select".
+ */
+export interface FoodDrinkBlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  cuisineOptions?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  occasionOptions?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  foodTypeOptions?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  featuredImage?: T;
+  featuredTitle?: T;
+  featuredDescription?: T;
+  featuredLink?: T;
+  sideItems?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        link?: T;
+        id?: T;
+      };
   tTitle?:
     | T
     | {
@@ -3143,20 +3915,25 @@ export interface ServicesBlockTypeSelect<T extends boolean = true> {
  * via the `definition` "OffersBlockType_select".
  */
 export interface OffersBlockTypeSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  offers?:
+  image?: T;
+  title?: T;
+  description?: T;
+  priceHighlight?: T;
+  featuresTitle?: T;
+  features?:
     | T
     | {
-        offerTitle?: T;
-        offerDescription?: T;
-        offerImage?: T;
-        offerLink?: T;
+        feature?: T;
         id?: T;
       };
-  columns?: T;
-  gap?: T;
-  layout?: T;
-  backgroundColor?: T;
+  sectionStyle?: T;
+  ctaText?: T;
+  ctaLink?: T;
+  imagePosition?: T;
+  textAlign?: T;
+  imageWidth?: T;
+  imageHeight?: T;
+  imageAspectRatio?: T;
   tTitle?:
     | T
     | {
@@ -3227,18 +4004,18 @@ export interface GalleryBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LocationBlockType_select".
+ * via the `definition` "PhotoGalleryBlockType_select".
  */
-export interface LocationBlockTypeSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  description?: T;
-  locationImage?: T;
-  address?: T;
-  googleMapUrl?: T;
-  height?: T;
-  textPosition?: T;
-  overlayOpacity?: T;
-  showButton?: T;
+export interface PhotoGalleryBlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  layout?: T;
+  loadMoreText?: T;
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
   tTitle?:
     | T
     | {
@@ -3267,18 +4044,20 @@ export interface LocationBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MomentBlock_select".
+ * via the `definition` "LocationBlockType_select".
  */
-export interface MomentBlockSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  hotelName?: T;
-  momentTitle?: T;
-  momentDescription?: T;
-  momentImage?: T;
+export interface LocationBlockTypeSelect<T extends boolean = true> {
+  address1Label?: T;
+  address1?: T;
+  address2Label?: T;
+  address2?: T;
+  hotlineLabel?: T;
+  hotline?: T;
+  emailLabel?: T;
+  email?: T;
   ctaText?: T;
   ctaLink?: T;
-  backgroundColor?: T;
-  layout?: T;
+  mapImage?: T;
   tTitle?:
     | T
     | {
@@ -3311,63 +4090,16 @@ export interface MomentBlockSelect<T extends boolean = true> {
  */
 export interface OurServicesBlockSelect<T extends boolean = true> {
   sectionTitle?: T;
+  sectionDescription?: T;
   services?:
     | T
     | {
-        category?: T;
+        serviceImage?: T;
         serviceName?: T;
         serviceDescription?: T;
-        serviceImage?: T;
-        serviceLink?: T;
         id?: T;
       };
   columns?: T;
-  backgroundColor?: T;
-  accentColor?: T;
-  tTitle?:
-    | T
-    | {
-        font?: T;
-        size?: T;
-        weight?: T;
-        lh?: T;
-        ls?: T;
-        color?: T;
-      };
-  tBody?:
-    | T
-    | {
-        font?: T;
-        size?: T;
-        weight?: T;
-        lh?: T;
-        ls?: T;
-        color?: T;
-      };
-  bgStyle?: T;
-  bgCustom?: T;
-  txtStyle?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "LocalLifeBlock_select".
- */
-export interface LocalLifeBlockSelect<T extends boolean = true> {
-  sectionTitle?: T;
-  sectionDescription?: T;
-  items?:
-    | T
-    | {
-        itemTitle?: T;
-        itemDescription?: T;
-        itemImage?: T;
-        itemLink?: T;
-        id?: T;
-      };
-  backgroundColor?: T;
-  accentColor?: T;
   tTitle?:
     | T
     | {
@@ -3399,10 +4131,21 @@ export interface LocalLifeBlockSelect<T extends boolean = true> {
  * via the `definition` "ContentImageBlock_select".
  */
 export interface ContentImageBlockSelect<T extends boolean = true> {
-  subtitle?: T;
   imagePosition?: T;
+  showBorder?: T;
   title?: T;
   description?: T;
+  highlightSection?:
+    | T
+    | {
+        title?: T;
+        items?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+      };
   image?: T;
   ctaText?: T;
   ctaLink?: T;
@@ -3429,6 +4172,258 @@ export interface ContentImageBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TheSpaceBlockType_select".
+ */
+export interface TheSpaceBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  sectionDescription?: T;
+  stats?:
+    | T
+    | {
+        icon?: T;
+        value?: T;
+        description?: T;
+        id?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SpecialOffersBlockType_select".
+ */
+export interface SpecialOffersBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  offers?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        ctaText?: T;
+        ctaLink?: T;
+        id?: T;
+      };
+  columns?: T;
+  showNavigation?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VisionBlock_select".
+ */
+export interface VisionBlockSelect<T extends boolean = true> {
+  mainTitle?: T;
+  mainDescription?: T;
+  cards?:
+    | T
+    | {
+        icon?: T;
+        style?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DesignedBlock_select".
+ */
+export interface DesignedBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  features?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CollaborationBlock_select".
+ */
+export interface CollaborationBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  partners?:
+    | T
+    | {
+        name?: T;
+        logo?: T;
+        link?: T;
+        id?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DescriptionType2BlockType_select".
+ */
+export interface DescriptionType2BlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  imageLeft?: T;
+  paragraph1?: T;
+  paragraph2?: T;
+  imageRight1?: T;
+  imageRight2?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
   id?: T;
   blockName?: T;
 }
@@ -3881,10 +4876,71 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  showTopBar?: boolean | null;
+  contactPhone?: string | null;
+  showLanguageSelector?: boolean | null;
+  languages?:
+    | {
+        code: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
+  showCurrencySelector?: boolean | null;
+  currencies?:
+    | {
+        code: string;
+        label: string;
+        id?: string | null;
+      }[]
+    | null;
   logo?: (number | null) | Media;
   logoWidth?: number | null;
   logoHeight?: number | null;
   logoLink?: string | null;
+  navItemsLeft?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  navItemsRight?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  showCTA?: boolean | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
   navItems?:
     | {
         link: {
@@ -3905,17 +4961,29 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
-  showAuth?: boolean | null;
-  signInText?: string | null;
-  signInLink?: string | null;
-  signUpText?: string | null;
-  signUpLink?: string | null;
   /**
-   * Để trống nếu muốn trong suốt. Ví dụ: #ffffff, rgba(0,0,0,0.5)
+   * Để trống nếu muốn trong suốt. Ví dụ: #ffffff
    */
   backgroundColor?: string | null;
+  scrolledBackgroundColor?: string | null;
   textColor?: ('light' | 'dark') | null;
   paddingSize?: ('small' | 'medium' | 'large') | null;
+  fontFamily?:
+    | (
+        | 'system-ui, -apple-system, sans-serif'
+        | 'Georgia, serif'
+        | 'Times New Roman, Times, serif'
+        | 'Playfair Display, Georgia, serif'
+        | 'Lora, Georgia, serif'
+        | 'Cormorant Garamond, Garamond, serif'
+        | 'Roboto, system-ui, sans-serif'
+        | 'Open Sans, system-ui, sans-serif'
+        | 'Montserrat, system-ui, sans-serif'
+      )
+    | null;
+  fontWeight?: ('300' | '400' | '500' | '600' | '700') | null;
+  fontSize?: ('12px' | '14px' | '15px' | '16px') | null;
+  letterSpacing?: ('0' | '0.5px' | '1px' | '1.5px' | '2px') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -3925,112 +4993,82 @@ export interface Header {
  */
 export interface Footer {
   id: number;
+  subscribeTitle?: string | null;
+  subscribeSubtitle?: string | null;
+  subscribeButtonText?: string | null;
+  subscribeButtonLink?: string | null;
   logo?: (number | null) | Media;
+  addresses?:
+    | {
+        address: string;
+        id?: string | null;
+      }[]
+    | null;
+  phone?: string | null;
+  email?: string | null;
+  findUsText?: string | null;
   socialLinks?:
     | {
-        platform: 'facebook' | 'youtube' | 'instagram' | 'linkedin' | 'pinterest';
+        platform: 'facebook' | 'youtube' | 'instagram' | 'linkedin' | 'pinterest' | 'twitter';
         url: string;
         id?: string | null;
       }[]
     | null;
-  subscribeSection?: {
-    title?: string | null;
-    buttonText?: string | null;
-    buttonLink?: string | null;
-  };
-  helpSection?: {
-    title?: string | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom') | null;
-            newTab?: boolean | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'posts';
-                  value: number | Post;
-                } | null);
-            url?: string | null;
-            label: string;
-          };
-          id?: string | null;
-        }[]
-      | null;
-  };
-  columns?:
+  navLinks?:
     | {
-        title: string;
-        links?:
-          | {
-              link: {
-                type?: ('reference' | 'custom') | null;
-                newTab?: boolean | null;
-                reference?:
-                  | ({
-                      relationTo: 'pages';
-                      value: number | Page;
-                    } | null)
-                  | ({
-                      relationTo: 'posts';
-                      value: number | Post;
-                    } | null);
-                url?: string | null;
-                label: string;
-              };
-              id?: string | null;
-            }[]
-          | null;
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: number | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+        };
         id?: string | null;
       }[]
     | null;
   copyrightText?: string | null;
   backgroundColor?: string | null;
   textColor?: string | null;
-  accentColor?: string | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "theme-settings".
- */
-export interface ThemeSetting {
-  id: number;
-  /**
-   * Nhập hex (#000000) hoặc "transparent"
-   */
-  headerBackgroundColor?: string | null;
-  headerTextColor?: ('light' | 'dark') | null;
-  /**
-   * Màu nền Header khi scroll xuống
-   */
-  headerScrolledBackgroundColor?: string | null;
-  footerBackgroundColor?: string | null;
-  footerTextColor?: string | null;
-  /**
-   * Dùng cho hover, links
-   */
-  footerAccentColor?: string | null;
-  footerBorderColor?: string | null;
-  /**
-   * Màu nền sidebar, header admin
-   */
-  adminPrimaryColor?: string | null;
-  /**
-   * Màu button, link, hover
-   */
-  adminAccentColor?: string | null;
-  adminBgColor?: string | null;
-  adminTextColor?: string | null;
-  defaultBlockBg?: string | null;
-  defaultBlockText?: string | null;
-  defaultTitleFont?: string | null;
-  defaultBodyFont?: string | null;
-  blockSpacing?: ('small' | 'normal' | 'large' | 'xlarge') | null;
+  borderColor?: string | null;
+  subscribeBackgroundColor?: string | null;
+  titleFont?:
+    | (
+        | 'Georgia, serif'
+        | "'Playfair Display', serif"
+        | "'Times New Roman', serif"
+        | "'Merriweather', serif"
+        | "'Lora', serif"
+        | 'system-ui, -apple-system, sans-serif'
+        | "'Inter', sans-serif"
+        | "'Roboto', sans-serif"
+        | "'Open Sans', sans-serif"
+        | "'Lato', sans-serif"
+      )
+    | null;
+  bodyFont?:
+    | (
+        | 'Georgia, serif'
+        | "'Playfair Display', serif"
+        | "'Times New Roman', serif"
+        | "'Merriweather', serif"
+        | "'Lora', serif"
+        | 'system-ui, -apple-system, sans-serif'
+        | "'Inter', sans-serif"
+        | "'Roboto', sans-serif"
+        | "'Open Sans', sans-serif"
+        | "'Lato', sans-serif"
+      )
+    | null;
+  titleFontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+  bodyFontWeight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -4039,10 +5077,59 @@ export interface ThemeSetting {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  showTopBar?: T;
+  contactPhone?: T;
+  showLanguageSelector?: T;
+  languages?:
+    | T
+    | {
+        code?: T;
+        label?: T;
+        id?: T;
+      };
+  showCurrencySelector?: T;
+  currencies?:
+    | T
+    | {
+        code?: T;
+        label?: T;
+        id?: T;
+      };
   logo?: T;
   logoWidth?: T;
   logoHeight?: T;
   logoLink?: T;
+  navItemsLeft?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  navItemsRight?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+            };
+        id?: T;
+      };
+  showCTA?: T;
+  ctaText?: T;
+  ctaLink?: T;
   navItems?:
     | T
     | {
@@ -4057,14 +5144,14 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         id?: T;
       };
-  showAuth?: T;
-  signInText?: T;
-  signInLink?: T;
-  signUpText?: T;
-  signUpLink?: T;
   backgroundColor?: T;
+  scrolledBackgroundColor?: T;
   textColor?: T;
   paddingSize?: T;
+  fontFamily?: T;
+  fontWeight?: T;
+  fontSize?: T;
+  letterSpacing?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -4074,7 +5161,20 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  subscribeTitle?: T;
+  subscribeSubtitle?: T;
+  subscribeButtonText?: T;
+  subscribeButtonLink?: T;
   logo?: T;
+  addresses?:
+    | T
+    | {
+        address?: T;
+        id?: T;
+      };
+  phone?: T;
+  email?: T;
+  findUsText?: T;
   socialLinks?:
     | T
     | {
@@ -4082,81 +5182,29 @@ export interface FooterSelect<T extends boolean = true> {
         url?: T;
         id?: T;
       };
-  subscribeSection?:
+  navLinks?:
     | T
     | {
-        title?: T;
-        buttonText?: T;
-        buttonLink?: T;
-      };
-  helpSection?:
-    | T
-    | {
-        title?: T;
-        links?:
+        link?:
           | T
           | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                  };
-              id?: T;
-            };
-      };
-  columns?:
-    | T
-    | {
-        title?: T;
-        links?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    newTab?: T;
-                    reference?: T;
-                    url?: T;
-                    label?: T;
-                  };
-              id?: T;
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
             };
         id?: T;
       };
   copyrightText?: T;
   backgroundColor?: T;
   textColor?: T;
-  accentColor?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "theme-settings_select".
- */
-export interface ThemeSettingsSelect<T extends boolean = true> {
-  headerBackgroundColor?: T;
-  headerTextColor?: T;
-  headerScrolledBackgroundColor?: T;
-  footerBackgroundColor?: T;
-  footerTextColor?: T;
-  footerAccentColor?: T;
-  footerBorderColor?: T;
-  adminPrimaryColor?: T;
-  adminAccentColor?: T;
-  adminBgColor?: T;
-  adminTextColor?: T;
-  defaultBlockBg?: T;
-  defaultBlockText?: T;
-  defaultTitleFont?: T;
-  defaultBodyFont?: T;
-  blockSpacing?: T;
+  borderColor?: T;
+  subscribeBackgroundColor?: T;
+  titleFont?: T;
+  bodyFont?: T;
+  titleFontWeight?: T;
+  bodyFontWeight?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

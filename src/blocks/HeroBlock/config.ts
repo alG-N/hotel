@@ -6,11 +6,10 @@ import { blockStyleFields } from '@/fields/blockBackground'
  * HERO BLOCK
  * 
  * Hero section với optional slideshow và flexible text positioning
- * - name/tagline
+ * - subtitle (e.g. "Welcome to")
+ * - name/title
+ * - tagline
  * - heroImage array hoặc single (for slideshow)
- * - textPosition: left/center/right
- * - verticalAlign: top/center/bottom
- * - enableSlideshow toggle
  */
 export const HeroBlock: Block = {
   slug: 'hero',
@@ -23,6 +22,14 @@ export const HeroBlock: Block = {
   interfaceName: 'HeroBlockType',
   
   fields: [
+    {
+      name: 'subtitle',
+      type: 'text',
+      label: 'Subtitle (Phía trên tiêu đề)',
+      admin: {
+        description: 'Ví dụ: "Welcome to", "Discover"',
+      },
+    },
     {
       name: 'name',
       type: 'text',
@@ -51,18 +58,30 @@ export const HeroBlock: Block = {
         }
       ],
     },
-    // CTA Button
+    // CTA Button (optional)
+    {
+      name: 'showCTA',
+      type: 'checkbox',
+      label: 'Hiển thị nút CTA',
+      defaultValue: false,
+    },
     {
       name: 'ctaText',
       type: 'text',
       label: 'Nút CTA',
-      defaultValue: 'Đặt phòng ngay',
+      defaultValue: 'Book Now',
+      admin: {
+        condition: (data, siblingData) => siblingData?.showCTA,
+      },
     },
     {
       name: 'ctaLink',
       type: 'text',
       label: 'Link CTA',
       defaultValue: '/booking',
+      admin: {
+        condition: (data, siblingData) => siblingData?.showCTA,
+      },
     },
 
     // SETTINGS
