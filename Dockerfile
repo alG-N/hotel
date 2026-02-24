@@ -41,9 +41,9 @@ ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 # Run pending Payload migrations before build so new block tables exist
 # for build-time data fetching (SSG/ISR) in production.
 RUN \
-  if [ -f yarn.lock ]; then yarn payload migrate; \
-  elif [ -f package-lock.json ]; then npm run payload -- migrate; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate; \
+  if [ -f yarn.lock ]; then printf 'y\n' | yarn payload migrate; \
+  elif [ -f package-lock.json ]; then printf 'y\n' | npm run payload -- migrate; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && printf 'y\n' | pnpm payload migrate; \
   else echo "Lockfile not found." && exit 1; \
   fi
 
