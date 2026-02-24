@@ -3,6 +3,7 @@ import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { redirectsPlugin } from '@payloadcms/plugin-redirects'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
+import { s3Storage } from '@payloadcms/storage-s3'
 import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
@@ -23,7 +24,27 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
 
+// Supabase Storage (S3-compatible) — only enabled when S3_BUCKET env var is set
+const s3Plugin: Plugin[] = process.env.S3_BUCKET
+  ? [
+      s3Storage({
+        collections: { media: true },
+        bucket: process.env.S3_BUCKET,
+        config: {
+          forcePathStyle: true, // required for Supabase S3
+          credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+          },
+          region: process.env.S3_REGION || 'ap-southeast-1',
+          endpoint: process.env.S3_ENDPOINT || '',
+        },
+      }),
+    ]
+  : []
+
 export const plugins: Plugin[] = [
+  ...s3Plugin,
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
