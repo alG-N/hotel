@@ -25,7 +25,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          {/* @ts-expect-error Async Server Component */}
           <AdvertisementProvider />
           <Header />
           <main className="pt-[120px]">
