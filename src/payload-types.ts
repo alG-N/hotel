@@ -112,10 +112,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    advertisement: Advertisement;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    advertisement: AdvertisementSelect<false> | AdvertisementSelect<true>;
   };
   locale: null;
   user: User & {
@@ -224,6 +226,8 @@ export interface Page {
     | DesignedBlock
     | CollaborationBlock
     | DescriptionType2BlockType
+    | BookingFormBlockType
+    | SubscribeBlockType
   )[];
   meta?: {
     title?: string | null;
@@ -2141,32 +2145,86 @@ export interface PhotoGalleryBlockType {
  * via the `definition` "LocationBlockType".
  */
 export interface LocationBlockType {
-  address1Label?: string | null;
   /**
-   * Ví dụ: 12 Anchor Road, Sai Kung
+   * Tiêu đề lớn phía trên (ví dụ: Location & Contact)
    */
+  sectionTitle?: string | null;
+  address1Label?: string | null;
   address1?: string | null;
   address2Label?: string | null;
-  /**
-   * Ví dụ: 8 Seashell Drive, Lantau Island
-   */
   address2?: string | null;
+  locationLabel?: string | null;
+  /**
+   * Mỗi dòng sẽ hiển thị riêng. Ví dụ:
+   * 1, Hoang Lien Street, Sapa District, Lao Cai Province
+   * 33000 SAPA
+   * Vietnam
+   */
+  fullAddress?: string | null;
+  /**
+   * Link Google Maps directions. Ví dụ: https://maps.google.com/...
+   */
+  getDirectionsUrl?: string | null;
+  reservationLabel?: string | null;
   hotlineLabel?: string | null;
   /**
-   * Ví dụ: +84 777 4340
+   * Ví dụ: +84 214/3629999
    */
   hotline?: string | null;
   emailLabel?: string | null;
   /**
-   * Ví dụ: Calanthehotel@gmail.com
+   * Ví dụ: HASV2-RE@accor.com
    */
   email?: string | null;
-  ctaText?: string | null;
-  ctaLink?: string | null;
+  parkingLabel?: string | null;
   /**
-   * Upload hình bản đồ với markers
+   * Ví dụ: Parking included, Indoor parking, Valet parking
+   */
+  parkingItems?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Nhập địa chỉ để hiển thị trên Google Maps. Nếu để trống sẽ dùng "Địa chỉ đầy đủ" ở trên.
+   */
+  mapAddress?: string | null;
+  /**
+   * Tùy chọn: nhập tọa độ để chính xác hơn. Ví dụ: 22.3380
+   */
+  mapLatitude?: number | null;
+  /**
+   * Tùy chọn: nhập tọa độ để chính xác hơn. Ví dụ: 103.8448
+   */
+  mapLongitude?: number | null;
+  /**
+   * Mức zoom bản đồ (1-20). Mặc định: 13
+   */
+  mapZoom?: number | null;
+  /**
+   * Hình bản đồ dự phòng khi không có Google Maps API key
    */
   mapImage?: (number | null) | Media;
+  gettingThereTitle?: string | null;
+  /**
+   * Mỗi mục sẽ hiển thị dạng accordion (click mở/đóng)
+   */
+  gettingThereItems?:
+    | {
+        /**
+         * Ví dụ: Parking, Road direction, Train...
+         */
+        title: string;
+        /**
+         * Nội dung hiển thị khi mở accordion
+         */
+        content?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  ctaText?: string | null;
+  ctaLink?: string | null;
   tTitle?: {
     font?:
       | (
@@ -3103,6 +3161,235 @@ export interface DescriptionType2BlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BookingFormBlockType".
+ */
+export interface BookingFormBlockType {
+  title?: string | null;
+  subtitle?: string | null;
+  /**
+   * Link đến hệ thống đặt phòng (Booking.com, engine riêng, v.v.)
+   */
+  bookingUrl: string;
+  buttonText?: string | null;
+  /**
+   * Danh sách loại phòng hiển thị trong dropdown
+   */
+  roomTypes?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Các card thông tin nhỏ bên dưới form (VD: Giờ check-in, chính sách hủy...)
+   */
+  infoCards?:
+    | {
+        icon?: ('clock' | 'shield' | 'star' | 'phone' | 'mail' | 'map') | null;
+        title: string;
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  layout?: ('centered' | 'split') | null;
+  sideImage?: (number | null) | Media;
+  maxGuests?: number | null;
+  maxRooms?: number | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'booking-form';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SubscribeBlockType".
+ */
+export interface SubscribeBlockType {
+  title?: string | null;
+  subtitle?: string | null;
+  placeholderText?: string | null;
+  buttonText?: string | null;
+  /**
+   * URL API nhận email (VD: Mailchimp, ConvertKit, hoặc API riêng). Để trống = chỉ hiển thị.
+   */
+  formAction?: string | null;
+  successMessage?: string | null;
+  /**
+   * Liệt kê lý do nên đăng ký (hiển thị dưới form)
+   */
+  benefits?:
+    | {
+        text: string;
+        id?: string | null;
+      }[]
+    | null;
+  layout?: ('centered' | 'horizontal' | 'split') | null;
+  sideImage?: (number | null) | Media;
+  privacyText?: string | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'subscribe';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -3427,6 +3714,8 @@ export interface PagesSelect<T extends boolean = true> {
         designed?: T | DesignedBlockSelect<T>;
         collaboration?: T | CollaborationBlockSelect<T>;
         'description-type2'?: T | DescriptionType2BlockTypeSelect<T>;
+        'booking-form'?: T | BookingFormBlockTypeSelect<T>;
+        subscribe?: T | SubscribeBlockTypeSelect<T>;
       };
   meta?:
     | T
@@ -4047,17 +4336,41 @@ export interface PhotoGalleryBlockTypeSelect<T extends boolean = true> {
  * via the `definition` "LocationBlockType_select".
  */
 export interface LocationBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
   address1Label?: T;
   address1?: T;
   address2Label?: T;
   address2?: T;
+  locationLabel?: T;
+  fullAddress?: T;
+  getDirectionsUrl?: T;
+  reservationLabel?: T;
   hotlineLabel?: T;
   hotline?: T;
   emailLabel?: T;
   email?: T;
+  parkingLabel?: T;
+  parkingItems?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  mapAddress?: T;
+  mapLatitude?: T;
+  mapLongitude?: T;
+  mapZoom?: T;
+  mapImage?: T;
+  gettingThereTitle?: T;
+  gettingThereItems?:
+    | T
+    | {
+        title?: T;
+        content?: T;
+        id?: T;
+      };
   ctaText?: T;
   ctaLink?: T;
-  mapImage?: T;
   tTitle?:
     | T
     | {
@@ -4401,6 +4714,106 @@ export interface DescriptionType2BlockTypeSelect<T extends boolean = true> {
   paragraph2?: T;
   imageRight1?: T;
   imageRight2?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BookingFormBlockType_select".
+ */
+export interface BookingFormBlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  bookingUrl?: T;
+  buttonText?: T;
+  roomTypes?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  infoCards?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  layout?: T;
+  sideImage?: T;
+  maxGuests?: T;
+  maxRooms?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SubscribeBlockType_select".
+ */
+export interface SubscribeBlockTypeSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  placeholderText?: T;
+  buttonText?: T;
+  formAction?: T;
+  successMessage?: T;
+  benefits?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  layout?: T;
+  sideImage?: T;
+  privacyText?: T;
   tTitle?:
     | T
     | {
@@ -5074,6 +5487,90 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "advertisement".
+ */
+export interface Advertisement {
+  id: number;
+  topBannerEnabled?: boolean | null;
+  /**
+   * Ví dụ: "Book now and get 20% off your first stay!"
+   */
+  topBannerText?: string | null;
+  /**
+   * Trang đích khi click vào banner. Ví dụ: /offers
+   */
+  topBannerLink?: string | null;
+  /**
+   * Ví dụ: "Book Now", "Learn More"
+   */
+  topBannerCtaText?: string | null;
+  /**
+   * Hex color. Ví dụ: #1a1a1a, #8B6914
+   */
+  topBannerBgColor?: string | null;
+  topBannerTextColor?: string | null;
+  topBannerDismissible?: boolean | null;
+  popupEnabled?: boolean | null;
+  /**
+   * Hình ảnh chính cho popup (tỷ lệ ngang hoặc vuông)
+   */
+  popupImage?: (number | null) | Media;
+  /**
+   * Ví dụ: "Exclusive Offer"
+   */
+  popupTitle?: string | null;
+  /**
+   * Nội dung chi tiết của popup
+   */
+  popupDescription?: string | null;
+  popupCtaText?: string | null;
+  popupCtaLink?: string | null;
+  /**
+   * Số giây chờ trước khi hiện popup. Mặc định: 3s
+   */
+  popupDelay?: number | null;
+  popupBgColor?: string | null;
+  popupTextColor?: string | null;
+  /**
+   * Nếu bật, popup chỉ hiện 1 lần mỗi phiên truy cập
+   */
+  popupShowOnce?: boolean | null;
+  floatingBarEnabled?: boolean | null;
+  /**
+   * Ví dụ: "Limited time: Spa package from $99"
+   */
+  floatingBarText?: string | null;
+  floatingBarCtaText?: string | null;
+  floatingBarCtaLink?: string | null;
+  floatingBarBgColor?: string | null;
+  floatingBarTextColor?: string | null;
+  floatingBarDismissible?: boolean | null;
+  slideInEnabled?: boolean | null;
+  /**
+   * Hình nhỏ minh họa cho offer
+   */
+  slideInImage?: (number | null) | Media;
+  /**
+   * Ví dụ: "Weekend Getaway"
+   */
+  slideInTitle?: string | null;
+  /**
+   * Ví dụ: "Stay 2 nights, get 1 free"
+   */
+  slideInDescription?: string | null;
+  slideInCtaText?: string | null;
+  slideInCtaLink?: string | null;
+  /**
+   * Hiện khi cuộn bao nhiêu % trang. Mặc định: 50%
+   */
+  slideInScrollTrigger?: number | null;
+  slideInBgColor?: string | null;
+  slideInTextColor?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -5205,6 +5702,48 @@ export interface FooterSelect<T extends boolean = true> {
   bodyFont?: T;
   titleFontWeight?: T;
   bodyFontWeight?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "advertisement_select".
+ */
+export interface AdvertisementSelect<T extends boolean = true> {
+  topBannerEnabled?: T;
+  topBannerText?: T;
+  topBannerLink?: T;
+  topBannerCtaText?: T;
+  topBannerBgColor?: T;
+  topBannerTextColor?: T;
+  topBannerDismissible?: T;
+  popupEnabled?: T;
+  popupImage?: T;
+  popupTitle?: T;
+  popupDescription?: T;
+  popupCtaText?: T;
+  popupCtaLink?: T;
+  popupDelay?: T;
+  popupBgColor?: T;
+  popupTextColor?: T;
+  popupShowOnce?: T;
+  floatingBarEnabled?: T;
+  floatingBarText?: T;
+  floatingBarCtaText?: T;
+  floatingBarCtaLink?: T;
+  floatingBarBgColor?: T;
+  floatingBarTextColor?: T;
+  floatingBarDismissible?: T;
+  slideInEnabled?: T;
+  slideInImage?: T;
+  slideInTitle?: T;
+  slideInDescription?: T;
+  slideInCtaText?: T;
+  slideInCtaLink?: T;
+  slideInScrollTrigger?: T;
+  slideInBgColor?: T;
+  slideInTextColor?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

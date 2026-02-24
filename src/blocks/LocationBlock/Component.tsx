@@ -2,8 +2,10 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
-import { MapPin, Phone, Mail } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { GoogleMapEmbed } from './GoogleMap'
+import { GettingThereAccordion } from './GettingThereAccordion'
 
 interface TypographySettings {
   font?: string
@@ -16,20 +18,31 @@ interface TypographySettings {
 
 interface LocationBlockProps {
   blockType: 'location'
-  // Addresses
+  // New fields
+  sectionTitle?: string
+  locationLabel?: string
+  fullAddress?: string
+  getDirectionsUrl?: string
+  reservationLabel?: string
+  parkingLabel?: string
+  parkingItems?: Array<{ text: string; id?: string }>
+  mapAddress?: string
+  mapLatitude?: number
+  mapLongitude?: number
+  mapZoom?: number
+  gettingThereTitle?: string
+  gettingThereItems?: Array<{ title: string; content?: string; id?: string }>
+  // Legacy fields (kept for backward compat)
   address1Label?: string
   address1?: string
   address2Label?: string
   address2?: string
-  // Contact
   hotlineLabel?: string
   hotline?: string
   emailLabel?: string
   email?: string
-  // CTA
   ctaText?: string
   ctaLink?: string
-  // Map
   mapImage?: Media | number
   // Style fields
   bgStyle?: string
@@ -40,45 +53,72 @@ interface LocationBlockProps {
 }
 
 /**
- * LOCATION BLOCK COMPONENT
- * 
+ * LOCATION BLOCK COMPONENT (Upgraded)
+ *
  * Layout:
- * ┌─────────────────────────────────────────────────────┐
- * │  Address 1  │  Hotline    │                         │
- * │  Address 2  │  Email      │  [Contact Us]           │
- * ├─────────────────────────────────────────────────────┤
- * │                   Map Image                          │
- * └─────────────────────────────────────────────────────┘
+ * ┌──────────────────────────────────────────────────────────────┐
+ * │         Location & Contact                                    │
+ * │  LOCATION          │  RESERVATION      │  PARKING             │
+ * │  Full address       │  Tel: ...         │  Parking included    │
+ * │  Get directions →   │  Mail: ...        │  Indoor parking      │
+ * ├──────────────────────────────────────────────────────────────┤
+ * │                  Google Map (embedded)                         │
+ * ├──────────────────────────────────────────────────────────────┤
+ * │         Getting there                                         │
+ * │  ▸ Parking / Road direction / Train / etc.                    │
+ * └──────────────────────────────────────────────────────────────┘
  */
 export function LocationBlockComponent({
-  address1Label = 'Address 1',
+  // New fields
+  sectionTitle = 'Location & Contact',
+  locationLabel = 'LOCATION',
+  fullAddress,
+  getDirectionsUrl,
+  reservationLabel = 'RESERVATION',
+  parkingLabel = 'PARKING',
+  parkingItems,
+  mapAddress,
+  mapLatitude,
+  mapLongitude,
+  mapZoom = 13,
+  gettingThereTitle = 'Getting there',
+  gettingThereItems,
+  // Legacy fields
   address1,
-  address2Label = 'Address 2',
   address2,
-  hotlineLabel = 'Hotline',
   hotline,
-  emailLabel = 'Email',
   email,
-  ctaText = 'Contact Us',
-  ctaLink = '/contact',
+  ctaText,
+  ctaLink,
   mapImage,
+  // Styles
   bgStyle,
   bgCustom,
   txtStyle,
   tTitle,
   tBody,
 }: LocationBlockProps) {
-  // Parse map image
-  const mapImg = typeof mapImage === 'object' ? mapImage as Media : null
+  // Parse map image for fallback
+  const mapImg = typeof mapImage === 'object' ? (mapImage as Media) : null
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
-  const styles = hasNewStyles 
+  const styles = hasNewStyles
     ? getBlockStyles(blockSettings)
-    : { backgroundColor: '#f5f3f0', color: '#1a1a1a' }
+    : { backgroundColor: '#f0e0d4', color: '#1a1a1a' }
 
   const textColor = styles.color || '#1a1a1a'
+
+  // Title typography
+  const titleStyles: React.CSSProperties = {
+    fontFamily: tTitle?.font || "'Playfair Display', Georgia, serif",
+    fontSize: tTitle?.size || undefined,
+    fontWeight: tTitle?.weight || '400',
+    lineHeight: tTitle?.lh || '1.2',
+    letterSpacing: tTitle?.ls || '0.01em',
+    color: tTitle?.color || textColor,
+  }
 
   // Body typography
   const bodyStyles: React.CSSProperties = {
@@ -89,110 +129,193 @@ export function LocationBlockComponent({
     color: tBody?.color || textColor,
   }
 
+  // Build display address from fullAddress or legacy fields
+  const displayAddress = fullAddress || [address1, address2].filter(Boolean).join('\n')
+
+  // Build map query from mapAddress or fullAddress
+  const mapQuery = mapAddress || displayAddress?.replace(/\n/g, ', ')
+
+  // Has Google Maps data?
+  const hasMapData = !!(mapLatitude && mapLongitude) || !!mapQuery
+
+  // Has getting there items?
+  const hasGettingThere = gettingThereItems && gettingThereItems.length > 0
+
+  // Has parking items?
+  const hasParkingItems = parkingItems && parkingItems.length > 0
+
   return (
-    <section 
-      className="py-12 md:py-16 px-4"
-      style={{ 
+    <section
+      className="py-16 md:py-24 px-4"
+      style={{
         backgroundColor: styles.backgroundColor,
         color: textColor,
       }}
     >
-      <div className="max-w-6xl mx-auto">
-        {/* Contact Info - 2 rows layout */}
-        <div className="space-y-4 mb-10">
-          
-          {/* Row 1: Address1 (with label) | Hotline (with label) | (empty) */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-12 items-start">
-            {/* Address 1 - with label */}
-            <div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
-                <MapPin size={14} />
-                <span>{address1Label || 'Address 1'}</span>
-              </div>
-              {address1 && (
-                <p className="text-base font-medium" style={{ ...bodyStyles, color: '#2c5545' }}>
-                  {address1}
-                </p>
-              )}
-            </div>
-
-            {/* Hotline - with label */}
-            <div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
-                <Phone size={14} />
-                <span>{hotlineLabel || 'Hotline'}</span>
-              </div>
-              {hotline && (
-                <a 
-                  href={`tel:${hotline.replace(/\s/g, '')}`}
-                  className="text-base font-medium hover:underline block"
-                  style={bodyStyles}
-                >
-                  {hotline}
-                </a>
-              )}
-            </div>
-
-            {/* Empty - button is in row 2 */}
-            <div></div>
+      <div className="max-w-7xl mx-auto">
+        {/* ========== TOP: Title + Info Grid ========== */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
+          {/* Section Title */}
+          <div className="lg:col-span-4">
+            {sectionTitle && (
+              <h2
+                className="text-3xl md:text-4xl lg:text-[42px]"
+                style={titleStyles}
+              >
+                {sectionTitle}
+              </h2>
+            )}
           </div>
 
-          {/* Row 2: Address2 (with label) | Email (with label) | Button */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-12 items-start">
-            {/* Address 2 - with label */}
-            <div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
-                <MapPin size={14} />
-                <span>{address2Label || 'Address 2'}</span>
-              </div>
-              {address2 && (
-                <p className="text-base font-medium" style={{ ...bodyStyles, color: '#2c5545' }}>
-                  {address2}
-                </p>
-              )}
-            </div>
-
-            {/* Email - with label */}
-            <div>
-              <div className="flex items-center gap-2 text-xs text-gray-500 mb-1" style={bodyStyles}>
-                <Mail size={14} />
-                <span>{emailLabel || 'Email'}</span>
-              </div>
-              {email && (
-                <a 
-                  href={`mailto:${email}`}
-                  className="text-base font-medium hover:underline block"
-                  style={bodyStyles}
+          {/* Info Columns */}
+          <div className="lg:col-span-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* LOCATION Column */}
+              <div>
+                <div
+                  className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
+                  style={{ ...bodyStyles, opacity: 0.6 }}
                 >
-                  {email}
-                </a>
-              )}
-            </div>
+                  {locationLabel}
+                </div>
+                {displayAddress && (
+                  <div className="mb-4">
+                    {displayAddress.split('\n').map((line, i) => (
+                      <p key={i} className="text-sm leading-relaxed" style={bodyStyles}>
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                )}
+                {getDirectionsUrl && (
+                  <a
+                    href={getDirectionsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 text-sm hover:opacity-70 transition-opacity"
+                    style={bodyStyles}
+                  >
+                    <span>Get directions</span>
+                    <ArrowRight size={14} />
+                  </a>
+                )}
+              </div>
 
-            {/* CTA Button - in row 2 */}
-            <div className="flex items-start justify-start md:justify-end">
-              {ctaText && ctaLink && (
-                <Link
-                  href={ctaLink}
-                  className="inline-block px-8 py-3 bg-[#2a2a28] text-white text-sm tracking-wider hover:bg-[#1a1a18] transition-colors"
+              {/* RESERVATION Column */}
+              <div>
+                <div
+                  className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
+                  style={{ ...bodyStyles, opacity: 0.6 }}
                 >
-                  {ctaText}
-                </Link>
+                  {reservationLabel}
+                </div>
+                {hotline && (
+                  <p className="text-sm mb-1" style={bodyStyles}>
+                    <span>Tel : </span>
+                    <a
+                      href={`tel:${hotline.replace(/[^\d+]/g, '')}`}
+                      className="hover:underline"
+                    >
+                      {hotline}
+                    </a>
+                  </p>
+                )}
+                {email && (
+                  <p className="text-sm" style={bodyStyles}>
+                    <span>Mail : </span>
+                    <a
+                      href={`mailto:${email}`}
+                      className="hover:underline"
+                    >
+                      {email}
+                    </a>
+                  </p>
+                )}
+              </div>
+
+              {/* PARKING Column */}
+              {hasParkingItems && (
+                <div>
+                  <div
+                    className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
+                    style={{ ...bodyStyles, opacity: 0.6 }}
+                  >
+                    {parkingLabel}
+                  </div>
+                  {parkingItems!.map((item, i) => (
+                    <p key={item.id || i} className="text-sm mb-1" style={bodyStyles}>
+                      {item.text}
+                    </p>
+                  ))}
+                </div>
               )}
             </div>
           </div>
-
         </div>
 
-        {/* Map Image */}
-        {mapImg?.url && (
-          <div className="relative w-full aspect-[16/7] overflow-hidden">
+        {/* ========== MIDDLE: Google Map ========== */}
+        {hasMapData && (
+          <div className="relative w-full aspect-[16/7] overflow-hidden mb-16">
+            <GoogleMapEmbed
+              address={mapQuery || undefined}
+              latitude={mapLatitude}
+              longitude={mapLongitude}
+              zoom={mapZoom}
+              className="w-full h-full"
+            />
+          </div>
+        )}
+
+        {/* Map Image Fallback (if no Google Maps data but has static image) */}
+        {!hasMapData && mapImg?.url && (
+          <div className="relative w-full aspect-[16/7] overflow-hidden mb-16">
             <Image
               src={mapImg.url}
               alt="Location Map"
               fill
               className="object-cover"
             />
+          </div>
+        )}
+
+        {/* ========== BOTTOM: Getting There Accordion ========== */}
+        {hasGettingThere && (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+            {/* Title */}
+            <div className="lg:col-span-4">
+              {gettingThereTitle && (
+                <h3
+                  className="text-2xl md:text-3xl lg:text-[36px]"
+                  style={titleStyles}
+                >
+                  {gettingThereTitle}
+                </h3>
+              )}
+            </div>
+
+            {/* Accordion */}
+            <div className="lg:col-span-8">
+              <GettingThereAccordion
+                items={gettingThereItems!.map((item) => ({
+                  title: item.title,
+                  content: item.content,
+                }))}
+                textColor={textColor}
+                borderColor={`${textColor}20`}
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Hidden CTA (if still configured - backward compat) */}
+        {ctaText && ctaLink && !hasGettingThere && (
+          <div className="mt-8 text-center">
+            <Link
+              href={ctaLink}
+              className="inline-block px-8 py-3 bg-[#2a2a28] text-white text-sm tracking-wider hover:bg-[#1a1a18] transition-colors"
+            >
+              {ctaText}
+            </Link>
           </div>
         )}
       </div>
