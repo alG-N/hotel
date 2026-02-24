@@ -11,3 +11,5 @@ export const revalidateHeader: GlobalAfterChangeHook = ({ doc, req: { payload, c
 
   return doc
 }
+
+// test
