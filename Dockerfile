@@ -38,8 +38,14 @@ ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-# Note: Migrations should be run manually or via a separate CI step, not during build
-# The database already has data migrated from local development
+# Run pending Payload migrations before build so new block tables exist
+# for build-time data fetching (SSG/ISR) in production.
+RUN \
+  if [ -f yarn.lock ]; then yarn payload migrate; \
+  elif [ -f package-lock.json ]; then npm run payload -- migrate; \
+  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm payload migrate; \
+  else echo "Lockfile not found." && exit 1; \
+  fi
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
