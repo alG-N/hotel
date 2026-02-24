@@ -24,27 +24,28 @@ const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
   return doc?.slug ? `${url}/${doc.slug}` : url
 }
 
-// Supabase Storage (S3-compatible) — only enabled when S3_BUCKET env var is set
-const s3Plugin: Plugin[] = process.env.S3_BUCKET
-  ? [
-      s3Storage({
-        collections: { media: true },
-        bucket: process.env.S3_BUCKET,
-        config: {
-          forcePathStyle: true, // required for Supabase S3
-          credentials: {
-            accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
-          },
-          region: process.env.S3_REGION || 'ap-southeast-1',
-          endpoint: process.env.S3_ENDPOINT || '',
-        },
-      }),
-    ]
-  : []
+// Supabase Storage (S3-compatible) — always registered so importMap includes the component.
+// When S3_BUCKET is not set, the plugin uses a dummy bucket and disableLocalStorage stays false.
+const hasS3 = !!process.env.S3_BUCKET
 
 export const plugins: Plugin[] = [
-  ...s3Plugin,
+  s3Storage({
+    collections: {
+      media: {
+        disableLocalStorage: hasS3,
+      },
+    },
+    bucket: process.env.S3_BUCKET || 'placeholder',
+    config: {
+      forcePathStyle: true, // required for Supabase S3
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY_ID || '',
+        secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || '',
+      },
+      region: process.env.S3_REGION || 'ap-southeast-1',
+      endpoint: process.env.S3_ENDPOINT || 'https://placeholder.supabase.co/storage/v1/s3',
+    },
+  }),
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
