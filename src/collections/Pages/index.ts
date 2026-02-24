@@ -25,6 +25,8 @@ import { VisionBlock } from '../../blocks/VisionBlock/config'
 import { DesignedBlock } from '../../blocks/DesignedBlock/config'
 import { CollaborationBlock } from '../../blocks/CollaborationBlock/config'
 import { DescriptionType2Block } from '../../blocks/DescriptionType2Block/config'
+import { BookingFormBlock } from '../../blocks/BookingFormBlock/config'
+import { SubscribeBlock } from '../../blocks/SubscribeBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -115,6 +117,8 @@ export const Pages: CollectionConfig<'pages'> = {
                 DesignedBlock,
                 CollaborationBlock,
                 DescriptionType2Block,
+                BookingFormBlock,
+                SubscribeBlock,
               ],
               required: true,
               admin: {

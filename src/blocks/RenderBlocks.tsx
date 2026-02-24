@@ -25,6 +25,8 @@ import { VisionBlockComponent } from '@/blocks/VisionBlock/Component'
 import { DesignedBlockComponent } from '@/blocks/DesignedBlock/Component'
 import { CollaborationBlockComponent } from '@/blocks/CollaborationBlock/Component'
 import { DescriptionType2BlockComponent } from '@/blocks/DescriptionType2Block/Component'
+import { BookingFormBlockComponent } from '@/blocks/BookingFormBlock/Component'
+import { SubscribeBlockComponent } from '@/blocks/SubscribeBlock/Component'
 
 const blockComponents = {
   // Default blocks
@@ -51,6 +53,8 @@ const blockComponents = {
   designed: DesignedBlockComponent,
   collaboration: CollaborationBlockComponent,
   'description-type2': DescriptionType2BlockComponent,
+  'booking-form': BookingFormBlockComponent,
+  subscribe: SubscribeBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{
