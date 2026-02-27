@@ -27,7 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <Providers>
           <AdvertisementProvider />
           <Header />
-          <main className="pt-[120px]">
+          <main style={{ paddingTop: 'var(--header-height, 120px)' }}>
             {children}
           </main>
           <Footer />

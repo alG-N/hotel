@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/providers/Language'
 
 interface FloatingBarAdProps {
   text?: string
@@ -15,13 +16,16 @@ interface FloatingBarAdProps {
 
 export function FloatingBarAd({
   text,
-  ctaText = 'Book Now',
+  ctaText: ctaTextProp = 'Book Now',
   ctaLink = '/booking',
   bgColor = '#2a2a28',
   textColor = '#ffffff',
   dismissible = true,
 }: FloatingBarAdProps) {
   const [dismissed, setDismissed] = useState(false)
+  const { t } = useLanguage()
+
+  const ctaText = t('Đặt ngay', ctaTextProp)
 
   if (dismissed || !text) return null
 
@@ -31,7 +35,7 @@ export function FloatingBarAd({
       style={{ backgroundColor: bgColor, color: textColor }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
-        <p className="text-sm tracking-wide flex-1">{text}</p>
+        <p className="text-sm tracking-wide flex-1">{t(text, text)}</p>
         <div className="flex items-center gap-3 flex-shrink-0">
           {ctaText && ctaLink && (
             <Link

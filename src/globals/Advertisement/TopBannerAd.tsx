@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/providers/Language'
 
 interface TopBannerAdProps {
   text?: string
@@ -22,6 +23,7 @@ export function TopBannerAd({
   dismissible = true,
 }: TopBannerAdProps) {
   const [dismissed, setDismissed] = useState(false)
+  const { t } = useLanguage()
 
   if (dismissed || !text) return null
 
@@ -31,14 +33,14 @@ export function TopBannerAd({
       style={{ backgroundColor: bgColor, color: textColor }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-center gap-3">
-        <span className="tracking-wide">{text}</span>
+        <span className="tracking-wide">{t(text, text)}</span>
         {ctaText && link && (
           <Link
             href={link}
             className="inline-flex items-center gap-1 font-medium underline underline-offset-4 hover:opacity-80 transition-opacity"
             style={{ color: textColor }}
           >
-            {ctaText}
+            {t(ctaText, ctaText)}
             <span aria-hidden>→</span>
           </Link>
         )}

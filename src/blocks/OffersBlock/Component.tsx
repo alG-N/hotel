@@ -3,6 +3,7 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { T } from '@/providers/Language/T'
 import { Check } from 'lucide-react'
 
 interface TypographySettings {
@@ -165,11 +166,11 @@ export function OffersBlockComponent({
                 </>
               ) : (
                 <>
-                  Enjoy an exclusive special price from{' '}
+                  <T vi="Tận hưởng mức giá đặc biệt từ" en="Enjoy an exclusive special price from" />{' '}
                   <span className="font-semibold italic text-lg md:text-xl" style={{ color: textColor }}>
                     {priceHighlight}
                   </span>{' '}
-                  when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.
+                  <T vi="khi đặt trực tiếp với The Calanthe. Được tuyển chọn chu đáo cho khách hàng yêu thích sự thoải mái, bình yên và giá trị đặc biệt." en="when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value." />
                 </>
               )}
             </p>
@@ -210,7 +211,11 @@ export function OffersBlockComponent({
                   color: isDark ? '#000000' : '#ffffff',
                 }}
               >
-                {ctaText}
+              {ctaText ? (
+                <T vi="Đặt ngay" en={ctaText} />
+              ) : (
+                <T vi="Đặt ngay" en="Book Now" />
+              )}
               </Link>
             )}
           </div>

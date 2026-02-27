@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/providers/Language'
 import type { Media } from '@/payload-types'
 
 interface PopupOfferAdProps {
@@ -24,7 +25,7 @@ export function PopupOfferAd({
   image,
   title,
   description,
-  ctaText = 'View Offer',
+  ctaText: ctaTextProp = 'View Offer',
   ctaLink = '/offers',
   delay = 3,
   bgColor = '#ffffff',
@@ -33,6 +34,9 @@ export function PopupOfferAd({
 }: PopupOfferAdProps) {
   const [visible, setVisible] = useState(false)
   const [closing, setClosing] = useState(false)
+  const { t } = useLanguage()
+
+  const ctaText = t('Xem ưu đãi', ctaTextProp)
 
   const img = typeof image === 'object' && image ? image : null
 

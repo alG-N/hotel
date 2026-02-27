@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import {
   CalendarDays,
   Users,
@@ -67,10 +68,10 @@ const iconMap = {
 }
 
 export function BookingFormBlockComponent({
-  title = 'Book Your Stay',
+  title: titleProp = 'Book Your Stay',
   subtitle,
   bookingUrl = '#',
-  buttonText = 'Check Availability',
+  buttonText: buttonTextProp = 'Check Availability',
   roomTypes = [],
   infoCards = [],
   layout = 'centered',
@@ -88,6 +89,10 @@ export function BookingFormBlockComponent({
   const [guests, setGuests] = useState(2)
   const [rooms, setRooms] = useState(1)
   const [roomType, setRoomType] = useState(roomTypes?.[0]?.value || '')
+  const { t } = useLanguage()
+
+  const title = t('Đặt Phòng', titleProp)
+  const buttonText = t('Kiểm tra phòng trống', buttonTextProp)
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
@@ -168,7 +173,7 @@ export function BookingFormBlockComponent({
               style={{ color: textColor }}
             >
               <CalendarDays className="w-4 h-4" style={{ color: mutedColor }} />
-              Check-in
+              {t('Nhận phòng', 'Check-in')}
             </label>
             <input
               type="date"
@@ -191,7 +196,7 @@ export function BookingFormBlockComponent({
               style={{ color: textColor }}
             >
               <CalendarDays className="w-4 h-4" style={{ color: mutedColor }} />
-              Check-out
+              {t('Trả phòng', 'Check-out')}
             </label>
             <input
               type="date"
@@ -217,7 +222,7 @@ export function BookingFormBlockComponent({
               style={{ color: textColor }}
             >
               <Users className="w-4 h-4" style={{ color: mutedColor }} />
-              Guests
+              {t('Khách', 'Guests')}
             </label>
             <div className="relative">
               <select
@@ -233,7 +238,7 @@ export function BookingFormBlockComponent({
               >
                 {Array.from({ length: maxGuests }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>
-                    {n} {n === 1 ? 'Guest' : 'Guests'}
+                    {n} {n === 1 ? t('Khách', 'Guest') : t('Khách', 'Guests')}
                   </option>
                 ))}
               </select>
@@ -251,7 +256,7 @@ export function BookingFormBlockComponent({
               style={{ color: textColor }}
             >
               <BedDouble className="w-4 h-4" style={{ color: mutedColor }} />
-              Rooms
+              {t('Phòng', 'Rooms')}
             </label>
             <div className="relative">
               <select
@@ -267,7 +272,7 @@ export function BookingFormBlockComponent({
               >
                 {Array.from({ length: maxRooms }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>
-                    {n} {n === 1 ? 'Room' : 'Rooms'}
+                    {n} {n === 1 ? t('Phòng', 'Room') : t('Phòng', 'Rooms')}
                   </option>
                 ))}
               </select>
@@ -287,7 +292,7 @@ export function BookingFormBlockComponent({
               style={{ color: textColor }}
             >
               <BedDouble className="w-4 h-4" style={{ color: mutedColor }} />
-              Room Type
+              {t('Loại phòng', 'Room Type')}
             </label>
             <div className="relative">
               <select
@@ -301,7 +306,7 @@ export function BookingFormBlockComponent({
                   fontFamily: bodyStyles.fontFamily,
                 }}
               >
-                <option value="">All Room Types</option>
+                <option value="">{t('Tất cả loại phòng', 'All Room Types')}</option>
                 {roomTypes.map((rt, idx) => (
                   <option key={idx} value={rt.value || ''}>
                     {rt.label}

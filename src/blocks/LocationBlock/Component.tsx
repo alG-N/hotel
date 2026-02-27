@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { T } from '@/providers/Language/T'
 import { GoogleMapEmbed } from './GoogleMap'
 import { GettingThereAccordion } from './GettingThereAccordion'
 
@@ -195,7 +196,7 @@ export function LocationBlockComponent({
                     className="inline-flex items-center gap-2 text-sm hover:opacity-70 transition-opacity"
                     style={bodyStyles}
                   >
-                    <span>Get directions</span>
+                    <span><T vi="Chỉ đường" en="Get directions" /></span>
                     <ArrowRight size={14} />
                   </a>
                 )}
@@ -211,7 +212,7 @@ export function LocationBlockComponent({
                 </div>
                 {hotline && (
                   <p className="text-sm mb-1" style={bodyStyles}>
-                    <span>Tel : </span>
+                    <span><T vi="ĐT : " en="Tel : " /></span>
                     <a
                       href={`tel:${hotline.replace(/[^\d+]/g, '')}`}
                       className="hover:underline"
@@ -222,7 +223,7 @@ export function LocationBlockComponent({
                 )}
                 {email && (
                   <p className="text-sm" style={bodyStyles}>
-                    <span>Mail : </span>
+                    <span><T vi="Email : " en="Mail : " /></span>
                     <a
                       href={`mailto:${email}`}
                       className="hover:underline"

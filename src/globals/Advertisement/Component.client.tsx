@@ -2,7 +2,6 @@
 
 import React from 'react'
 import type { Advertisement } from '@/payload-types'
-import { TopBannerAd } from './TopBannerAd'
 import { PopupOfferAd } from './PopupOfferAd'
 import { FloatingBarAd } from './FloatingBarAd'
 import { SlideInAd } from './SlideInAd'
@@ -14,17 +13,7 @@ interface AdvertisementClientProps {
 export function AdvertisementClient({ data }: AdvertisementClientProps) {
   return (
     <>
-      {/* Top Banner - rendered in place (above header) */}
-      {data.topBannerEnabled && (
-        <TopBannerAd
-          text={data.topBannerText || undefined}
-          link={data.topBannerLink || undefined}
-          ctaText={data.topBannerCtaText || undefined}
-          bgColor={data.topBannerBgColor || undefined}
-          textColor={data.topBannerTextColor || undefined}
-          dismissible={data.topBannerDismissible ?? true}
-        />
-      )}
+      {/* TopBanner is now rendered inside the Header for proper fixed layout */}
 
       {/* Popup Offer - fixed overlay */}
       {data.popupEnabled && (

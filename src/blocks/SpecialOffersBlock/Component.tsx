@@ -5,6 +5,7 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface TypographySettings {
@@ -52,7 +53,7 @@ interface SpecialOffersBlockProps {
  * └─────────────┴─────────────┴─────────────────┘
  */
 export function SpecialOffersBlockComponent({
-  sectionTitle = 'Special Offers',
+  sectionTitle: sectionTitleProp = 'Special Offers',
   offers = [],
   columns = '3',
   showNavigation = true,
@@ -63,6 +64,9 @@ export function SpecialOffersBlockComponent({
   tBody,
 }: SpecialOffersBlockProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
+  const { t } = useLanguage()
+
+  const sectionTitle = t('Ƭu đãi đặc biệt', sectionTitleProp)
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
@@ -205,7 +209,7 @@ export function SpecialOffersBlockComponent({
                       href={offer.ctaLink}
                       className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 transition-colors w-fit"
                     >
-                      {offer.ctaText || 'Get The Offer'}
+                      {offer.ctaText || t('Nhận ưu đãi', 'Get The Offer')}
                     </Link>
                   )}
                 </div>

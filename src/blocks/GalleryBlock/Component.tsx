@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -44,7 +45,7 @@ const heightMap = {
  */
 export function GalleryBlockComponent({
   gallery,
-  seeAllText = 'See all photos',
+  seeAllText: seeAllTextProp = 'See all photos',
   seeAllLink = '/gallery',
   height = 'large',
   showCounter = true,
@@ -57,6 +58,9 @@ export function GalleryBlockComponent({
   tBody,
 }: GalleryBlockProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { t } = useLanguage()
+
+  const seeAllText = t('Xem tất cả ảnh', seeAllTextProp)
 
   // Get colors from new style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }

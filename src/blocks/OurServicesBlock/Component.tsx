@@ -4,6 +4,7 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -43,7 +44,7 @@ interface OurServicesBlockProps {
  * - Cards: Portrait images with title + description OVERLAY at bottom (inside image)
  */
 export function OurServicesBlockComponent({
-  sectionTitle = 'Dining That Complements Your Stay',
+  sectionTitle: sectionTitleProp = 'Dining That Complements Your Stay',
   sectionDescription,
   services = [],
   columns = '3',
@@ -53,6 +54,9 @@ export function OurServicesBlockComponent({
   tTitle,
   tBody,
 }: OurServicesBlockProps) {
+  const { t } = useLanguage()
+  const sectionTitle = t('Ẩm thực bổ trợ kỳ nghỉ của bạn', sectionTitleProp)
+
   // Get colors from new style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'

@@ -3,13 +3,14 @@ import { useHeaderTheme } from '@/providers/HeaderTheme'
 import { useLanguage } from '@/providers/Language'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
-import type { Header } from '@/payload-types'
+import type { Header, Advertisement } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { Media } from '@/components/Media'
 import { CMSLink } from '@/components/Link'
+import { TopBannerAd } from '@/globals/Advertisement/TopBannerAd'
 import { Phone, ChevronDown } from 'lucide-react'
 
 interface ThemeColors {
@@ -25,6 +26,7 @@ interface ThemeColors {
 interface HeaderClientProps {
   data: Header
   themeColors?: ThemeColors | null
+  adData?: Advertisement | null
 }
 
 const paddingMap = {
@@ -33,7 +35,7 @@ const paddingMap = {
   large: 'py-6',
 }
 
-export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors }) => {
+export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, adData }) => {
   const [theme, setTheme] = useState<string | null>(null)
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLangMenu, setShowLangMenu] = useState(false)
@@ -72,7 +74,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
   const navItemsLeft = data?.navItemsLeft || []
   const navItemsRight = data?.navItemsRight || []
   const showCTA = data?.showCTA ?? true
-  const ctaText = data?.ctaText || 'Book Your Stay'
+  const ctaTextRaw = data?.ctaText || 'Book Your Stay'
+  const ctaText = t('Đặt Phòng', ctaTextRaw)
   const ctaLink = data?.ctaLink || '/booking'
 
   // Use theme colors
@@ -109,8 +112,29 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
     color: textColorValue,
   }
 
+  // Style without color for CTA button (so Tailwind hover:text-* works)
+  const navTextStyleNoColor: React.CSSProperties = {
+    fontFamily,
+    fontWeight,
+    fontSize,
+    letterSpacing,
+  }
+
+  // Dynamic header height tracking
+  const headerRef = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const observer = new ResizeObserver(() => {
+      document.documentElement.style.setProperty('--header-height', `${el.offsetHeight}px`)
+    })
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   return (
     <header
+      ref={headerRef}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300`}
       style={{
         backgroundColor: currentBgColor === 'transparent' ? 'transparent' : currentBgColor,
@@ -119,6 +143,18 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
       }}
       {...(theme ? { 'data-theme': theme } : {})}
     >
+      {/* Top Banner Ad - inside fixed header so it stacks properly */}
+      {adData?.topBannerEnabled && (
+        <TopBannerAd
+          text={adData.topBannerText || undefined}
+          link={adData.topBannerLink || undefined}
+          ctaText={adData.topBannerCtaText || undefined}
+          bgColor={adData.topBannerBgColor || undefined}
+          textColor={adData.topBannerTextColor || undefined}
+          dismissible={adData.topBannerDismissible ?? true}
+        />
+      )}
+
       {/* Top Bar */}
       {showTopBar && (
         <div className={`border-b ${borderColorClass}`}>
@@ -272,7 +308,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
                           ? 'border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white'
                           : 'border-white text-white hover:bg-white hover:text-gray-800'
                       }`}
-                      style={navTextStyle}
+                      style={navTextStyleNoColor}
                     >
                       {ctaText}
                     </Link>

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/providers/Language'
 import type { Media } from '@/payload-types'
 
 interface SlideInAdProps {
@@ -21,7 +22,7 @@ export function SlideInAd({
   image,
   title,
   description,
-  ctaText = 'Learn More',
+  ctaText: ctaTextProp = 'Learn More',
   ctaLink = '/offers',
   scrollTrigger = 50,
   bgColor = '#ffffff',
@@ -29,6 +30,9 @@ export function SlideInAd({
 }: SlideInAdProps) {
   const [visible, setVisible] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const { t } = useLanguage()
+
+  const ctaText = t('Tìm hiểu thêm', ctaTextProp)
 
   const img = typeof image === 'object' && image ? image : null
 

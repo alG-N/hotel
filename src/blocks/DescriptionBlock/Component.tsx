@@ -3,6 +3,7 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { T } from '@/providers/Language/T'
 import { ArrowUpRight } from 'lucide-react'
 
 interface TypographySettings {
@@ -132,7 +133,7 @@ export function DescriptionBlockComponent({
                     className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
                     style={{ color: textColor }}
                   >
-                    {ctaText}
+                    {ctaText ? ctaText : <T vi="Thêm về chúng tôi" en="More About Us" />}
                     <ArrowUpRight className="w-4 h-4" />
                   </Link>
                 )}

@@ -5,6 +5,7 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import { Utensils, Calendar, Coffee, ChevronDown } from 'lucide-react'
 
 interface TypographySettings {
@@ -56,7 +57,7 @@ interface FoodDrinkBlockProps {
  * - Right: 3 horizontal cards (image left, text right)
  */
 export function FoodDrinkBlockComponent({
-  title = 'Foods & Drinks',
+  title: titleProp = 'Foods & Drinks',
   cuisineOptions = [],
   occasionOptions = [],
   foodTypeOptions = [],
@@ -74,6 +75,9 @@ export function FoodDrinkBlockComponent({
   const [selectedCuisine, setSelectedCuisine] = useState('')
   const [selectedOccasion, setSelectedOccasion] = useState('')
   const [selectedFoodType, setSelectedFoodType] = useState('')
+  const { t } = useLanguage()
+
+  const title = t('Đồ ăn & Thức uống', titleProp)
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
@@ -136,7 +140,7 @@ export function FoodDrinkBlockComponent({
           className="appearance-none bg-transparent text-base pr-6 cursor-pointer focus:outline-none"
           style={{ color: textColor, fontFamily: titleStyles.fontFamily }}
         >
-          <option value="">Select {label.toLowerCase()}</option>
+          <option value="">{t('Chọn', 'Select')} {label.toLowerCase()}</option>
           {options.map((opt, idx) => (
             <option key={idx} value={opt.value}>{opt.label}</option>
           ))}
@@ -169,21 +173,21 @@ export function FoodDrinkBlockComponent({
         <div className="flex flex-wrap gap-8 md:gap-16 mb-10 pb-6 border-b" style={{ borderColor }}>
           <FilterDropdown
             icon={Utensils}
-            label="Cuisine"
+            label={t('Ẩm thực', 'Cuisine')}
             options={cuisineOptions}
             value={selectedCuisine}
             onChange={setSelectedCuisine}
           />
           <FilterDropdown
             icon={Calendar}
-            label="Occasion"
+            label={t('Dịp', 'Occasion')}
             options={occasionOptions}
             value={selectedOccasion}
             onChange={setSelectedOccasion}
           />
           <FilterDropdown
             icon={Coffee}
-            label="Food type"
+            label={t('Loại món', 'Food type')}
             options={foodTypeOptions}
             value={selectedFoodType}
             onChange={setSelectedFoodType}

@@ -5,6 +5,7 @@ import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import { Bed, Monitor, Bath, Wifi, Tv, Wind, Sofa, Sun, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface TypographySettings {
@@ -68,6 +69,7 @@ export function RoomsGridBlockComponent({
 }: RoomsGridBlockProps) {
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const [imageIndexes, setImageIndexes] = useState<Record<number, number>>({})
+  const { t } = useLanguage()
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
@@ -102,10 +104,10 @@ export function RoomsGridBlockComponent({
 
   // Build categories with auto count
   const categoryLabels: Record<string, string> = {
-    regular: 'Regular',
-    deluxe: 'Deluxe',
-    family: 'Family',
-    suites: 'Suites',
+    regular: t('Thường', 'Regular'),
+    deluxe: t('Cao cấp', 'Deluxe'),
+    family: t('Gia đình', 'Family'),
+    suites: t('Suite', 'Suites'),
   }
 
   const categoriesWithCount = useMemo(() => {
@@ -192,7 +194,7 @@ export function RoomsGridBlockComponent({
             }`}
             style={{ color: activeCategory === null ? '#fff' : textColor }}
           >
-            All ({rooms.length})
+            {t('Tất cả', 'All')} ({rooms.length})
           </button>
           
           {categoriesWithCount.map((cat, idx) => (
@@ -306,7 +308,7 @@ export function RoomsGridBlockComponent({
                           href={room.bookLink}
                           className="inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 transition-colors w-fit mt-auto"
                         >
-                          Book now
+                          {t('Đặt ngay', 'Book now')}
                         </Link>
                       )}
                     </div>

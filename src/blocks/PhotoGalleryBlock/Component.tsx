@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -44,7 +45,7 @@ export function PhotoGalleryBlockComponent({
   title,
   images,
   layout: rawLayout = 'bento',
-  loadMoreText = 'Load more',
+  loadMoreText: loadMoreTextProp = 'Load more',
   bgStyle,
   bgCustom,
   txtStyle,
@@ -52,6 +53,9 @@ export function PhotoGalleryBlockComponent({
 }: PhotoGalleryBlockProps) {
   // Normalize legacy layouts
   const layout = (rawLayout === 'masonry' || rawLayout === 'rows') ? 'bento' : rawLayout
+  const { t } = useLanguage()
+  const loadMoreText = t('Xem thêm', loadMoreTextProp)
+
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'

@@ -4,6 +4,7 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import { LayoutGrid, Users, Layers, Square, Clock } from 'lucide-react'
 
 interface TypographySettings {
@@ -47,7 +48,7 @@ interface TheSpaceBlockProps {
  * Row 2: Image | Stat | Image
  */
 export function TheSpaceBlockComponent({
-  sectionTitle = 'The Space',
+  sectionTitle: sectionTitleProp = 'The Space',
   sectionDescription,
   stats = [],
   images = [],
@@ -57,6 +58,9 @@ export function TheSpaceBlockComponent({
   tTitle,
   tBody,
 }: TheSpaceBlockProps) {
+  const { t } = useLanguage()
+  const sectionTitle = t('Không gian', sectionTitleProp)
+
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'

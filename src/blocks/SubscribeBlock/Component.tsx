@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 import { Check, Loader2 } from 'lucide-react'
 
 interface TypographySettings {
@@ -40,12 +41,12 @@ interface SubscribeBlockProps {
 }
 
 export function SubscribeBlockComponent({
-  title = 'Get the latest news & discounts',
+  title: titleProp = 'Get the latest news & discounts',
   subtitle,
-  placeholderText = 'Enter your email address',
-  buttonText = 'Subscribe',
+  placeholderText: placeholderProp = 'Enter your email address',
+  buttonText: buttonTextProp = 'Subscribe',
   formAction,
-  successMessage = 'Thank you for subscribing!',
+  successMessage: successMessageProp = 'Thank you for subscribing!',
   benefits = [],
   layout = 'centered',
   sideImage,
@@ -58,6 +59,12 @@ export function SubscribeBlockComponent({
 }: SubscribeBlockProps) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+  const { t } = useLanguage()
+
+  const title = t('Nhận tin tức & ưu đãi mới nhất', titleProp)
+  const placeholderText = t('Nhập địa chỉ email của bạn', placeholderProp)
+  const buttonText = t('Đăng ký', buttonTextProp)
+  const successMessage = t('Cảm ơn bạn đã đăng ký!', successMessageProp)
   const [errorMsg, setErrorMsg] = useState('')
 
   // Style system
@@ -96,7 +103,7 @@ export function SubscribeBlockComponent({
     e.preventDefault()
 
     if (!email || !email.includes('@')) {
-      setErrorMsg('Please enter a valid email address.')
+      setErrorMsg(t('Vui lòng nhập địa chỉ email hợp lệ.', 'Please enter a valid email address.'))
       setStatus('error')
       return
     }
@@ -122,11 +129,11 @@ export function SubscribeBlockComponent({
         setEmail('')
       } else {
         setStatus('error')
-        setErrorMsg('Something went wrong. Please try again.')
+        setErrorMsg(t('Đã xảy ra lỗi. Vui lòng thử lại.', 'Something went wrong. Please try again.'))
       }
     } catch {
       setStatus('error')
-      setErrorMsg('Something went wrong. Please try again.')
+      setErrorMsg(t('Đã xảy ra lỗi. Vui lòng thử lại.', 'Something went wrong. Please try again.'))
     }
   }
 

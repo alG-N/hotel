@@ -2,10 +2,17 @@ import { HeaderClient } from './Component.client'
 import { getCachedGlobal } from '@/utilities/getGlobals'
 import React from 'react'
 
-import type { Header as HeaderType } from '@/payload-types'
+import type { Header as HeaderType, Advertisement } from '@/payload-types'
 
 export async function Header() {
   const headerData = await getCachedGlobal('header', 1)() as HeaderType
+
+  let adData: Advertisement | null = null
+  try {
+    adData = await getCachedGlobal('advertisement', 1)() as Advertisement
+  } catch {
+    // ads may not be configured
+  }
   
   // Get style settings directly from header config
   const styleSettings = {
@@ -18,5 +25,5 @@ export async function Header() {
     letterSpacing: headerData.letterSpacing || '1px',
   }
 
-  return <HeaderClient data={headerData} themeColors={styleSettings} />
+  return <HeaderClient data={headerData} themeColors={styleSettings} adData={adData} />
 }
