@@ -95,7 +95,6 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
     currentBgColor === 'transparent' ||
     textColorSetting === 'dark'
 
-  const textColorClass = isLightBg ? 'text-gray-800' : 'text-white'
   const textColorValue = isLightBg ? '#1f2937' : '#ffffff'
   const borderColorClass = isLightBg ? 'border-gray-200' : 'border-white/20'
   const hoverColorClass = isLightBg ? 'hover:text-gray-600' : 'hover:text-gray-300'
