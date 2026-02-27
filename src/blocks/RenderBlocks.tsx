@@ -70,6 +70,9 @@ export const RenderBlocks: React.FC<{
         {blocks.map((block, index) => {
           const { blockType } = block
 
+          // Skip disabled blocks (enabled defaults to true if not set)
+          if ('enabled' in block && block.enabled === false) return null
+
           if (blockType && blockType in blockComponents) {
             const Block = blockComponents[blockType]
 

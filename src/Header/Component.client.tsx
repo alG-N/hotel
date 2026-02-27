@@ -1,5 +1,6 @@
 'use client'
 import { useHeaderTheme } from '@/providers/HeaderTheme'
+import { useLanguage } from '@/providers/Language'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
@@ -37,7 +38,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLangMenu, setShowLangMenu] = useState(false)
   const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
-  const [selectedLang, setSelectedLang] = useState('ENG')
+  const { language, setLanguage, t } = useLanguage()
   const [selectedCurrency, setSelectedCurrency] = useState('USD')
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
   const pathname = usePathname()
@@ -66,7 +67,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
   const contactPhone = data?.contactPhone || '+84 777 4340'
   const showLanguageSelector = data?.showLanguageSelector ?? true
   const showCurrencySelector = data?.showCurrencySelector ?? true
-  const languages = data?.languages || [{ code: 'en', label: 'ENG' }, { code: 'vi', label: 'VIE' }]
+  const languages = data?.languages || [{ code: 'en', label: 'ENG' }, { code: 'vi', label: 'VN' }]
   const currencies = data?.currencies || [{ code: 'usd', label: 'USD' }, { code: 'vnd', label: 'VND' }]
   const navItemsLeft = data?.navItemsLeft || []
   const navItemsRight = data?.navItemsRight || []
@@ -127,7 +128,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
               {/* Contact Phone */}
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4" />
-                <span>Contact us at {contactPhone}</span>
+                <span>{t('Liên hệ', 'Contact us at')} {contactPhone}</span>
               </div>
 
               {/* Language & Currency Selectors */}
@@ -142,7 +143,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
                       }}
                       className={`flex items-center gap-1 ${hoverColorClass} transition-colors`}
                     >
-                      {selectedLang}
+                      {languages.find((l) => l.code === language)?.label || (language === 'vi' ? 'VN' : 'ENG')}
                       <ChevronDown className="w-3 h-3" />
                     </button>
                     {showLangMenu && (
@@ -154,10 +155,12 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors })
                           <button
                             key={lang.code}
                             onClick={() => {
-                              setSelectedLang(lang.label || lang.code || 'EN')
+                              setLanguage((lang.code === 'vi' ? 'vi' : 'en') as 'vi' | 'en')
                               setShowLangMenu(false)
                             }}
-                            className="block w-full text-left px-3 py-1.5 text-sm text-gray-700 hover:bg-gray-50"
+                            className={`block w-full text-left px-3 py-1.5 text-sm hover:bg-gray-50 ${
+                              lang.code === language ? 'text-gray-900 font-medium' : 'text-gray-700'
+                            }`}
                           >
                             {lang.label}
                           </button>

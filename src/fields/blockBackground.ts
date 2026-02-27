@@ -51,10 +51,25 @@ export const backgroundColorOptions = [
 ]
 
 /**
+ * Block visibility toggle field
+ */
+export const blockVisibilityField: Field = {
+  name: 'enabled',
+  type: 'checkbox',
+  label: 'Hiển thị block này',
+  defaultValue: true,
+  admin: {
+    description: 'Tắt để ẩn block này khỏi trang (không cần xóa)',
+  },
+}
+
+/**
  * Block background styling field - using short names
  * bgStyle, bgCustom, txtStyle
  */
 export const blockStyleFields: Field[] = [
+  // Block visibility
+  blockVisibilityField,
   {
     type: 'collapsible',
     label: 'Cài đặt màu nền',

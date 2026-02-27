@@ -21,13 +21,13 @@ export const Advertisement: GlobalConfig = {
         // TAB 1: TOP BANNER
         // =====================
         {
-          label: 'Top Banner',
-          description: 'Banner quảng cáo dạng dải mỏng, hiển thị phía trên Header',
+          label: 'Băng rôn đầu trang',
+          description: 'Băng rôn quảng cáo dạng dải mỏng, hiển thị phía trên Header',
           fields: [
             {
               name: 'topBannerEnabled',
               type: 'checkbox',
-              label: 'Bật Top Banner',
+              label: 'Bật băng rôn đầu trang',
               defaultValue: false,
             },
             {
@@ -36,7 +36,7 @@ export const Advertisement: GlobalConfig = {
               label: 'Nội dung',
               admin: {
                 condition: (data) => data?.topBannerEnabled,
-                description: 'Ví dụ: "Book now and get 20% off your first stay!"',
+                description: 'Ví dụ: "Đặt ngay giảm 20% cho lần lưu trú đầu tiên!"',
               },
             },
             {
@@ -54,7 +54,7 @@ export const Advertisement: GlobalConfig = {
               label: 'Text nút CTA',
               admin: {
                 condition: (data) => data?.topBannerEnabled,
-                description: 'Ví dụ: "Book Now", "Learn More"',
+                description: 'Ví dụ: "Đặt ngay", "Tìm hiểu thêm"',
               },
             },
             {
@@ -92,13 +92,13 @@ export const Advertisement: GlobalConfig = {
         // TAB 2: POPUP OFFER
         // =====================
         {
-          label: 'Popup Offer',
+          label: 'Popup khuyến mãi',
           description: 'Popup hiển thị khi người dùng vào trang (sau delay)',
           fields: [
             {
               name: 'popupEnabled',
               type: 'checkbox',
-              label: 'Bật Popup Offer',
+              label: 'Bật Popup khuyến mãi',
               defaultValue: false,
             },
             {
@@ -117,7 +117,7 @@ export const Advertisement: GlobalConfig = {
               label: 'Tiêu đề',
               admin: {
                 condition: (data) => data?.popupEnabled,
-                description: 'Ví dụ: "Exclusive Offer"',
+                description: 'Ví dụ: "Ưu đãi đặc biệt"',
               },
             },
             {
@@ -133,7 +133,7 @@ export const Advertisement: GlobalConfig = {
               name: 'popupCtaText',
               type: 'text',
               label: 'Text nút CTA',
-              defaultValue: 'View Offer',
+              defaultValue: 'Xem ưu đãi',
               admin: {
                 condition: (data) => data?.popupEnabled,
               },
@@ -192,13 +192,13 @@ export const Advertisement: GlobalConfig = {
         // TAB 3: FLOATING BAR
         // =====================
         {
-          label: 'Floating Bar',
+          label: 'Thanh nổi cuối trang',
           description: 'Thanh quảng cáo nổi ở dưới cùng trang',
           fields: [
             {
               name: 'floatingBarEnabled',
               type: 'checkbox',
-              label: 'Bật Floating Bar',
+              label: 'Bật thanh nổi',
               defaultValue: false,
             },
             {
@@ -207,14 +207,14 @@ export const Advertisement: GlobalConfig = {
               label: 'Nội dung',
               admin: {
                 condition: (data) => data?.floatingBarEnabled,
-                description: 'Ví dụ: "Limited time: Spa package from $99"',
+                description: 'Ví dụ: "Giới hạn: Gói Spa từ 99$"',
               },
             },
             {
               name: 'floatingBarCtaText',
               type: 'text',
               label: 'Text nút CTA',
-              defaultValue: 'Book Now',
+              defaultValue: 'Đặt ngay',
               admin: {
                 condition: (data) => data?.floatingBarEnabled,
               },
@@ -262,13 +262,13 @@ export const Advertisement: GlobalConfig = {
         // TAB 4: SLIDE-IN OFFER
         // =====================
         {
-          label: 'Slide-in CTA',
+          label: 'Hộp trượt góc phải',
           description: 'Hộp quảng cáo trượt vào từ góc phải khi cuộn trang',
           fields: [
             {
               name: 'slideInEnabled',
               type: 'checkbox',
-              label: 'Bật Slide-in CTA',
+              label: 'Bật hộp trượt',
               defaultValue: false,
             },
             {
@@ -278,7 +278,7 @@ export const Advertisement: GlobalConfig = {
               label: 'Hình ảnh',
               admin: {
                 condition: (data) => data?.slideInEnabled,
-                description: 'Hình nhỏ minh họa cho offer',
+                description: 'Hình nhỏ minh họa cho ưu đãi',
               },
             },
             {
@@ -287,7 +287,7 @@ export const Advertisement: GlobalConfig = {
               label: 'Tiêu đề',
               admin: {
                 condition: (data) => data?.slideInEnabled,
-                description: 'Ví dụ: "Weekend Getaway"',
+                description: 'Ví dụ: "Nghỉ cuối tuần"',
               },
             },
             {
@@ -296,14 +296,14 @@ export const Advertisement: GlobalConfig = {
               label: 'Mô tả ngắn',
               admin: {
                 condition: (data) => data?.slideInEnabled,
-                description: 'Ví dụ: "Stay 2 nights, get 1 free"',
+                description: 'Ví dụ: "Ở 2 đêm, tặng 1 đêm"',
               },
             },
             {
               name: 'slideInCtaText',
               type: 'text',
               label: 'Text nút',
-              defaultValue: 'Learn More',
+              defaultValue: 'Tìm hiểu thêm',
               admin: {
                 condition: (data) => data?.slideInEnabled,
               },

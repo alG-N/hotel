@@ -58,7 +58,7 @@ export const Header: GlobalConfig = {
           ],
           defaultValue: [
             { code: 'en', label: 'ENG' },
-            { code: 'vi', label: 'VIE' },
+            { code: 'vi', label: 'VN' },
           ],
         },
         {
