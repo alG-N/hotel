@@ -1,4 +1,5 @@
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getLocale } from '@/utilities/getLocale'
 import React from 'react'
 
 import type { Footer as FooterType } from '@/payload-types'
@@ -6,7 +7,8 @@ import type { Footer as FooterType } from '@/payload-types'
 import { FooterClient } from './Component.client'
 
 export async function Footer() {
-  const footerData: FooterType = await getCachedGlobal('footer', 1)()
+  const locale = await getLocale()
+  const footerData: FooterType = await getCachedGlobal('footer', 1, locale)()
 
   return <FooterClient data={footerData} />
 }

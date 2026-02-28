@@ -8,18 +8,20 @@ import { getPayload } from 'payload'
 import React from 'react'
 import PageClient from './page.client'
 import { T } from '@/providers/Language/T'
+import { getLocale } from '@/utilities/getLocale'
 
-export const dynamic = 'force-static'
 export const revalidate = 600
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
+  const locale = await getLocale()
 
   const posts = await payload.find({
     collection: 'posts',
     depth: 1,
     limit: 12,
     overrideAccess: false,
+    locale,
     select: {
       title: true,
       slug: true,

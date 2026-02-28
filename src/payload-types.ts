@@ -108,7 +108,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('vi' | 'en') | ('vi' | 'en')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -119,7 +119,7 @@ export interface Config {
     footer: FooterSelect<false> | FooterSelect<true>;
     advertisement: AdvertisementSelect<false> | AdvertisementSelect<true>;
   };
-  locale: null;
+  locale: 'vi' | 'en';
   user: User & {
     collection: 'users';
   };
@@ -551,6 +551,10 @@ export interface CallToActionBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -680,6 +684,10 @@ export interface ContentBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -769,6 +777,10 @@ export interface MediaBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -882,6 +894,10 @@ export interface ArchiveBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -987,6 +1003,10 @@ export interface FormBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1291,6 +1311,10 @@ export interface HeroBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1401,6 +1425,10 @@ export interface DescriptionBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1527,6 +1555,10 @@ export interface RoomsGridBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1649,6 +1681,10 @@ export interface AccommodationsType2BlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1772,6 +1808,10 @@ export interface FoodDrinkBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1894,6 +1934,10 @@ export interface OffersBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -1993,6 +2037,10 @@ export interface GalleryBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2099,6 +2147,10 @@ export interface PhotoGalleryBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2267,6 +2319,10 @@ export interface LocationBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2381,6 +2437,10 @@ export interface OurServicesBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2443,6 +2503,10 @@ export interface ContentImageBlock {
   image: number | Media;
   ctaText?: string | null;
   ctaLink?: string | null;
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2592,6 +2656,10 @@ export interface TheSpaceBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2693,6 +2761,10 @@ export interface SpecialOffersBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2750,6 +2822,10 @@ export interface VisionBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2866,6 +2942,10 @@ export interface DesignedBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -2964,6 +3044,10 @@ export interface CollaborationBlock {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -3118,6 +3202,10 @@ export interface DescriptionType2BlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -3238,6 +3326,10 @@ export interface BookingFormBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -3347,6 +3439,10 @@ export interface SubscribeBlockType {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -3772,6 +3868,7 @@ export interface CallToActionBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -3821,6 +3918,7 @@ export interface ContentBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -3853,6 +3951,7 @@ export interface MediaBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -3890,6 +3989,7 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -3924,6 +4024,7 @@ export interface FormBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -3973,6 +4074,7 @@ export interface HeroBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4011,6 +4113,7 @@ export interface DescriptionBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4071,6 +4174,7 @@ export interface RoomsGridBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4127,6 +4231,7 @@ export interface AccommodationsType2BlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4193,6 +4298,7 @@ export interface FoodDrinkBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4243,6 +4349,7 @@ export interface OffersBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4285,6 +4392,7 @@ export interface GalleryBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4325,6 +4433,7 @@ export interface PhotoGalleryBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4391,6 +4500,7 @@ export interface LocationBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4433,6 +4543,7 @@ export interface OurServicesBlockSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4462,6 +4573,7 @@ export interface ContentImageBlockSelect<T extends boolean = true> {
   image?: T;
   ctaText?: T;
   ctaLink?: T;
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4529,6 +4641,7 @@ export interface TheSpaceBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4573,6 +4686,7 @@ export interface SpecialOffersBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4595,6 +4709,7 @@ export interface VisionBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4636,6 +4751,7 @@ export interface DesignedBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4677,6 +4793,7 @@ export interface CollaborationBlockSelect<T extends boolean = true> {
         link?: T;
         id?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4734,6 +4851,7 @@ export interface DescriptionType2BlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4788,6 +4906,7 @@ export interface BookingFormBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -4834,6 +4953,7 @@ export interface SubscribeBlockTypeSelect<T extends boolean = true> {
         ls?: T;
         color?: T;
       };
+  enabled?: T;
   bgStyle?: T;
   bgCustom?: T;
   txtStyle?: T;
@@ -5493,16 +5613,13 @@ export interface Advertisement {
   id: number;
   topBannerEnabled?: boolean | null;
   /**
-   * Ví dụ: "Book now and get 20% off your first stay!"
+   * Ví dụ: "Đặt ngay giảm 20% cho lần lưu trú đầu tiên!"
    */
   topBannerText?: string | null;
   /**
    * Trang đích khi click vào banner. Ví dụ: /offers
    */
   topBannerLink?: string | null;
-  /**
-   * Ví dụ: "Book Now", "Learn More"
-   */
   topBannerCtaText?: string | null;
   /**
    * Hex color. Ví dụ: #1a1a1a, #8B6914
@@ -5515,9 +5632,6 @@ export interface Advertisement {
    * Hình ảnh chính cho popup (tỷ lệ ngang hoặc vuông)
    */
   popupImage?: (number | null) | Media;
-  /**
-   * Ví dụ: "Exclusive Offer"
-   */
   popupTitle?: string | null;
   /**
    * Nội dung chi tiết của popup
@@ -5537,7 +5651,7 @@ export interface Advertisement {
   popupShowOnce?: boolean | null;
   floatingBarEnabled?: boolean | null;
   /**
-   * Ví dụ: "Limited time: Spa package from $99"
+   * Ví dụ: "Giới hạn: Gói Spa từ 99$"
    */
   floatingBarText?: string | null;
   floatingBarCtaText?: string | null;
@@ -5547,15 +5661,15 @@ export interface Advertisement {
   floatingBarDismissible?: boolean | null;
   slideInEnabled?: boolean | null;
   /**
-   * Hình nhỏ minh họa cho offer
+   * Hình nhỏ minh họa cho ưu đãi
    */
   slideInImage?: (number | null) | Media;
   /**
-   * Ví dụ: "Weekend Getaway"
+   * Ví dụ: "Nghỉ cuối tuần"
    */
   slideInTitle?: string | null;
   /**
-   * Ví dụ: "Stay 2 nights, get 1 free"
+   * Ví dụ: "Ở 2 đêm, tặng 1 đêm"
    */
   slideInDescription?: string | null;
   slideInCtaText?: string | null;
@@ -5833,6 +5947,10 @@ export interface BannerBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'
@@ -5923,6 +6041,10 @@ export interface CodeBlock {
     ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
     color?: string | null;
   };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
   bgStyle?:
     | (
         | 'transparent'

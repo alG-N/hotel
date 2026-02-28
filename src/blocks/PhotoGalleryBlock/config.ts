@@ -25,6 +25,7 @@ export const PhotoGalleryBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       admin: {
         description: 'Tiêu đề section (không bắt buộc)',
       },
@@ -53,6 +54,7 @@ export const PhotoGalleryBlock: Block = {
       name: 'loadMoreText',
       type: 'text',
       label: 'Nút Load more',
+      localized: true,
       defaultValue: 'Load more',
       admin: {
         description: 'Text cho nút load more',

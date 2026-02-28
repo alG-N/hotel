@@ -28,12 +28,14 @@ export const BookingFormBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'Book Your Stay',
     },
     {
       name: 'subtitle',
       type: 'textarea',
       label: 'Mô tả ngắn',
+      localized: true,
       defaultValue: 'Experience luxury and comfort at The Calanthe. Select your dates and preferences below.',
     },
 
@@ -52,6 +54,7 @@ export const BookingFormBlock: Block = {
       name: 'buttonText',
       type: 'text',
       label: 'Text nút đặt phòng',
+      localized: true,
       defaultValue: 'Check Availability',
     },
 
@@ -68,6 +71,7 @@ export const BookingFormBlock: Block = {
           name: 'label',
           type: 'text',
           label: 'Tên loại phòng',
+          localized: true,
           required: true,
         },
         {
@@ -106,12 +110,14 @@ export const BookingFormBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
         },
         {
           name: 'description',
           type: 'text',
           label: 'Mô tả',
+          localized: true,
         },
       ],
     },

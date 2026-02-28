@@ -19,6 +19,7 @@ export const LocationBlock: Block = {
       name: 'sectionTitle',
       type: 'text',
       label: 'Tiêu đề section',
+      localized: true,
       defaultValue: 'Location & Contact',
       admin: {
         description: 'Tiêu đề lớn phía trên (ví dụ: Location & Contact)',
@@ -36,6 +37,7 @@ export const LocationBlock: Block = {
           name: 'address1Label',
           type: 'text',
           label: 'Label địa chỉ 1 (legacy)',
+          localized: true,
           defaultValue: 'Address 1',
           admin: { condition: () => false }, // Ẩn trong admin
         },
@@ -43,12 +45,14 @@ export const LocationBlock: Block = {
           name: 'address1',
           type: 'text',
           label: 'Địa chỉ 1 (legacy)',
+          localized: true,
           admin: { condition: () => false },
         },
         {
           name: 'address2Label',
           type: 'text',
           label: 'Label địa chỉ 2 (legacy)',
+          localized: true,
           defaultValue: 'Address 2',
           admin: { condition: () => false },
         },
@@ -56,6 +60,7 @@ export const LocationBlock: Block = {
           name: 'address2',
           type: 'text',
           label: 'Địa chỉ 2 (legacy)',
+          localized: true,
           admin: { condition: () => false },
         },
         // Field mới
@@ -63,12 +68,14 @@ export const LocationBlock: Block = {
           name: 'locationLabel',
           type: 'text',
           label: 'Label mục Location',
+          localized: true,
           defaultValue: 'LOCATION',
         },
         {
           name: 'fullAddress',
           type: 'textarea',
           label: 'Địa chỉ đầy đủ',
+          localized: true,
           admin: {
             description: 'Mỗi dòng sẽ hiển thị riêng. Ví dụ:\n1, Hoang Lien Street, Sapa District, Lao Cai Province\n33000 SAPA\nVietnam',
           },
@@ -94,6 +101,7 @@ export const LocationBlock: Block = {
           name: 'reservationLabel',
           type: 'text',
           label: 'Label mục Reservation',
+          localized: true,
           defaultValue: 'RESERVATION',
         },
         // Giữ field cũ
@@ -101,6 +109,7 @@ export const LocationBlock: Block = {
           name: 'hotlineLabel',
           type: 'text',
           label: 'Label Hotline (legacy)',
+          localized: true,
           defaultValue: 'Hotline',
           admin: { condition: () => false },
         },
@@ -116,6 +125,7 @@ export const LocationBlock: Block = {
           name: 'emailLabel',
           type: 'text',
           label: 'Label Email (legacy)',
+          localized: true,
           defaultValue: 'Email',
           admin: { condition: () => false },
         },
@@ -140,6 +150,7 @@ export const LocationBlock: Block = {
           name: 'parkingLabel',
           type: 'text',
           label: 'Label mục Parking',
+          localized: true,
           defaultValue: 'PARKING',
         },
         {
@@ -158,6 +169,7 @@ export const LocationBlock: Block = {
               name: 'text',
               type: 'text',
               label: 'Nội dung',
+              localized: true,
               required: true,
             },
           ],
@@ -229,6 +241,7 @@ export const LocationBlock: Block = {
           name: 'gettingThereTitle',
           type: 'text',
           label: 'Tiêu đề section',
+          localized: true,
           defaultValue: 'Getting there',
         },
         {
@@ -247,6 +260,7 @@ export const LocationBlock: Block = {
               name: 'title',
               type: 'text',
               label: 'Tiêu đề',
+              localized: true,
               required: true,
               admin: {
                 description: 'Ví dụ: Parking, Road direction, Train...',
@@ -256,6 +270,7 @@ export const LocationBlock: Block = {
               name: 'content',
               type: 'textarea',
               label: 'Nội dung chi tiết',
+              localized: true,
               admin: {
                 description: 'Nội dung hiển thị khi mở accordion',
               },
@@ -275,6 +290,7 @@ export const LocationBlock: Block = {
           name: 'ctaText',
           type: 'text',
           label: 'Text nút',
+          localized: true,
           defaultValue: 'Contact Us',
         },
         {

@@ -26,6 +26,7 @@ export const FoodDrinkBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'Foods & Drinks',
     },
 
@@ -40,7 +41,7 @@ export const FoodDrinkBlock: Block = {
           type: 'array',
           label: 'Cuisine Options',
           fields: [
-            { name: 'label', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true, localized: true },
             { name: 'value', type: 'text', required: true },
           ],
         },
@@ -49,7 +50,7 @@ export const FoodDrinkBlock: Block = {
           type: 'array',
           label: 'Occasion Options',
           fields: [
-            { name: 'label', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true, localized: true },
             { name: 'value', type: 'text', required: true },
           ],
         },
@@ -58,7 +59,7 @@ export const FoodDrinkBlock: Block = {
           type: 'array',
           label: 'Food Type Options',
           fields: [
-            { name: 'label', type: 'text', required: true },
+            { name: 'label', type: 'text', required: true, localized: true },
             { name: 'value', type: 'text', required: true },
           ],
         },
@@ -82,12 +83,14 @@ export const FoodDrinkBlock: Block = {
           name: 'featuredTitle',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
         },
         {
           name: 'featuredDescription',
           type: 'textarea',
           label: 'Mô tả',
+          localized: true,
         },
         {
           name: 'featuredLink',
@@ -116,12 +119,14 @@ export const FoodDrinkBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
         },
         {
           name: 'description',
           type: 'textarea',
           label: 'Mô tả',
+          localized: true,
         },
         {
           name: 'link',

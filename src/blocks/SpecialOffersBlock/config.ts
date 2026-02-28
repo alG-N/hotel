@@ -25,6 +25,7 @@ export const SpecialOffersBlock: Block = {
       name: 'sectionTitle',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'Special Offers',
     },
 
@@ -45,17 +46,20 @@ export const SpecialOffersBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
         },
         {
           name: 'description',
           type: 'textarea',
           label: 'Mô tả',
+          localized: true,
         },
         {
           name: 'ctaText',
           type: 'text',
           label: 'Text nút CTA',
+          localized: true,
           defaultValue: 'Get The Offer',
         },
         {

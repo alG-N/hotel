@@ -28,12 +28,14 @@ export const SubscribeBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'Get the latest news & discounts',
     },
     {
       name: 'subtitle',
       type: 'textarea',
       label: 'Mô tả',
+      localized: true,
       defaultValue: 'Subscribe to our newsletter to stay on updated with the latest offers, events, and exclusive content.',
     },
 
@@ -42,12 +44,14 @@ export const SubscribeBlock: Block = {
       name: 'placeholderText',
       type: 'text',
       label: 'Placeholder cho email',
+      localized: true,
       defaultValue: 'Enter your email address',
     },
     {
       name: 'buttonText',
       type: 'text',
       label: 'Text nút subscribe',
+      localized: true,
       defaultValue: 'Subscribe',
     },
     {
@@ -62,6 +66,7 @@ export const SubscribeBlock: Block = {
       name: 'successMessage',
       type: 'text',
       label: 'Thông báo thành công',
+      localized: true,
       defaultValue: 'Thank you for subscribing!',
     },
 
@@ -79,6 +84,7 @@ export const SubscribeBlock: Block = {
           name: 'text',
           type: 'text',
           label: 'Nội dung',
+          localized: true,
           required: true,
         },
       ],
@@ -114,6 +120,7 @@ export const SubscribeBlock: Block = {
       name: 'privacyText',
       type: 'text',
       label: 'Ghi chú bảo mật',
+      localized: true,
       defaultValue: 'We respect your privacy. Unsubscribe at any time.',
     },
 

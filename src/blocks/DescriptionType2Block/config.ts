@@ -30,6 +30,7 @@ export const DescriptionType2Block: Block = {
           name: 'title',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
           admin: {
             description: 'Ví dụ: "Why The Calanthe Exists?"',
@@ -70,6 +71,7 @@ export const DescriptionType2Block: Block = {
           name: 'paragraph1',
           type: 'textarea',
           label: 'Đoạn văn 1',
+          localized: true,
           admin: {
             description: 'Nội dung đoạn văn đầu tiên',
           },
@@ -78,6 +80,7 @@ export const DescriptionType2Block: Block = {
           name: 'paragraph2',
           type: 'textarea',
           label: 'Đoạn văn 2',
+          localized: true,
           admin: {
             description: 'Nội dung đoạn văn thứ hai',
           },

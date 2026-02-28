@@ -213,6 +213,7 @@ export const Header: GlobalConfig = {
           type: 'text',
           label: 'Text nút CTA',
           defaultValue: 'Book Your Stay',
+          localized: true,
         },
         {
           name: 'ctaLink',

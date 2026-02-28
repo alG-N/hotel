@@ -14,12 +14,14 @@ export const DesignedBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Title',
+      localized: true,
       required: true,
     },
     {
       name: 'description',
       type: 'textarea',
       label: 'Description',
+      localized: true,
     },
     {
       name: 'features',
@@ -61,6 +63,7 @@ export const DesignedBlock: Block = {
               name: 'title',
               type: 'text',
               label: 'Feature Title',
+              localized: true,
               required: true,
               admin: {
                 width: '50%',
@@ -72,6 +75,7 @@ export const DesignedBlock: Block = {
           name: 'description',
           type: 'textarea',
           label: 'Feature Description',
+          localized: true,
         },
       ],
     },

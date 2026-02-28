@@ -23,18 +23,21 @@ export const Footer: GlobalConfig = {
           type: 'text',
           label: 'Tiêu đề',
           defaultValue: 'Get the latest news & discounts',
+          localized: true,
         },
         {
           name: 'subscribeSubtitle',
           type: 'text',
           label: 'Phụ đề',
           defaultValue: 'Subscribe to our newsletter to stay on updated',
+          localized: true,
         },
         {
           name: 'subscribeButtonText',
           type: 'text',
           label: 'Text nút',
           defaultValue: 'Subscribe',
+          localized: true,
         },
         {
           name: 'subscribeButtonLink',
@@ -67,6 +70,7 @@ export const Footer: GlobalConfig = {
               name: 'address',
               type: 'text',
               required: true,
+              localized: true,
             },
           ],
           maxRows: 3,
@@ -88,6 +92,7 @@ export const Footer: GlobalConfig = {
           type: 'text',
           label: 'Text "Find us"',
           defaultValue: 'Find us',
+          localized: true,
         },
         {
           name: 'socialLinks',
@@ -144,6 +149,7 @@ export const Footer: GlobalConfig = {
       type: 'text',
       label: 'Copyright Text',
       defaultValue: '@2025 Calanthe hotel All rights Reserves',
+      localized: true,
     },
     // Style Settings
     {

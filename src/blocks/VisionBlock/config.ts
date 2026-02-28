@@ -17,6 +17,7 @@ export const VisionBlock: Block = {
           name: 'mainTitle',
           type: 'text',
           label: 'Main Title',
+          localized: true,
           required: true,
           admin: {
             width: '50%',
@@ -26,6 +27,7 @@ export const VisionBlock: Block = {
           name: 'mainDescription',
           type: 'textarea',
           label: 'Main Description',
+          localized: true,
           admin: {
             width: '50%',
           },
@@ -80,12 +82,14 @@ export const VisionBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Card Title',
+          localized: true,
           required: true,
         },
         {
           name: 'description',
           type: 'textarea',
           label: 'Card Description',
+          localized: true,
         },
       ],
     },

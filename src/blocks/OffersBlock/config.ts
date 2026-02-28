@@ -32,12 +32,14 @@ export const OffersBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'Exclusive Offers, Thoughtfully Curated',
     },
     {
       name: 'description',
       type: 'textarea',
       label: 'Mô tả',
+      localized: true,
       admin: {
         description: 'Mô tả ngắn về ưu đãi. Có thể chứa giá với format đặc biệt.',
       },
@@ -46,6 +48,7 @@ export const OffersBlock: Block = {
       name: 'priceHighlight',
       type: 'text',
       label: 'Giá nổi bật',
+      localized: true,
       defaultValue: '$89 per night',
       admin: {
         description: 'Phần giá sẽ được in đậm và nghiêng',
@@ -56,6 +59,7 @@ export const OffersBlock: Block = {
       name: 'featuresTitle',
       type: 'text',
       label: 'Tiêu đề features',
+      localized: true,
       defaultValue: "What's Included:",
     },
     {
@@ -66,6 +70,7 @@ export const OffersBlock: Block = {
         {
           name: 'feature',
           type: 'text',
+          localized: true,
           required: true,
         },
       ],
@@ -90,6 +95,7 @@ export const OffersBlock: Block = {
       name: 'ctaText',
       type: 'text',
       label: 'Nút CTA',
+      localized: true,
       defaultValue: 'Book Now',
     },
     {

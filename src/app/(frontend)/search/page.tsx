@@ -8,6 +8,7 @@ import { Search } from '@/search/Component'
 import PageClient from './page.client'
 import { CardPostData } from '@/components/Card'
 import { T } from '@/providers/Language/T'
+import { getLocale } from '@/utilities/getLocale'
 
 type Args = {
   searchParams: Promise<{
@@ -17,11 +18,13 @@ type Args = {
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
   const { q: query } = await searchParamsPromise
   const payload = await getPayload({ config: configPromise })
+  const locale = await getLocale()
 
   const posts = await payload.find({
     collection: 'search',
     depth: 1,
     limit: 12,
+    locale,
     select: {
       title: true,
       slug: true,

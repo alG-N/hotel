@@ -25,12 +25,14 @@ export const TheSpaceBlock: Block = {
       name: 'sectionTitle',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       defaultValue: 'The Space',
     },
     {
       name: 'sectionDescription',
       type: 'textarea',
       label: 'Mô tả ngắn',
+      localized: true,
       defaultValue: 'Dining at The Calanthe is designed to complement your stay.',
     },
 
@@ -60,6 +62,7 @@ export const TheSpaceBlock: Block = {
           name: 'value',
           type: 'text',
           label: 'Giá trị',
+          localized: true,
           required: true,
           admin: {
             description: 'Ví dụ: 120 m², 48 Seats, 3 Distinct Zones',
@@ -69,6 +72,7 @@ export const TheSpaceBlock: Block = {
           name: 'description',
           type: 'textarea',
           label: 'Mô tả',
+          localized: true,
         },
       ],
     },

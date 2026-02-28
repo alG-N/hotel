@@ -42,16 +42,18 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     } catch {
       // ignore
     }
-    // Update html lang attribute
+    // Set cookie for server-side locale detection (Payload localization)
     if (typeof document !== 'undefined') {
+      document.cookie = `payload-locale=${lang};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`
       document.documentElement.lang = lang
     }
   }, [])
 
-  // Set initial html lang
+  // Set initial html lang and cookie
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.documentElement.lang = language
+      document.cookie = `payload-locale=${language};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`
     }
   }, [language])
 

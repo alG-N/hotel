@@ -39,6 +39,7 @@ export const GalleryBlock: Block = {
       name: 'seeAllText',
       type: 'text',
       label: 'Text nút xem tất cả',
+      localized: true,
       defaultValue: 'See all photos',
     },
     {

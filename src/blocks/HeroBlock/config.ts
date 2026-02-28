@@ -26,6 +26,7 @@ export const HeroBlock: Block = {
       name: 'subtitle',
       type: 'text',
       label: 'Subtitle (Phía trên tiêu đề)',
+      localized: true,
       admin: {
         description: 'Ví dụ: "Welcome to", "Discover"',
       },
@@ -34,12 +35,14 @@ export const HeroBlock: Block = {
       name: 'name',
       type: 'text',
       label: 'Tên Hotel/Tiêu đề',
+      localized: true,
       required: true,
     },
     {
       name: 'tagline',
       type: 'text',
       label: 'Tagline/Slogan',
+      localized: true,
     },
     {
       name: 'heroImage',
@@ -69,6 +72,7 @@ export const HeroBlock: Block = {
       name: 'ctaText',
       type: 'text',
       label: 'Nút CTA',
+      localized: true,
       defaultValue: 'Book Now',
       admin: {
         condition: (data, siblingData) => siblingData?.showCTA,

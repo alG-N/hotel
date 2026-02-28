@@ -29,6 +29,7 @@ export const OurServicesBlock: Block = {
           name: 'sectionTitle',
           type: 'text',
           label: 'Tiêu đề Section',
+          localized: true,
           defaultValue: 'Dining That Complements Your Stay',
           admin: {
             description: 'Tiêu đề lớn bên trái',
@@ -38,6 +39,7 @@ export const OurServicesBlock: Block = {
           name: 'sectionDescription',
           type: 'textarea',
           label: 'Mô tả Section',
+          localized: true,
           admin: {
             description: 'Mô tả ngắn bên phải tiêu đề',
           },
@@ -67,6 +69,7 @@ export const OurServicesBlock: Block = {
           name: 'serviceName',
           type: 'text',
           label: 'Tên dịch vụ',
+          localized: true,
           required: true,
           admin: {
             description: 'Ví dụ: Calm Space, Balanced Drinks',
@@ -76,6 +79,7 @@ export const OurServicesBlock: Block = {
           name: 'serviceDescription',
           type: 'textarea',
           label: 'Mô tả',
+          localized: true,
           admin: {
             description: 'Mô tả ngắn hiển thị trên card',
           },

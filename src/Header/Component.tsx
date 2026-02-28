@@ -1,15 +1,17 @@
 import { HeaderClient } from './Component.client'
 import { getCachedGlobal } from '@/utilities/getGlobals'
+import { getLocale } from '@/utilities/getLocale'
 import React from 'react'
 
 import type { Header as HeaderType, Advertisement } from '@/payload-types'
 
 export async function Header() {
-  const headerData = await getCachedGlobal('header', 1)() as HeaderType
+  const locale = await getLocale()
+  const headerData = await getCachedGlobal('header', 1, locale)() as HeaderType
 
   let adData: Advertisement | null = null
   try {
-    adData = await getCachedGlobal('advertisement', 1)() as Advertisement
+    adData = await getCachedGlobal('advertisement', 1, locale)() as Advertisement
   } catch {
     // ads may not be configured
   }

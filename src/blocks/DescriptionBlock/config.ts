@@ -25,6 +25,7 @@ export const DescriptionBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Tiêu đề',
+      localized: true,
       required: true,
       admin: {
         description: 'Ví dụ: "A Refined Stay, Thoughtfully Designed"',
@@ -43,6 +44,7 @@ export const DescriptionBlock: Block = {
           name: 'leftText',
           type: 'textarea',
           label: 'Text',
+          localized: true,
           admin: {
             description: 'Mô tả ngắn về khách sạn',
           },
@@ -51,6 +53,7 @@ export const DescriptionBlock: Block = {
           name: 'ctaText',
           type: 'text',
           label: 'CTA Text',
+          localized: true,
           defaultValue: 'More About Us',
         },
         {
@@ -92,6 +95,7 @@ export const DescriptionBlock: Block = {
           name: 'rightText',
           type: 'textarea',
           label: 'Text dưới ảnh',
+          localized: true,
           admin: {
             description: 'Nội dung hiển thị dưới ảnh lớn',
           },

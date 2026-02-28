@@ -35,6 +35,7 @@ export const AccommodationsType2Block: Block = {
           name: 'title',
           type: 'text',
           label: 'Tiêu đề',
+          localized: true,
           required: true,
           defaultValue: 'Designed Around How You Rest',
           admin: {
@@ -45,6 +46,7 @@ export const AccommodationsType2Block: Block = {
           name: 'ctaText',
           type: 'text',
           label: 'CTA Text',
+          localized: true,
           defaultValue: 'More About Us',
         },
         {
@@ -71,6 +73,7 @@ export const AccommodationsType2Block: Block = {
           name: 'name',
           type: 'text',
           label: 'Tên phòng',
+          localized: true,
           required: true,
           admin: {
             description: 'Ví dụ: Deluxe Room, Premier Room, Junior Suite',
@@ -80,6 +83,7 @@ export const AccommodationsType2Block: Block = {
           name: 'description',
           type: 'textarea',
           label: 'Mô tả ngắn',
+          localized: true,
           admin: {
             description: 'Mô tả 1-2 dòng về phòng',
           },
@@ -124,6 +128,7 @@ export const AccommodationsType2Block: Block = {
               name: 'text',
               type: 'text',
               label: 'Nội dung',
+              localized: true,
               required: true,
             },
           ],
@@ -132,6 +137,7 @@ export const AccommodationsType2Block: Block = {
           name: 'buttonText',
           type: 'text',
           label: 'Nút CTA',
+          localized: true,
           defaultValue: 'Book now',
         },
         {

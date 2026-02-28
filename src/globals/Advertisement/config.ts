@@ -34,6 +34,7 @@ export const Advertisement: GlobalConfig = {
               name: 'topBannerText',
               type: 'text',
               label: 'Nội dung',
+              localized: true,
               admin: {
                 condition: (data) => data?.topBannerEnabled,
                 description: 'Ví dụ: "Đặt ngay giảm 20% cho lần lưu trú đầu tiên!"',
@@ -52,9 +53,8 @@ export const Advertisement: GlobalConfig = {
               name: 'topBannerCtaText',
               type: 'text',
               label: 'Text nút CTA',
+              localized: true,
               admin: {
-                condition: (data) => data?.topBannerEnabled,
-                description: 'Ví dụ: "Đặt ngay", "Tìm hiểu thêm"',
               },
             },
             {
@@ -115,15 +115,15 @@ export const Advertisement: GlobalConfig = {
               name: 'popupTitle',
               type: 'text',
               label: 'Tiêu đề',
+              localized: true,
               admin: {
-                condition: (data) => data?.popupEnabled,
-                description: 'Ví dụ: "Ưu đãi đặc biệt"',
               },
             },
             {
               name: 'popupDescription',
               type: 'textarea',
               label: 'Mô tả',
+              localized: true,
               admin: {
                 condition: (data) => data?.popupEnabled,
                 description: 'Nội dung chi tiết của popup',
@@ -134,6 +134,7 @@ export const Advertisement: GlobalConfig = {
               type: 'text',
               label: 'Text nút CTA',
               defaultValue: 'Xem ưu đãi',
+              localized: true,
               admin: {
                 condition: (data) => data?.popupEnabled,
               },
@@ -205,6 +206,7 @@ export const Advertisement: GlobalConfig = {
               name: 'floatingBarText',
               type: 'text',
               label: 'Nội dung',
+              localized: true,
               admin: {
                 condition: (data) => data?.floatingBarEnabled,
                 description: 'Ví dụ: "Giới hạn: Gói Spa từ 99$"',
@@ -215,6 +217,7 @@ export const Advertisement: GlobalConfig = {
               type: 'text',
               label: 'Text nút CTA',
               defaultValue: 'Đặt ngay',
+              localized: true,
               admin: {
                 condition: (data) => data?.floatingBarEnabled,
               },
@@ -285,6 +288,7 @@ export const Advertisement: GlobalConfig = {
               name: 'slideInTitle',
               type: 'text',
               label: 'Tiêu đề',
+              localized: true,
               admin: {
                 condition: (data) => data?.slideInEnabled,
                 description: 'Ví dụ: "Nghỉ cuối tuần"',
@@ -294,6 +298,7 @@ export const Advertisement: GlobalConfig = {
               name: 'slideInDescription',
               type: 'text',
               label: 'Mô tả ngắn',
+              localized: true,
               admin: {
                 condition: (data) => data?.slideInEnabled,
                 description: 'Ví dụ: "Ở 2 đêm, tặng 1 đêm"',
@@ -304,6 +309,7 @@ export const Advertisement: GlobalConfig = {
               type: 'text',
               label: 'Text nút',
               defaultValue: 'Tìm hiểu thêm',
+              localized: true,
               admin: {
                 condition: (data) => data?.slideInEnabled,
               },

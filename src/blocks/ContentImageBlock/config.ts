@@ -47,12 +47,14 @@ export const ContentImageBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Title',
+      localized: true,
       required: true,
     },
     {
       name: 'description',
       type: 'textarea',
       label: 'Description',
+      localized: true,
     },
     {
       name: 'highlightSection',
@@ -63,6 +65,7 @@ export const ContentImageBlock: Block = {
           name: 'title',
           type: 'text',
           label: 'Section Title',
+          localized: true,
           admin: {
             placeholder: 'e.g., What we achieve',
           },
@@ -77,6 +80,7 @@ export const ContentImageBlock: Block = {
               name: 'text',
               type: 'text',
               label: 'Item Text',
+              localized: true,
               required: true,
             },
           ],
@@ -97,6 +101,7 @@ export const ContentImageBlock: Block = {
           name: 'ctaText',
           type: 'text',
           label: 'CTA Button Text (Optional)',
+          localized: true,
           admin: {
             width: '50%',
           },

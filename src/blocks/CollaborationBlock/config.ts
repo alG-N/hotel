@@ -14,12 +14,14 @@ export const CollaborationBlock: Block = {
       name: 'title',
       type: 'text',
       label: 'Title',
+      localized: true,
       required: true,
     },
     {
       name: 'description',
       type: 'textarea',
       label: 'Description',
+      localized: true,
     },
     {
       name: 'partners',
@@ -32,6 +34,7 @@ export const CollaborationBlock: Block = {
           name: 'name',
           type: 'text',
           label: 'Partner Name',
+          localized: true,
           required: true,
         },
         {
