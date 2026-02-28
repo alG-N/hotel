@@ -18,6 +18,7 @@ export const AdminBar: React.FC = () => {
   const [show, setShow] = useState(false)
   const [user, setUser] = useState<PayloadMeUser | null>(null)
   const router = useRouter()
+  const { t } = useLanguage()
 
   // Check user on mount
   React.useEffect(() => {
@@ -57,8 +58,6 @@ export const AdminBar: React.FC = () => {
   }, [router])
 
   if (!show) return null
-
-  const { t } = useLanguage()
 
   return (
     <div
