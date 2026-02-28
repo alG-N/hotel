@@ -6,6 +6,7 @@ import { cn } from '@/utilities/ui'
 import React, { useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { useLanguage } from '@/providers/Language'
 
 import './index.scss'
 
@@ -57,6 +58,8 @@ export const AdminBar: React.FC = () => {
 
   if (!show) return null
 
+  const { t } = useLanguage()
+
   return (
     <div
       className={cn(baseClass, 'fixed top-0 left-0 right-0 py-2 bg-black text-white z-50')}
@@ -73,7 +76,7 @@ export const AdminBar: React.FC = () => {
             href="/admin" 
             className="text-sm font-medium text-white hover:text-gray-300 transition-colors"
           >
-            Dashboard
+            {t('Bảng điều khiển', 'Dashboard')}
           </Link>
           {user?.email && (
             <span className="text-sm text-gray-400">{user.email}</span>
@@ -86,7 +89,7 @@ export const AdminBar: React.FC = () => {
             onClick={handleLogout}
             className="text-sm text-white hover:text-gray-300 transition-colors"
           >
-            Logout
+            {t('Đăng xuất', 'Logout')}
           </button>
         </div>
       </div>

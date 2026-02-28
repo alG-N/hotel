@@ -8,6 +8,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import React, { useState } from 'react'
+import { useLanguage } from '@/providers/Language'
 
 import type { Theme } from './types'
 
@@ -28,6 +29,8 @@ export const ThemeSelector: React.FC = () => {
     }
   }
 
+  const { t } = useLanguage()
+
   React.useEffect(() => {
     const preference = window.localStorage.getItem(themeLocalStorageKey)
     setValue(preference ?? 'auto')
@@ -36,15 +39,15 @@ export const ThemeSelector: React.FC = () => {
   return (
     <Select onValueChange={onThemeChange} value={value}>
       <SelectTrigger
-        aria-label="Select a theme"
+        aria-label={t('Chọn giao diện', 'Select a theme')}
         className="w-auto bg-transparent gap-2 pl-0 md:pl-3 border-none"
       >
-        <SelectValue placeholder="Theme" />
+        <SelectValue placeholder={t('Giao diện', 'Theme')} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="auto">Auto</SelectItem>
-        <SelectItem value="light">Light</SelectItem>
-        <SelectItem value="dark">Dark</SelectItem>
+        <SelectItem value="auto">{t('Tự động', 'Auto')}</SelectItem>
+        <SelectItem value="light">{t('Sáng', 'Light')}</SelectItem>
+        <SelectItem value="dark">{t('Tối', 'Dark')}</SelectItem>
       </SelectContent>
     </Select>
   )
