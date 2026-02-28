@@ -49,7 +49,7 @@ export function TopBannerAd({
         <button
           onClick={() => setDismissed(true)}
           className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:opacity-70 transition-opacity"
-          aria-label="Đóng banner"
+          aria-label={t('Đóng banner', 'Close banner')}
           style={{ color: textColor }}
         >
           <X size={16} />

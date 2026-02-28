@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -87,6 +88,7 @@ function HeroSlideshow({
   interval?: number 
 }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const { t } = useLanguage()
 
   useEffect(() => {
     if (images.length <= 1) return
@@ -111,7 +113,7 @@ function HeroSlideshow({
           {img?.url && (
             <Image
               src={img.url}
-              alt={img.alt || 'Hero image'}
+              alt={img.alt || t('Ảnh bìa', 'Hero image')}
               fill
               className="object-cover"
               priority={index === 0}
@@ -154,6 +156,7 @@ export function HeroBlockComponent({
   bodyFont = 'system-ui, -apple-system, sans-serif',
   textAlign, // legacy support
 }: HeroBlockProps) {
+  const { t } = useLanguage()
   // Handle legacy textAlign prop
   const position = textPosition || textAlign || 'center'
   
@@ -227,7 +230,7 @@ export function HeroBlockComponent({
       ) : firstImage?.url ? (
         <Image
           src={firstImage.url}
-          alt={name || 'Hero'}
+          alt={name || t('Ảnh bìa', 'Hero')}
           fill
           className="object-cover"
           priority

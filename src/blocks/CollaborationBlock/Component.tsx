@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import type { Media } from '@/payload-types'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -45,6 +46,7 @@ export function CollaborationBlockComponent({
   tTitle,
   tBody,
 }: CollaborationBlockProps) {
+  const { t } = useLanguage()
   // DEBUG: Log toàn bộ partners data
   console.log('CollaborationBlock DEBUG:', { 
     title, 
@@ -131,7 +133,7 @@ export function CollaborationBlockComponent({
                   key={idx}
                   className="h-10 w-32 bg-gray-500 flex items-center justify-center text-xs"
                 >
-                  {partner.name || 'No logo'}
+                  {partner.name || t('Không có logo', 'No logo')}
                 </div>
               )
             }
@@ -144,7 +146,7 @@ export function CollaborationBlockComponent({
               >
                 <Image
                   src={logo.url}
-                  alt={partner.name || 'Partner logo'}
+                  alt={partner.name || t('Logo đối tác', 'Partner logo')}
                   width={logo.width || 150}
                   height={logo.height || 60}
                   className="h-12 md:h-16 w-auto object-contain"

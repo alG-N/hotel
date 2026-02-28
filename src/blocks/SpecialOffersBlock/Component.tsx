@@ -145,7 +145,7 @@ export function SpecialOffersBlockComponent({
                 onClick={scrollLeft}
                 className="w-10 h-10 border flex items-center justify-center hover:bg-black hover:text-white transition-colors"
                 style={{ borderColor: textColor, color: textColor }}
-                aria-label="Previous"
+                aria-label={t('Trước', 'Previous')}
               >
                 <ChevronLeft className="w-5 h-5" />
               </button>
@@ -153,7 +153,7 @@ export function SpecialOffersBlockComponent({
                 onClick={scrollRight}
                 className="w-10 h-10 border flex items-center justify-center hover:bg-black hover:text-white transition-colors"
                 style={{ borderColor: textColor, color: textColor }}
-                aria-label="Next"
+                aria-label={t('Sau', 'Next')}
               >
                 <ChevronRight className="w-5 h-5" />
               </button>
@@ -176,7 +176,7 @@ export function SpecialOffersBlockComponent({
                   <div className="relative aspect-[4/3] overflow-hidden mb-4">
                     <Image
                       src={img.url}
-                      alt={offer.title || 'Offer'}
+                      alt={offer.title || t('Ưu đãi', 'Offer')}
                       fill
                       className="object-cover"
                     />

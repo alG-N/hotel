@@ -71,18 +71,18 @@ interface LocationBlockProps {
  */
 export function LocationBlockComponent({
   // New fields
-  sectionTitle = 'Location & Contact',
-  locationLabel = 'LOCATION',
+  sectionTitle,
+  locationLabel,
   fullAddress,
   getDirectionsUrl,
-  reservationLabel = 'RESERVATION',
-  parkingLabel = 'PARKING',
+  reservationLabel,
+  parkingLabel,
   parkingItems,
   mapAddress,
   mapLatitude,
   mapLongitude,
   mapZoom = 13,
-  gettingThereTitle = 'Getting there',
+  gettingThereTitle,
   gettingThereItems,
   // Legacy fields
   address1,
@@ -101,6 +101,13 @@ export function LocationBlockComponent({
 }: LocationBlockProps) {
   // Parse map image for fallback
   const mapImg = typeof mapImage === 'object' ? (mapImage as Media) : null
+
+  // Defaults handled below after rendering via <T> for translation
+  const displaySectionTitle = sectionTitle
+  const displayLocationLabel = locationLabel
+  const displayReservationLabel = reservationLabel
+  const displayParkingLabel = parkingLabel
+  const displayGettingThereTitle = gettingThereTitle
 
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
@@ -158,12 +165,19 @@ export function LocationBlockComponent({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
           {/* Section Title */}
           <div className="lg:col-span-4">
-            {sectionTitle && (
+            {displaySectionTitle ? (
               <h2
                 className="text-3xl md:text-4xl lg:text-[42px]"
                 style={titleStyles}
               >
-                {sectionTitle}
+                {displaySectionTitle}
+              </h2>
+            ) : (
+              <h2
+                className="text-3xl md:text-4xl lg:text-[42px]"
+                style={titleStyles}
+              >
+                <T vi="Vị trí & Liên hệ" en="Location & Contact" />
               </h2>
             )}
           </div>
@@ -177,7 +191,7 @@ export function LocationBlockComponent({
                   className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
                   style={{ ...bodyStyles, opacity: 0.6 }}
                 >
-                  {locationLabel}
+                  {displayLocationLabel || <T vi="VỊ TRÍ" en="LOCATION" />}
                 </div>
                 {displayAddress && (
                   <div className="mb-4">
@@ -208,7 +222,7 @@ export function LocationBlockComponent({
                   className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
                   style={{ ...bodyStyles, opacity: 0.6 }}
                 >
-                  {reservationLabel}
+                  {displayReservationLabel || <T vi="ĐẶT PHÒNG" en="RESERVATION" />}
                 </div>
                 {hotline && (
                   <p className="text-sm mb-1" style={bodyStyles}>
@@ -241,7 +255,7 @@ export function LocationBlockComponent({
                     className="text-xs font-medium tracking-[0.2em] uppercase mb-4"
                     style={{ ...bodyStyles, opacity: 0.6 }}
                   >
-                    {parkingLabel}
+                    {displayParkingLabel || <T vi="BÃI ĐỖ XE" en="PARKING" />}
                   </div>
                   {parkingItems!.map((item, i) => (
                     <p key={item.id || i} className="text-sm mb-1" style={bodyStyles}>
@@ -272,7 +286,7 @@ export function LocationBlockComponent({
           <div className="relative w-full aspect-[16/7] overflow-hidden mb-16">
             <Image
               src={mapImg.url}
-              alt="Location Map"
+              alt="Location Map / Bản đồ vị trí"
               fill
               className="object-cover"
             />
@@ -284,12 +298,19 @@ export function LocationBlockComponent({
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
             {/* Title */}
             <div className="lg:col-span-4">
-              {gettingThereTitle && (
+              {displayGettingThereTitle ? (
                 <h3
                   className="text-2xl md:text-3xl lg:text-[36px]"
                   style={titleStyles}
                 >
-                  {gettingThereTitle}
+                  {displayGettingThereTitle}
+                </h3>
+              ) : (
+                <h3
+                  className="text-2xl md:text-3xl lg:text-[36px]"
+                  style={titleStyles}
+                >
+                  <T vi="Cách đến" en="Getting there" />
                 </h3>
               )}
             </div>

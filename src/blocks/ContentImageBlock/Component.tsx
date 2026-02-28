@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Check } from 'lucide-react'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { T } from '@/providers/Language/T'
 
 interface TypographySettings {
   font?: string
@@ -216,14 +217,14 @@ export function ContentImageBlockComponent({
             {img?.url ? (
               <Image
                 src={img.url}
-                alt={img.alt || title || 'Content image'}
+                alt={img.alt || title || 'Hình ảnh nội dung / Content image'}
                 fill
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
               />
             ) : (
               <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                No image
+                <T vi="Không có ảnh" en="No image" />
               </div>
             )}
           </div>

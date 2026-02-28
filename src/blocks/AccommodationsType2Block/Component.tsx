@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
 import { ArrowUpRight, ChevronLeft, ChevronRight, Bed, Monitor, Bath, Sun, Sofa, Star } from 'lucide-react'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -75,6 +76,7 @@ function RoomCard({
   mutedColor: string
 }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const { t } = useLanguage()
   
   // Parse images
   const images = room.images
@@ -99,7 +101,7 @@ function RoomCard({
           <>
             <Image
               src={images[currentImageIndex]?.url || ''}
-              alt={images[currentImageIndex]?.alt || room.name || 'Room'}
+              alt={images[currentImageIndex]?.alt || room.name || t('Phòng', 'Room')}
               fill
               className="object-cover"
             />
@@ -110,14 +112,14 @@ function RoomCard({
                 <button
                   onClick={prevImage}
                   className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 hover:bg-white rounded-sm flex items-center justify-center transition-all"
-                  aria-label="Previous image"
+                  aria-label={t('Ảnh trước', 'Previous image')}
                 >
                   <ChevronLeft className="w-5 h-5 text-gray-700" />
                 </button>
                 <button
                   onClick={nextImage}
                   className="absolute left-3 top-1/2 translate-y-4 w-8 h-8 bg-white/80 hover:bg-white rounded-sm flex items-center justify-center transition-all"
-                  aria-label="Next image"
+                  aria-label={t('Ảnh sau', 'Next image')}
                 >
                   <ChevronRight className="w-5 h-5 text-gray-700" />
                 </button>

@@ -50,7 +50,7 @@ export function FloatingBarAd({
             <button
               onClick={() => setDismissed(true)}
               className="p-1 hover:opacity-70 transition-opacity"
-              aria-label="Đóng"
+              aria-label={t('Đóng', 'Close')}
               style={{ color: textColor }}
             >
               <X size={18} />

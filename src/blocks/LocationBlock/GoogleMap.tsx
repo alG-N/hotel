@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { useLanguage } from '@/providers/Language'
 
 interface GoogleMapEmbedProps {
   address?: string
@@ -23,6 +24,7 @@ export function GoogleMapEmbed({
   className = '',
 }: GoogleMapEmbedProps) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+  const { t } = useLanguage()
 
   if (!apiKey) {
     // No API key - show a link to Google Maps instead
@@ -41,7 +43,7 @@ export function GoogleMapEmbed({
           className="text-center p-8"
         >
           <div className="text-gray-500 mb-2">📍</div>
-          <div className="text-sm text-gray-600 underline">Xem trên Google Maps</div>
+          <div className="text-sm text-gray-600 underline">{t('Xem trên Google Maps', 'View on Google Maps')}</div>
         </a>
       </div>
     )
@@ -68,7 +70,7 @@ export function GoogleMapEmbed({
       allowFullScreen
       loading="lazy"
       referrerPolicy="no-referrer-when-downgrade"
-      title="Google Maps"
+      title={t('Bản đồ Google', 'Google Maps')}
     />
   )
 }

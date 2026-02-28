@@ -4,6 +4,7 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -77,13 +78,14 @@ function SmallImage({
 }: { 
   image: Media | null 
 }) {
+  const { t } = useLanguage()
   if (!image?.url) return null
   
   return (
     <div className="relative w-28 md:w-36 lg:w-40 aspect-[16/10] overflow-hidden">
       <Image
         src={image.url}
-        alt={image.alt || 'Decorative image'}
+        alt={image.alt || t('Ảnh trang trí', 'Decorative image')}
         fill
         className="object-cover"
       />
@@ -132,6 +134,7 @@ function PortraitImage({
   image: Media | null
   aspectRatio?: string
 }) {
+  const { t } = useLanguage()
   if (!image?.url) return null
   
   return (
@@ -141,7 +144,7 @@ function PortraitImage({
     >
       <Image
         src={image.url}
-        alt={image.alt || 'Gallery image'}
+        alt={image.alt || t('Ảnh bộ sưu tập', 'Gallery image')}
         fill
         className="object-cover"
       />
@@ -164,6 +167,7 @@ export function DescriptionType2BlockComponent({
   tTitle,
   tBody,
 }: DescriptionType2BlockProps) {
+  const { t } = useLanguage()
   // Style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
@@ -237,7 +241,7 @@ export function DescriptionType2BlockComponent({
               {rightImage1?.url && (
                 <Image
                   src={rightImage1.url}
-                  alt={rightImage1.alt || 'Gallery image'}
+                  alt={rightImage1.alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                   fill
                   className="object-cover"
                 />
@@ -251,7 +255,7 @@ export function DescriptionType2BlockComponent({
               {leftImage?.url && (
                 <Image
                   src={leftImage.url}
-                  alt={leftImage.alt || 'Decorative image'}
+                  alt={leftImage.alt || t('Ảnh trang trí', 'Decorative image')}
                   fill
                   className="object-cover"
                 />
@@ -267,7 +271,7 @@ export function DescriptionType2BlockComponent({
               {rightImage2?.url && (
                 <Image
                   src={rightImage2.url}
-                  alt={rightImage2.alt || 'Gallery image'}
+                  alt={rightImage2.alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                   fill
                   className="object-cover"
                 />
@@ -292,7 +296,7 @@ export function DescriptionType2BlockComponent({
             {leftImage?.url && (
               <Image
                 src={leftImage.url}
-                alt={leftImage.alt || 'Decorative image'}
+                alt={leftImage.alt || t('Ảnh trang trí', 'Decorative image')}
                 fill
                 className="object-cover"
               />

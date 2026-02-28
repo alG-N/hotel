@@ -136,7 +136,7 @@ export function OurServicesBlockComponent({
                   {img?.url && (
                     <Image
                       src={img.url}
-                      alt={service.serviceName || 'Service'}
+                      alt={service.serviceName || t('Dịch vụ', 'Service')}
                       fill
                       className="object-cover"
                     />

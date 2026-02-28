@@ -108,7 +108,7 @@ export function GalleryBlockComponent({
       {currentImage?.url && (
         <Image
           src={currentImage.url}
-          alt={currentImage.alt || `Photo ${currentIndex + 1}`}
+          alt={currentImage.alt || `${t('Ảnh', 'Photo')} ${currentIndex + 1}`}
           fill
           className="object-cover transition-opacity duration-500"
           priority
@@ -122,7 +122,7 @@ export function GalleryBlockComponent({
           <button
             onClick={goToPrevious}
             className="absolute left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center transition-all shadow-lg"
-            aria-label="Previous image"
+            aria-label={t('Ảnh trước', 'Previous image')}
           >
             <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -133,7 +133,7 @@ export function GalleryBlockComponent({
           <button
             onClick={goToNext}
             className="absolute right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-white/90 hover:bg-white flex items-center justify-center transition-all shadow-lg"
-            aria-label="Next image"
+            aria-label={t('Ảnh sau', 'Next image')}
           >
             <svg className="w-6 h-6 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

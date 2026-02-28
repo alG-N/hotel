@@ -4,6 +4,7 @@ import React from 'react'
 import type { Media } from '@/payload-types'
 import Image from 'next/image'
 import { getBlockStyles, type BlockStyleSettings } from '@/fields/blockBackground'
+import { useLanguage } from '@/providers/Language'
 
 interface TypographySettings {
   font?: string
@@ -43,7 +44,7 @@ interface OurServicesBlockProps {
  * - Cards: Portrait images with title + description overlay at bottom
  */
 export function OurServicesBlockComponent({
-  sectionTitle = 'Dining That Complements Your Stay',
+  sectionTitle,
   sectionDescription,
   services = [],
   columns = '3',
@@ -54,6 +55,7 @@ export function OurServicesBlockComponent({
   tTitle,
   tBody,
 }: OurServicesBlockProps) {
+  const { t } = useLanguage()
   // Get colors from new style system
   const blockSettings: BlockStyleSettings = { bgStyle, bgCustom, txtStyle }
   const hasNewStyles = !!bgStyle && bgStyle !== 'default'
@@ -102,14 +104,12 @@ export function OurServicesBlockComponent({
         {/* Header: Title left, Description right */}
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6 mb-12">
           {/* Title */}
-          {sectionTitle && (
-            <h2 
-              className="text-3xl md:text-4xl lg:text-5xl max-w-md"
-              style={titleStyles}
-            >
-              {sectionTitle}
-            </h2>
-          )}
+          <h2 
+            className="text-3xl md:text-4xl lg:text-5xl max-w-md"
+            style={titleStyles}
+          >
+            {sectionTitle || t('Ẩm thực bổ sung cho kỳ nghỉ của bạn', 'Dining That Complements Your Stay')}
+          </h2>
 
           {/* Description */}
           {sectionDescription && (
@@ -135,7 +135,7 @@ export function OurServicesBlockComponent({
                   {img?.url && (
                     <Image
                       src={img.url}
-                      alt={service.serviceName || 'Service'}
+                      alt={service.serviceName || t('Dịch vụ', 'Service')}
                       fill
                       className="object-cover"
                     />

@@ -48,12 +48,12 @@ interface OffersBlockProps {
  */
 export function OffersBlockComponent({
   image,
-  title = 'Exclusive Offers, Thoughtfully Curated',
+  title,
   description,
-  priceHighlight = '$89 per night',
-  featuresTitle = "What's Included:",
+  priceHighlight,
+  featuresTitle,
   features,
-  ctaText = 'Book Now',
+  ctaText,
   ctaLink = '/booking',
   sectionStyle = 'dark',
   imagePosition = 'left',
@@ -133,7 +133,7 @@ export function OffersBlockComponent({
             >
               <Image
                 src={img.url}
-                alt={title || 'Offer'}
+                alt={title || 'Offer / \u01AFu \u0111\u00e3i'}
                 fill
                 className="object-cover"
               />
@@ -143,12 +143,19 @@ export function OffersBlockComponent({
           {/* Content */}
           <div className={`flex flex-col ${itemsAlignClass} ${imagePosition === 'right' ? 'lg:order-1' : ''}`}>
             {/* Title */}
-            {title && (
+            {title ? (
               <h2 
                 className={`text-3xl md:text-4xl lg:text-5xl mb-6 italic ${textAlignClass}`}
                 style={titleStyles}
               >
                 {title}
+              </h2>
+            ) : (
+              <h2 
+                className={`text-3xl md:text-4xl lg:text-5xl mb-6 italic ${textAlignClass}`}
+                style={titleStyles}
+              >
+                <T vi="\u01AFu \u0111\u00e3i \u0111\u1ed9c quy\u1ec1n, \u0111\u01b0\u1ee3c tuy\u1ec3n ch\u1ecdn chu \u0111\u00e1o" en="Exclusive Offers, Thoughtfully Curated" />
               </h2>
             )}
 
@@ -168,7 +175,7 @@ export function OffersBlockComponent({
                 <>
                   <T vi="Tận hưởng mức giá đặc biệt từ" en="Enjoy an exclusive special price from" />{' '}
                   <span className="font-semibold italic text-lg md:text-xl" style={{ color: textColor }}>
-                    {priceHighlight}
+                    {priceHighlight || '$89 per night'}
                   </span>{' '}
                   <T vi="khi đặt trực tiếp với The Calanthe. Được tuyển chọn chu đáo cho khách hàng yêu thích sự thoải mái, bình yên và giá trị đặc biệt." en="when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value." />
                 </>
@@ -181,9 +188,13 @@ export function OffersBlockComponent({
             {/* Features */}
             {features && features.length > 0 && (
               <div className={`mb-8 ${textAlignClass}`}>
-                {featuresTitle && (
+                {featuresTitle ? (
                   <p className="text-sm mb-4" style={{ color: mutedColor }}>
                     {featuresTitle}
+                  </p>
+                ) : (
+                  <p className="text-sm mb-4" style={{ color: mutedColor }}>
+                    <T vi="Bao g\u1ed3m:" en="What's Included:" />
                   </p>
                 )}
                 <ul className={`space-y-2 ${textAlign === 'center' ? 'inline-block' : ''}`}>
@@ -202,7 +213,7 @@ export function OffersBlockComponent({
             )}
 
             {/* CTA Button */}
-            {ctaText && ctaLink && (
+            {ctaLink && (
               <Link
                 href={ctaLink}
                 className="inline-block px-8 py-3 text-sm tracking-wider transition-all duration-300"

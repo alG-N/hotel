@@ -94,7 +94,7 @@ export function PopupOfferAd({
         <button
           onClick={handleClose}
           className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-black/10 hover:bg-black/20 transition-colors"
-          aria-label="Đóng popup"
+          aria-label={t('Đóng popup', 'Close popup')}
         >
           <X size={18} />
         </button>
@@ -104,7 +104,7 @@ export function PopupOfferAd({
           <div className="relative w-full aspect-[16/9]">
             <Image
               src={img.url}
-              alt={img.alt || title || 'Offer'}
+              alt={img.alt || title || t('Ưu đãi', 'Offer')}
               fill
               className="object-cover"
             />

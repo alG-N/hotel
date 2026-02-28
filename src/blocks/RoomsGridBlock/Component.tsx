@@ -238,7 +238,7 @@ export function RoomsGridBlockComponent({
                         {currentImage?.url && (
                           <Image
                             src={currentImage.url}
-                            alt={room.name || 'Room'}
+                            alt={room.name || t('Phòng', 'Room')}
                             fill
                             className="object-cover"
                           />

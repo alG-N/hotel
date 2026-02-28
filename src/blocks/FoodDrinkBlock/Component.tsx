@@ -201,7 +201,7 @@ export function FoodDrinkBlockComponent({
             {featImg?.url && (
               <Image
                 src={featImg.url}
-                alt={featuredTitle || 'Featured dish'}
+                alt={featuredTitle || t('Món nổi bật', 'Featured dish')}
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -246,7 +246,7 @@ export function FoodDrinkBlockComponent({
                   {img?.url && (
                     <Image
                       src={img.url}
-                      alt={item.title || 'Dish'}
+                      alt={item.title || t('Món ăn', 'Dish')}
                       fill
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />

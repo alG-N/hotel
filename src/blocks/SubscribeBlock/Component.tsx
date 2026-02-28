@@ -286,7 +286,7 @@ export function SubscribeBlockComponent({
               <div className="relative aspect-[4/3] overflow-hidden hidden lg:block">
                 <Image
                   src={sideImg.url}
-                  alt={sideImg.alt || title || 'Subscribe'}
+                  alt={sideImg.alt || title || t('Đăng ký', 'Subscribe')}
                   fill
                   className="object-cover"
                 />

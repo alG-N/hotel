@@ -152,7 +152,7 @@ export function TheSpaceBlockComponent({
       <div className="relative h-full min-h-[150px] md:min-h-[180px]">
         <Image
           src={img.url}
-          alt={img.alt || 'Space image'}
+          alt={img.alt || t('Ảnh không gian', 'Space image')}
           fill
           className="object-cover"
         />

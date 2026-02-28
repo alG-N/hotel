@@ -43,7 +43,7 @@ interface DescriptionBlockProps {
 export function DescriptionBlockComponent({
   title,
   leftText,
-  ctaText = 'More About Us',
+  ctaText,
   ctaLink = '/about',
   image1,
   image2,
@@ -127,7 +127,7 @@ export function DescriptionBlockComponent({
                     {leftText}
                   </p>
                 )}
-                {ctaText && ctaLink && (
+                {ctaLink && (
                   <Link 
                     href={ctaLink}
                     className="inline-flex items-center gap-2 text-sm font-medium hover:gap-3 transition-all"
@@ -145,7 +145,7 @@ export function DescriptionBlockComponent({
                   <div className="relative aspect-[3/4] w-full max-w-[220px]">
                     <Image
                       src={img1.url}
-                      alt={img1.alt || 'Image 1'}
+                      alt={img1.alt || 'Hình ảnh / Image 1'}
                       fill
                       className="object-cover"
                     />
@@ -162,7 +162,7 @@ export function DescriptionBlockComponent({
               <div className="relative aspect-[16/9] w-full max-w-lg ml-auto mb-6">
                 <Image
                   src={img2.url}
-                  alt={img2.alt || 'Image 2'}
+                  alt={img2.alt || 'Hình ảnh / Image 2'}
                   fill
                   className="object-cover"
                 />

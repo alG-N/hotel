@@ -399,7 +399,7 @@ export function BookingFormBlockComponent({
             <div className="relative aspect-[3/4] overflow-hidden hidden lg:block">
               <Image
                 src={sideImg.url}
-                alt={sideImg.alt || title || 'Booking'}
+                alt={sideImg.alt || title || t('Đặt phòng', 'Booking')}
                 fill
                 className="object-cover"
               />

@@ -96,7 +96,7 @@ export function PhotoGalleryBlockComponent({
     <div className={`relative overflow-hidden ${className}`}>
       <Image
         src={img.url!}
-        alt={img.alt || 'Gallery image'}
+        alt={img.alt || t('Ảnh bộ sưu tập', 'Gallery image')}
         fill
         className="object-cover"
       />
@@ -154,7 +154,7 @@ export function PhotoGalleryBlockComponent({
               <div key={idx} className="relative aspect-[4/3] overflow-hidden">
                 <Image
                   src={img.url!}
-                  alt={img.alt || `Gallery image ${idx + 1}`}
+                  alt={img.alt || `${t('Ảnh bộ sưu tập', 'Gallery image')} ${idx + 1}`}
                   fill
                   className="object-cover"
                 />
@@ -186,7 +186,7 @@ export function PhotoGalleryBlockComponent({
                             <div className="relative overflow-hidden" style={{ height: '40%' }}>
                               <Image
                                 src={groupImages[1].url!}
-                                alt={groupImages[1].alt || 'Gallery image'}
+                                alt={groupImages[1].alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                                 fill
                                 className="object-cover"
                               />
@@ -195,7 +195,7 @@ export function PhotoGalleryBlockComponent({
                               <div className="relative overflow-hidden" style={{ height: '60%' }}>
                                 <Image
                                   src={groupImages[2].url!}
-                                  alt={groupImages[2].alt || 'Gallery image'}
+                                  alt={groupImages[2].alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                                   fill
                                   className="object-cover"
                                 />
@@ -210,7 +210,7 @@ export function PhotoGalleryBlockComponent({
                             <div className="relative overflow-hidden" style={{ height: '55%' }}>
                               <Image
                                 src={groupImages[3].url!}
-                                alt={groupImages[3].alt || 'Gallery image'}
+                                alt={groupImages[3].alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                                 fill
                                 className="object-cover"
                               />
@@ -219,7 +219,7 @@ export function PhotoGalleryBlockComponent({
                               <div className="relative overflow-hidden" style={{ height: '45%' }}>
                                 <Image
                                   src={groupImages[4].url!}
-                                  alt={groupImages[4].alt || 'Gallery image'}
+                                  alt={groupImages[4].alt || t('Ảnh bộ sưu tập', 'Gallery image')}
                                   fill
                                   className="object-cover"
                                 />
