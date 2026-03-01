@@ -65,6 +65,31 @@ export const seedHotelData = async ({
     const resolved = mid(id)
     return resolved !== undefined ? [{ image: resolved }] : []
   }
+
+  /** Helper: create a simple Lexical richText paragraph */
+  const richText = (text: string) => ({
+    root: {
+      type: 'root',
+      children: [
+        {
+          type: 'paragraph',
+          children: [
+            { type: 'text', text, format: 0, detail: 0, mode: 'normal', style: '', version: 1 },
+          ],
+          direction: 'ltr' as const,
+          format: '' as const,
+          indent: 0,
+          version: 1,
+          textFormat: 0,
+          textStyle: '',
+        },
+      ],
+      direction: 'ltr' as const,
+      format: '' as const,
+      indent: 0,
+      version: 1,
+    },
+  })
   payload.logger.info(`— Found ${mediaIds.size} existing media records`)
 
   // ── Step 1: Clear existing pages ───────────────────────────────────
@@ -392,28 +417,48 @@ export const seedHotelData = async ({
         {
           blockType: 'food-drink',
           title: 'Ẩm Thực & Thức Uống',
+          cuisineOptions: [
+            { label: 'Ẩm thực Việt Nam', value: 'vietnamese' },
+            { label: 'Ẩm thực Châu Á', value: 'asian' },
+            { label: 'Ẩm thực Châu Âu', value: 'european' },
+          ],
+          occasionOptions: [
+            { label: 'Bữa sáng', value: 'breakfast' },
+            { label: 'Bữa trưa', value: 'lunch' },
+            { label: 'Bữa tối', value: 'dinner' },
+          ],
+          foodTypeOptions: [
+            { label: 'Đồ ăn nhẹ', value: 'appetizer' },
+            { label: 'Món chính', value: 'main-course' },
+            { label: 'Tráng miệng', value: 'dessert' },
+            { label: 'Thức uống', value: 'beverage' },
+          ],
           featuredImage: mid(20),
           featuredTitle: 'Thiên Đường Yên Bình',
           featuredDescription:
             'Trải nghiệm hương vị thanh bình của Thiên Đường Yên Bình, một món ăn kết hợp thảo mộc tinh tế với rau củ tươi theo mùa, tưới nhẹ sốt chanh. Món ăn này được thiết kế để gợi lên cảm giác yên bình và thanh thản, hoàn hảo cho một bữa ăn thư giãn.',
+          featuredLink: '/restaurants',
           sideItems: [
             {
               image: mid(21),
               title: 'Gourmet Suite',
               description:
                 'Lựa chọn hoàn hảo cho kỳ nghỉ ngắn và chuyên gia tìm kiếm sự thoải mái và sang trọng',
+              link: '/restaurants',
             },
             {
               image: mid(22),
               title: 'Luxury Haven',
               description:
                 'Lựa chọn tuyệt vời cho chuyến thăm ngắn và khách doanh nhân trân trọng sự đơn giản và tiêu chuẩn cao.',
+              link: '/restaurants',
             },
             {
               image: mid(23),
               title: 'Opulent Retreat',
               description:
                 'Điểm đến lý tưởng cho chuyến đi ngắn và khách công tác ưu tiên sự tiện lợi và chất lượng.',
+              link: '/restaurants',
             },
           ],
           enabled: true,
@@ -487,6 +532,16 @@ export const seedHotelData = async ({
           enabled: true,
         },
         {
+          blockType: 'gallery',
+          gallery: [...mimg(24), ...mimg(25), ...mimg(26), ...mimg(27), ...mimg(28)],
+          seeAllText: 'Xem tất cả ảnh',
+          seeAllLink: '/gallery',
+          height: 'large',
+          showCounter: true,
+          showSeeAll: true,
+          enabled: true,
+        },
+        {
           blockType: 'photo-gallery',
           layout: 'magazine',
           loadMoreText: 'Xem thêm',
@@ -545,6 +600,7 @@ export const seedHotelData = async ({
             'The Calanthe được tạo ra để đáp ứng nhu cầu ngày càng tăng về những kỳ nghỉ yên tĩnh hơn, có chủ đích hơn. Khi du lịch trở nên nhanh hơn và mang tính giao dịch hơn, chúng tôi nhận thấy sự thoải mái, yên bình và kết nối con người thường bị bỏ qua.',
           paragraph2:
             'Chúng tôi tồn tại để mang đến một lựa chọn thay thế\u2014nơi khách có thể thư giãn, cảm thấy thoải mái và trải nghiệm sự hiếu khách không áp lực hay thừa thãi. The Calanthe không phải là làm nhiều hơn. Mà là làm điều quan trọng, tốt hơn.',
+          imageLeft: mid(26),
           imageRight1: mid(27),
           imageRight2: mid(28),
           enabled: true,
@@ -674,17 +730,49 @@ export const seedHotelData = async ({
         },
         {
           blockType: 'location',
-          address1Label: 'Địa chỉ 1',
-          address1: '12 Anchor Road, Sai Kung',
-          address2Label: 'Địa chỉ 2',
-          address2: '8 Seashell Drive, Lantau Island',
-          hotlineLabel: 'Đường dây nóng',
-          hotline: '+84 777 4340',
-          emailLabel: 'Email',
+          // New fields
+          sectionTitle: 'Vị Trí & Liên Hệ',
+          locationLabel: 'ĐỊA CHỈ',
+          fullAddress: '1, Đường Hoàng Liên, Thị Trấn Sapa, Huyện Sapa, Tỉnh Lào Cai\n33000 SAPA\nViệt Nam',
+          getDirectionsUrl: 'https://maps.google.com/?q=22.3380,103.8448',
+          reservationLabel: 'ĐẶT PHÒNG',
+          hotline: '+84 214/3629999',
           email: 'Calanthehotel@gmail.com',
+          parkingLabel: 'BÃI ĐỖ XE',
+          parkingItems: [
+            { text: 'Bãi đỗ xe miễn phí' },
+            { text: 'Bãi đỗ xe trong nhà' },
+            { text: 'Dịch vụ đỗ xe hộ' },
+          ],
+          mapAddress: '1 Hoang Lien, Sapa, Lao Cai, Vietnam',
+          mapLatitude: 22.338,
+          mapLongitude: 103.8448,
+          mapZoom: 15,
+          mapImage: mid(31),
+          gettingThereTitle: 'Hướng Dẫn Đến',
+          gettingThereItems: [
+            {
+              title: 'Bãi đỗ xe',
+              content: 'Khách sạn có bãi đỗ xe riêng miễn phí dành cho khách lưu trú. Bãi đỗ xe trong nhà có sức chứa 30 xe.',
+            },
+            {
+              title: 'Đường bộ',
+              content: 'Từ trung tâm thị trấn Sapa, đi theo đường Hoàng Liên khoảng 5 phút. Khách sạn nằm bên trái đường.',
+            },
+            {
+              title: 'Tàu hỏa',
+              content: 'Đến ga Lào Cai, sau đó di chuyển bằng xe buýt hoặc taxi đến Sapa (khoảng 35 phút). Khách sạn có thể sắp xếp đón từ ga.',
+            },
+          ],
           ctaText: 'Liên Hệ',
           ctaLink: '/contact',
-          mapImage: mid(31),
+          // Legacy fields (kept for fallback)
+          address1Label: 'Địa chỉ 1',
+          address1: '1, Đường Hoàng Liên, Sapa',
+          address2Label: 'Địa chỉ 2',
+          address2: '33000 SAPA, Việt Nam',
+          hotlineLabel: 'Đường dây nóng',
+          emailLabel: 'Email',
           enabled: true,
         },
         { ...offersBlockVi, image: mid(15) },
@@ -906,8 +994,100 @@ export const seedHotelData = async ({
     },
   })
 
+  // ────────── Page 10: Thông Tin Thêm ──────────
+  const infoPage = await payload.create({
+    collection: 'pages',
+    locale: 'vi',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      title: 'Thông Tin Thêm',
+      slug: 'info',
+      _status: 'published',
+      hero: { type: 'none' },
+      layout: [
+        {
+          blockType: 'hero',
+          subtitle: 'Trang chủ / Thông Tin',
+          name: 'Thông Tin Thêm',
+          tagline:
+            'Tất cả những gì bạn cần biết về The Calanthe — dịch vụ, tiện ích và cam kết của chúng tôi.',
+          showCTA: false,
+          ctaText: 'Đặt Ngay',
+          ctaLink: '/booking',
+          height: 'small',
+          textPosition: 'center',
+          verticalAlign: 'center',
+          overlayOpacity: 'medium',
+          enableSlideshow: false,
+          heroImage: mimg(6),
+          enabled: true,
+        },
+        ({
+          blockType: 'banner',
+          style: 'info',
+          content: richText(
+            'Chào mừng bạn đến với The Calanthe! Đặt phòng trực tiếp trên website để nhận ưu đãi tốt nhất và bữa sáng miễn phí.',
+          ),
+          enabled: true,
+        }) as any,
+        {
+          blockType: 'content',
+          columns: [
+            {
+              size: 'half',
+              richText: richText(
+                'The Calanthe mang đến trải nghiệm nghỉ dưỡng tinh tế, nơi mỗi chi tiết được chăm chút để tạo nên sự thoải mái và bình yên cho bạn.',
+              ),
+              enableLink: false,
+            },
+            {
+              size: 'half',
+              richText: richText(
+                'Với thiết kế hiện đại, dịch vụ chu đáo và vị trí thuận lợi, The Calanthe là lựa chọn hoàn hảo cho kỳ nghỉ của bạn.',
+              ),
+              enableLink: false,
+            },
+          ],
+          enabled: true,
+        },
+        {
+          blockType: 'mediaBlock',
+          media: mid(17),
+          enabled: true,
+        },
+        {
+          blockType: 'cta',
+          richText: richText(
+            'Sẵn sàng cho kỳ nghỉ tiếp theo? Đặt phòng ngay hôm nay để tận hưởng ưu đãi đặc biệt.',
+          ),
+          links: [
+            {
+              link: {
+                type: 'custom',
+                url: '/booking',
+                label: 'Đặt Phòng Ngay',
+                appearance: 'default',
+              },
+            },
+            {
+              link: {
+                type: 'custom',
+                url: '/offers',
+                label: 'Xem Ưu Đãi',
+                appearance: 'outline',
+              },
+            },
+          ],
+          enabled: true,
+        },
+        { ...offersBlockVi, image: mid(15) },
+      ],
+    },
+  })
+
   payload.logger.info(
-    `— Created 9 pages (vi): Main(${mainPage.id}), Accommodations(${accommodationsPage.id}), Restaurants(${restaurantsPage.id}), Gallery(${galleryPage.id}), Our Story(${ourStoryPage.id}), Contact(${contactPage.id}), Offers(${offersPage.id}), Subscribe(${subscribePage.id}), Booking(${bookingPage.id})`,
+    `— Created 10 pages (vi): Main(${mainPage.id}), Accommodations(${accommodationsPage.id}), Restaurants(${restaurantsPage.id}), Gallery(${galleryPage.id}), Our Story(${ourStoryPage.id}), Contact(${contactPage.id}), Offers(${offersPage.id}), Subscribe(${subscribePage.id}), Booking(${bookingPage.id}), Info(${infoPage.id})`,
   )
 
   // ═══════════════════════════════════════════════════════════════════
@@ -1176,14 +1356,17 @@ export const seedHotelData = async ({
         sectionDescription: 'Dining at The Calanthe is designed to complement your stay.',
         stats: [
           {
+            value: '120 m\u00b2',
             description:
               'Total indoor dining and bar area, designed for comfortable circulation and visual openness.',
           },
           {
+            value: '48 Seats',
             description:
               'A balanced mix of intimate tables and relaxed communal seating, ensuring privacy without isolation.',
           },
           {
+            value: '3 Distinct Zones',
             description:
               'Dining area, bar counter, and lounge seating\u2014each with its own atmosphere, flowing naturally throughout the day.',
           },
@@ -1192,6 +1375,22 @@ export const seedHotelData = async ({
       // food-drink
       {
         title: 'Foods & Drinks',
+        cuisineOptions: [
+          { label: 'Vietnamese Cuisine' },
+          { label: 'Asian Cuisine' },
+          { label: 'European Cuisine' },
+        ],
+        occasionOptions: [
+          { label: 'Breakfast' },
+          { label: 'Lunch' },
+          { label: 'Dinner' },
+        ],
+        foodTypeOptions: [
+          { label: 'Appetizer' },
+          { label: 'Main Course' },
+          { label: 'Dessert' },
+          { label: 'Beverage' },
+        ],
         featuredTitle: 'Tranquil Haven',
         featuredDescription:
           'Experience the serene flavors of Tranquil Haven, a dish that combines delicate herbs with fresh, seasonal vegetables, all drizzled with a light citrus vinaigrette. This refreshing plate is designed to evoke a sense of calm and peace, perfect for a relaxing meal.',
@@ -1260,6 +1459,10 @@ export const seedHotelData = async ({
         tagline:
           'The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm',
         ctaText: 'Book Now',
+      },
+      // gallery slideshow
+      {
+        seeAllText: 'See all photos',
       },
       // photo-gallery
       {
@@ -1366,6 +1569,7 @@ export const seedHotelData = async ({
         title: 'Working With\u00a0Like-Minded Creators',
         description:
           'We collaborate with partners who share our values of quality, responsibility, and thoughtful design.',
+        partners: [{ name: 'Partner A' }],
       },
     ],
   })
@@ -1384,11 +1588,36 @@ export const seedHotelData = async ({
       },
       // location
       {
+        sectionTitle: 'Location & Contact',
+        locationLabel: 'LOCATION',
+        fullAddress: '1, Hoang Lien Street, Sapa District, Lao Cai Province\n33000 SAPA\nVietnam',
+        reservationLabel: 'RESERVATION',
+        parkingLabel: 'PARKING',
+        parkingItems: [
+          { text: 'Parking included' },
+          { text: 'Indoor parking' },
+          { text: 'Valet parking' },
+        ],
+        gettingThereTitle: 'Getting There',
+        gettingThereItems: [
+          {
+            title: 'Parking',
+            content: 'The hotel offers complimentary private parking for guests. The indoor parking area accommodates up to 30 vehicles.',
+          },
+          {
+            title: 'Road Direction',
+            content: 'From Sapa town center, follow Hoang Lien Street for about 5 minutes. The hotel is on the left side of the road.',
+          },
+          {
+            title: 'Train',
+            content: 'Arrive at Lao Cai station, then transfer by bus or taxi to Sapa (approx. 35 minutes). The hotel can arrange pickup from the station.',
+          },
+        ],
+        ctaText: 'Contact Us',
         address1Label: 'Address 1',
         address2Label: 'Address 2',
         hotlineLabel: 'Hotline',
         emailLabel: 'Email',
-        ctaText: 'Contact Us',
       },
       // offers
       {
@@ -1558,7 +1787,72 @@ export const seedHotelData = async ({
     ],
   })
 
-  payload.logger.info('\u2014 English locale patched for all 9 pages.')
+  // ──── Page 10 English: Info ────
+  await updateEn(infoPage, {
+    title: 'Additional Info',
+    layout: [
+      // hero
+      {
+        subtitle: 'Home / Info',
+        name: 'Additional Info',
+        tagline:
+          'Everything you need to know about The Calanthe — our services, amenities, and commitments.',
+        ctaText: 'Book Now',
+      },
+      // banner
+      {
+        content: richText(
+          'Welcome to The Calanthe! Book directly on our website for the best rates and complimentary breakfast.',
+        ),
+      },
+      // content
+      {
+        columns: [
+          {
+            richText: richText(
+              'The Calanthe offers a refined retreat experience, where every detail is crafted to create comfort and calm for you.',
+            ),
+          },
+          {
+            richText: richText(
+              'With modern design, attentive service, and a convenient location, The Calanthe is the perfect choice for your getaway.',
+            ),
+          },
+        ],
+      },
+      // mediaBlock
+      {},
+      // cta
+      {
+        richText: richText(
+          'Ready for your next getaway? Book today to enjoy our exclusive offers.',
+        ),
+        links: [
+          {
+            link: {
+              label: 'Book Your Stay',
+            },
+          },
+          {
+            link: {
+              label: 'View Offers',
+            },
+          },
+        ],
+      },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
+    ],
+  })
+
+  payload.logger.info('\u2014 English locale patched for all 10 pages.')
 
   // ═══════════════════════════════════════════════════════════════════
   // STEP 4: Update globals (Vietnamese + English)
@@ -1756,5 +2050,75 @@ export const seedHotelData = async ({
     },
   })
 
-  payload.logger.info('Seeded hotel data successfully! (vi + en) \u2014 9 pages + header + footer')
+  // ── Advertisement Global (Vi + En) ────────────────────────────────
+  payload.logger.info('— Updating advertisement (vi)...')
+  await payload.updateGlobal({
+    slug: 'advertisement',
+    locale: 'vi',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      // Top Banner
+      topBannerEnabled: false,
+      topBannerText: 'Đặt ngay giảm 20% cho lần lưu trú đầu tiên!',
+      topBannerLink: '/offers',
+      topBannerCtaText: 'Đặt Ngay',
+      topBannerBgColor: '#1a1a1a',
+      topBannerTextColor: '#ffffff',
+      topBannerDismissible: true,
+      // Popup
+      popupEnabled: false,
+      popupImage: mid(15),
+      popupTitle: 'Ưu Đãi Đặc Biệt',
+      popupDescription:
+        'Đặt phòng trực tiếp và nhận giảm giá 15% cùng bữa sáng miễn phí cho kỳ nghỉ của bạn tại The Calanthe.',
+      popupCtaText: 'Xem Ưu Đãi',
+      popupCtaLink: '/offers',
+      popupDelay: 3,
+      popupBgColor: '#ffffff',
+      popupTextColor: '#1a1a1a',
+      popupShowOnce: true,
+      // Floating Bar
+      floatingBarEnabled: false,
+      floatingBarText: 'Giới hạn: Gói Spa từ $99',
+      floatingBarCtaText: 'Đặt Ngay',
+      floatingBarCtaLink: '/booking',
+      floatingBarBgColor: '#2a2a28',
+      floatingBarTextColor: '#ffffff',
+      floatingBarDismissible: true,
+      // Slide-in
+      slideInEnabled: false,
+      slideInImage: mid(9),
+      slideInTitle: 'Nghỉ Cuối Tuần',
+      slideInDescription: 'Ở 2 đêm, tặng 1 đêm',
+      slideInCtaText: 'Tìm Hiểu Thêm',
+      slideInCtaLink: '/offers',
+      slideInScrollTrigger: 50,
+      slideInBgColor: '#ffffff',
+      slideInTextColor: '#1a1a1a',
+    },
+  })
+
+  payload.logger.info('— Updating advertisement (en)...')
+  await payload.updateGlobal({
+    slug: 'advertisement',
+    locale: 'en',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      topBannerText: 'Book now and get 20% off your first stay!',
+      topBannerCtaText: 'Book Now',
+      popupTitle: 'Special Offer',
+      popupDescription:
+        'Book directly and receive 15% off plus complimentary breakfast for your stay at The Calanthe.',
+      popupCtaText: 'View Offers',
+      floatingBarText: 'Limited: Spa Package from $99',
+      floatingBarCtaText: 'Book Now',
+      slideInTitle: 'Weekend Getaway',
+      slideInDescription: 'Stay 2 nights, get 1 free',
+      slideInCtaText: 'Learn More',
+    },
+  })
+
+  payload.logger.info('Seeded hotel data successfully! (vi + en) — 10 pages + header + footer + advertisement')
 }
