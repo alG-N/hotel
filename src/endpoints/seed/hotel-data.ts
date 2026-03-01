@@ -1,5 +1,4 @@
 import type { Payload, PayloadRequest } from 'payload'
-import { sql } from 'drizzle-orm'
 
 /**
  * Shared "Exclusive Offers" block used on multiple pages.
@@ -54,23 +53,6 @@ export const seedHotelData = async ({
     return resolved !== undefined ? [{ image: resolved }] : []
   }
   payload.logger.info(`— Found ${mediaIds.size} existing media records`)
-
-  // ── Create placeholder media if DB is fresh (no media at all) ─────
-  if (mediaIds.size === 0) {
-    payload.logger.info('— No media found, creating placeholder records for testing...')
-    const neededIds = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32]
-    for (const id of neededIds) {
-      await payload.db.drizzle.execute(sql`
-        INSERT INTO media (id, filename, mime_type, filesize, width, height, updated_at, created_at)
-        VALUES (${id}, ${'placeholder-' + id + '.jpg'}, 'image/jpeg', 1000, 800, 600, NOW(), NOW())
-        ON CONFLICT (id) DO NOTHING
-      `)
-      mediaIds.add(id)
-    }
-    // Reset the serial sequence so future uploads don't conflict
-    await payload.db.drizzle.execute(sql`SELECT setval('media_id_seq', 32, true)`)
-    payload.logger.info('— Created 32 placeholder media records')
-  }
 
   // ── Step 1: Clear existing pages ──────────────────────────────────
   payload.logger.info('— Clearing existing pages...')
