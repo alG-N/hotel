@@ -23,6 +23,7 @@ const offersBlockVi = {
 
 /* ─── Shared offers block (English) ─── */
 const offersBlockEn = {
+  blockType: 'offers' as const,
   title: 'Exclusive Offers, Thoughtfully Curated',
   description:
     'Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.',
@@ -914,10 +915,63 @@ export const seedHotelData = async ({
   // ═══════════════════════════════════════════════════════════════════
   payload.logger.info('— Patching English locale for all pages...')
 
-  const updateEn = async (id: number, data: Record<string, any>) => {
+  /**
+   * Deep-merge helper: overlays English patches onto existing Vietnamese blocks.
+   * Preserves block/row `id`s and all non-localized fields from the base,
+   * while replacing only the localized text fields with English values.
+   */
+  const deepMergeBlock = (base: any, patch: any): any => {
+    const result = { ...base }
+    for (const [key, value] of Object.entries(patch)) {
+      if (Array.isArray(value) && Array.isArray(base[key])) {
+        // Merge arrays by index (preserving row IDs within each item)
+        result[key] = base[key].map((baseItem: any, j: number) => {
+          const patchItem = (value as any[])[j]
+          if (patchItem && typeof patchItem === 'object' && typeof baseItem === 'object') {
+            return deepMergeBlock(baseItem, patchItem)
+          }
+          return patchItem !== undefined ? patchItem : baseItem
+        })
+        // If patch has more items than base, append them
+        if ((value as any[]).length > (base[key] as any[]).length) {
+          result[key] = [...result[key], ...(value as any[]).slice((base[key] as any[]).length)]
+        }
+      } else if (
+        value !== null &&
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        base[key] !== null &&
+        typeof base[key] === 'object' &&
+        !Array.isArray(base[key])
+      ) {
+        // Deep-merge nested objects (e.g., link groups, highlightSection)
+        result[key] = deepMergeBlock(base[key], value)
+      } else if (value !== undefined) {
+        result[key] = value
+      }
+    }
+    return result
+  }
+
+  /**
+   * Update a page's English locale.
+   * Accepts the full page object (from create response) so we can extract
+   * block IDs from layout and deep-merge English patches onto them.
+   * This preserves Vietnamese locale data for all localized sub-fields.
+   */
+  const updateEn = async (page: any, data: Record<string, any>) => {
+    if (data.layout && Array.isArray(data.layout) && page.layout) {
+      const viLayout = page.layout as any[]
+      const enPatches = data.layout as any[]
+      data.layout = viLayout.map((viBlock: any, i: number) => {
+        const enPatch = enPatches[i]
+        if (!enPatch) return viBlock
+        return deepMergeBlock(viBlock, enPatch)
+      })
+    }
     await payload.update({
       collection: 'pages',
-      id,
+      id: page.id,
       locale: 'en',
       depth: 0,
       context: { disableRevalidate: true },
@@ -926,19 +980,19 @@ export const seedHotelData = async ({
   }
 
   // ──── Page 1 English: Main ────
-  await updateEn(mainPage.id, {
+  await updateEn(mainPage, {
     title: 'Main',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Welcome to',
         name: 'The Calanthe',
         tagline:
           'Wake up to soft light, thoughtful details, and a sense of calm crafted for modern travelers who value balance and beauty',
         ctaText: 'Book Now',
       },
+      // description
       {
-        blockType: 'description',
         title: 'A Refined Stay,\u00a0Thoughtfully Designed',
         leftText:
           'The Calanthe is a boutique hotel created for travelers who value calm, comfort, and intentional design.',
@@ -946,8 +1000,8 @@ export const seedHotelData = async ({
         rightText:
           'Every space is shaped to help you slow down and feel at ease. From soft materials to carefully curated details, The Calanthe balances modern elegance with a warm, welcoming atmosphere\u2014so your stay feels personal, not transactional.',
       },
+      // accommodations-type2
       {
-        blockType: 'accommodations-type2',
         title: 'Designed Around How You Rest',
         ctaText: 'More About Us',
         rooms: [
@@ -957,9 +1011,9 @@ export const seedHotelData = async ({
               'Ideal for short stays and business travelers who value simplicity and quality.',
             buttonText: 'Book now',
             features: [
-              { icon: 'bed', text: 'Queen or king-size bed with premium bedding.' },
-              { icon: 'sofa', text: 'Work-friendly desk and comfortable seating.' },
-              { icon: 'bath', text: 'Modern bathroom with walk-in shower.' },
+              { text: 'Queen or king-size bed with premium bedding.' },
+              { text: 'Work-friendly desk and comfortable seating.' },
+              { text: 'Modern bathroom with walk-in shower.' },
             ],
           },
           {
@@ -968,9 +1022,9 @@ export const seedHotelData = async ({
               'Designed for longer stays or guests who enjoy extra room to relax.',
             buttonText: 'Book now',
             features: [
-              { icon: 'bed', text: 'Spacious sleeping area with lounge seating' },
-              { icon: 'sofa', text: 'Large windows for natural daylight' },
-              { icon: 'bath', text: 'Upgraded bathroom amenities' },
+              { text: 'Spacious sleeping area with lounge seating' },
+              { text: 'Large windows for natural daylight' },
+              { text: 'Upgraded bathroom amenities' },
             ],
           },
           {
@@ -979,15 +1033,15 @@ export const seedHotelData = async ({
               'Offered clearly defined living and resting zones, ideal for couples or extended stays.',
             buttonText: 'Book now',
             features: [
-              { icon: 'bed', text: 'King-size bed with enhanced comfort features' },
-              { icon: 'sofa', text: 'Separate seating or living area' },
-              { icon: 'bath', text: 'Premium bath amenities and refined finishes' },
+              { text: 'King-size bed with enhanced comfort features' },
+              { text: 'Separate seating or living area' },
+              { text: 'Premium bath amenities and refined finishes' },
             ],
           },
         ],
       },
+      // our-services
       {
-        blockType: 'our-services',
         sectionTitle: 'Dining That Complements Your Stay',
         sectionDescription:
           'Dining at The Calanthe is designed to complement your stay. Every element is thoughtfully curated to feel relaxed, balanced, and unhurried.',
@@ -1009,37 +1063,45 @@ export const seedHotelData = async ({
           },
         ],
       },
+      // photo-gallery
       {
-        blockType: 'photo-gallery',
         title: 'Experience The Calanthe Through Every Detail',
         loadMoreText: 'Load more',
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 2 English: Accommodations ────
-  await updateEn(accommodationsPage.id, {
+  await updateEn(accommodationsPage, {
     title: 'Accommodations',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Accommodations',
         name: 'Accommodations',
         tagline: 'Our accommodations are designed with one purpose: exceptional rest.',
         ctaText: 'Book Now',
       },
+      // rooms-grid
       {
-        blockType: 'rooms-grid',
         rooms: [
           {
             name: 'Deluxe Room',
             subtitle:
               'Ideal for short stays and business travelers who value simplicity and quality.',
             amenities: [
-              { icon: 'bed', text: 'Queen or king-size bed with premium bedding.' },
-              { icon: 'sofa', text: 'Work-friendly desk and comfortable seating.' },
-              { icon: 'bath', text: 'Modern bathroom with walk-in shower.' },
+              { text: 'Queen or king-size bed with premium bedding.' },
+              { text: 'Work-friendly desk and comfortable seating.' },
+              { text: 'Modern bathroom with walk-in shower.' },
             ],
           },
           {
@@ -1047,9 +1109,9 @@ export const seedHotelData = async ({
             subtitle:
               'Designed for longer stays or guests who enjoy extra room to relax.',
             amenities: [
-              { icon: 'bed', text: 'Spacious sleeping area with lounge seating' },
-              { icon: 'sofa', text: 'Large windows for natural daylight' },
-              { icon: 'bath', text: 'Upgraded bathroom amenities' },
+              { text: 'Spacious sleeping area with lounge seating' },
+              { text: 'Large windows for natural daylight' },
+              { text: 'Upgraded bathroom amenities' },
             ],
           },
           {
@@ -1057,9 +1119,9 @@ export const seedHotelData = async ({
             subtitle:
               'Offered clearly defined living and resting zones, ideal for couples or extended stays.',
             amenities: [
-              { icon: 'bed', text: 'King-size bed with enhanced comfort features' },
-              { icon: 'sofa', text: 'Separate seating or living area' },
-              { icon: 'bath', text: 'Premium bath amenities and refined finishes' },
+              { text: 'King-size bed with enhanced comfort features' },
+              { text: 'Separate seating or living area' },
+              { text: 'Premium bath amenities and refined finishes' },
             ],
           },
           {
@@ -1067,9 +1129,9 @@ export const seedHotelData = async ({
             subtitle:
               'Offered clearly defined living and resting zones, ideal for couples or extended stays.',
             amenities: [
-              { icon: 'bed', text: 'King-size bed with enhanced comfort features' },
-              { icon: 'sofa', text: 'Separate seating or living area' },
-              { icon: 'bath', text: 'Premium bath amenities and refined finishes' },
+              { text: 'King-size bed with enhanced comfort features' },
+              { text: 'Separate seating or living area' },
+              { text: 'Premium bath amenities and refined finishes' },
             ],
           },
           {
@@ -1077,56 +1139,58 @@ export const seedHotelData = async ({
             subtitle:
               'Offered clearly defined living and resting zones, ideal for couples or extended stays.',
             amenities: [
-              { icon: 'bed', text: 'King-size bed with enhanced comfort features' },
-              { icon: 'sofa', text: 'Separate seating or living area' },
-              { icon: 'bath', text: 'Premium bath amenities and refined finishes' },
+              { text: 'King-size bed with enhanced comfort features' },
+              { text: 'Separate seating or living area' },
+              { text: 'Premium bath amenities and refined finishes' },
             ],
           },
         ],
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 3 English: Restaurants & Bars ────
-  await updateEn(restaurantsPage.id, {
+  await updateEn(restaurantsPage, {
     title: 'Restaurants & Bars',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Restaurants & Bars',
         name: 'Restaurants & Bars',
         tagline:
           'Dining at The Calanthe is designed to complement your stay. Every element is thoughtfully curated to feel relaxed, balanced, and unhurried.',
         ctaText: 'Book Now',
       },
+      // the-space
       {
-        blockType: 'the-space',
         sectionTitle: 'The Space',
         sectionDescription: 'Dining at The Calanthe is designed to complement your stay.',
         stats: [
           {
-            icon: 'grid',
-            value: '120 m\u00b2',
             description:
               'Total indoor dining and bar area, designed for comfortable circulation and visual openness.',
           },
           {
-            icon: 'zones',
-            value: '48 Seats',
             description:
               'A balanced mix of intimate tables and relaxed communal seating, ensuring privacy without isolation.',
           },
           {
-            icon: 'seats',
-            value: '3 Distinct Zones',
             description:
               'Dining area, bar counter, and lounge seating\u2014each with its own atmosphere, flowing naturally throughout the day.',
           },
         ],
       },
+      // food-drink
       {
-        blockType: 'food-drink',
         title: 'Foods & Drinks',
         featuredTitle: 'Tranquil Haven',
         featuredDescription:
@@ -1149,8 +1213,8 @@ export const seedHotelData = async ({
           },
         ],
       },
+      // special-offers
       {
-        blockType: 'special-offers',
         sectionTitle: 'Special Offers',
         offers: [
           {
@@ -1173,72 +1237,86 @@ export const seedHotelData = async ({
           },
         ],
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 4 English: Gallery ────
-  await updateEn(galleryPage.id, {
+  await updateEn(galleryPage, {
     title: 'Gallery',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Gallery',
         name: 'Gallery',
         tagline:
           'The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm',
         ctaText: 'Book Now',
       },
+      // photo-gallery
       {
-        blockType: 'photo-gallery',
         loadMoreText: 'Load more',
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 5 English: Our Story ────
-  await updateEn(ourStoryPage.id, {
+  await updateEn(ourStoryPage, {
     title: 'Our Story',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Story',
         name: 'Our Story',
         tagline:
           'The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm that defines every stay.',
         ctaText: 'Book Now',
       },
+      // description-type2
       {
-        blockType: 'description-type2',
         title: 'Why The Calanthe\u00a0Exists?',
         paragraph1:
           'The Calanthe was created to answer a growing need for quieter, more intentional stays. As travel became faster and more transactional, we saw how often comfort, calm, and human connection were overlooked.',
         paragraph2:
           'We exist to offer an alternative\u2014one where guests can slow down, feel at ease, and experience hospitality without pressure or excess. The Calanthe is not about doing more. It is about doing what matters, better.',
       },
+      // vision
       {
-        blockType: 'vision',
         mainTitle: 'Redefining Comfort\u00a0Through Simplicity',
         mainDescription:
           'Our vision is to become a destination for travelers who value clarity, balance, and meaningful design. We aim to redefine comfort\u2014not as luxury for display, but as an experience that genuinely supports rest and well-being.',
         cards: [
           {
-            icon: 'eye',
             title: 'Our Vision',
             description:
               'We aim to redefine comfort\u2014not as luxury for display, but as an experience that genuinely supports rest and well-being.',
           },
           {
-            icon: 'target',
             title: 'Our Goal',
             description:
               'Create spaces that feel natural and effortless. Deliver consistent, thoughtful service. Build a hotel experience that feels personal, not generic',
           },
         ],
       },
+      // content-image
       {
-        blockType: 'content-image',
         title: 'Experiences That Feel\u00a0Personal and Lasting',
         description:
           'At The Calanthe, success is measured by how guests feel, not how much is added. We focus on outcomes that matter.',
@@ -1251,95 +1329,102 @@ export const seedHotelData = async ({
           ],
         },
       },
+      // designed
       {
-        blockType: 'designed',
         title: 'Designed With Intention',
         description:
           'The Calanthe\u2019s features are not added for impact\u2014they are designed for purpose.',
         features: [
           {
-            icon: 'book',
             title: 'Thoughtfully Designed Rooms',
             description: 'Every room is carefully planned to support rest and privacy.',
           },
           {
-            icon: 'smile',
             title: 'Human-Centered Layouts',
             description: 'Spaces are designed around how people move and use them.',
           },
           {
-            icon: 'volume-off',
             title: 'Quiet Comfort & Sound Control',
             description: 'Acoustic considerations are integrated throughout the hotel.',
           },
           {
-            icon: 'utensils',
             title: 'Calm Dining Experience',
             description: 'Our restaurant and bar are designed for unhurried moments.',
           },
           {
-            icon: 'palette',
             title: 'Consistent Design Language',
             description: 'Every detail follows a cohesive design approach',
           },
           {
-            icon: 'accessibility',
             title: 'Accessible & Inclusive Spaces',
             description: 'Accessibility is considered from the start, not added later.',
           },
         ],
       },
+      // collaboration
       {
-        blockType: 'collaboration',
         title: 'Working With\u00a0Like-Minded Creators',
         description:
           'We collaborate with partners who share our values of quality, responsibility, and thoughtful design.',
-        partners: [{ name: 'a' }],
       },
     ],
   })
 
   // ──── Page 6 English: Contact & Location ────
-  await updateEn(contactPage.id, {
+  await updateEn(contactPage, {
     title: 'Contact & Location',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Contact & Location',
         name: 'Contact & Location',
         tagline:
           'The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm',
         ctaText: 'Book Now',
       },
+      // location
       {
-        blockType: 'location',
         address1Label: 'Address 1',
-        address1: '12 Anchor Road, Sai Kung',
         address2Label: 'Address 2',
-        address2: '8 Seashell Drive, Lantau Island',
         hotlineLabel: 'Hotline',
         emailLabel: 'Email',
         ctaText: 'Contact Us',
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 7 English: Offers ────
-  await updateEn(offersPage.id, {
+  await updateEn(offersPage, {
     title: 'Offers',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Offers',
         name: 'Special Offers',
         tagline:
           'Discover exclusive packages thoughtfully curated for guests who appreciate comfort and exceptional value.',
         ctaText: 'Book Now',
       },
-      { ...offersBlockEn },
+      // offers block
       {
-        blockType: 'special-offers',
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
+      // special-offers
+      {
         sectionTitle: 'More Packages',
         offers: [
           {
@@ -1351,19 +1436,19 @@ export const seedHotelData = async ({
           {
             title: 'Honeymoon Package',
             description:
-              'Designed for couples — includes a suite, romantic dinner, and special room decoration.',
+              'Designed for couples \u2014 includes a suite, romantic dinner, and special room decoration.',
             ctaText: 'Get The Offer',
           },
           {
             title: 'Business Package',
             description:
-              'Ideal for business travelers — high-speed WiFi, workspace, and express breakfast.',
+              'Ideal for business travelers \u2014 high-speed WiFi, workspace, and express breakfast.',
             ctaText: 'Get The Offer',
           },
         ],
       },
+      // subscribe
       {
-        blockType: 'subscribe',
         title: 'Sign Up for Early Offers',
         subtitle:
           'Subscribe to our newsletter to be the first to know about promotions and exclusive deals.',
@@ -1381,19 +1466,18 @@ export const seedHotelData = async ({
   })
 
   // ──── Page 8 English: Subscribe ────
-  await updateEn(subscribePage.id, {
+  await updateEn(subscribePage, {
     title: 'Newsletter',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Subscribe',
         name: 'Newsletter',
         tagline:
           'Stay updated with the latest offers, special events, and exclusive content from The Calanthe.',
-        ctaText: '',
       },
+      // subscribe
       {
-        blockType: 'subscribe',
         title: 'Get the Latest News & Offers',
         subtitle:
           'Subscribe to our newsletter to stay updated with the latest offers, events, and exclusive content from The Calanthe.',
@@ -1408,68 +1492,79 @@ export const seedHotelData = async ({
         ],
         privacyText: 'We respect your privacy. Unsubscribe at any time.',
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
   // ──── Page 9 English: Booking ────
-  await updateEn(bookingPage.id, {
+  await updateEn(bookingPage, {
     title: 'Book Your Stay',
     layout: [
+      // hero
       {
-        blockType: 'hero',
         subtitle: 'Home / Booking',
         name: 'Book Your Stay',
         tagline:
           'Select your dates, room type, and number of guests to begin your stay at The Calanthe.',
-        ctaText: '',
       },
+      // booking-form
       {
-        blockType: 'booking-form',
         title: 'Book Your Stay at The Calanthe',
         subtitle:
           'Experience luxury and comfort at The Calanthe. Select your dates and preferences below.',
         buttonText: 'Check Availability',
         roomTypes: [
-          { label: 'Deluxe Room', value: 'deluxe' },
-          { label: 'Premier Room', value: 'premier' },
-          { label: 'Junior Suite', value: 'junior-suite' },
-          { label: 'Cozy Retreat Suite', value: 'cozy-retreat' },
+          { label: 'Deluxe Room' },
+          { label: 'Premier Room' },
+          { label: 'Junior Suite' },
+          { label: 'Cozy Retreat Suite' },
         ],
         infoCards: [
           {
-            icon: 'clock',
             title: 'Check-in / Check-out',
-            description: 'Check-in: 2:00 PM — Check-out: 12:00 PM',
+            description: 'Check-in: 2:00 PM \u2014 Check-out: 12:00 PM',
           },
           {
-            icon: 'shield',
             title: 'Cancellation Policy',
             description: 'Free cancellation up to 48 hours in advance',
           },
           {
-            icon: 'star',
             title: 'Best Rate Guarantee',
             description: 'Book direct for the best available rate',
           },
           {
-            icon: 'phone',
             title: '24/7 Support',
             description: 'Call +84 777 4340 for assistance',
           },
         ],
       },
-      { ...offersBlockEn },
+      // offers
+      {
+        title: offersBlockEn.title,
+        description: offersBlockEn.description,
+        priceHighlight: offersBlockEn.priceHighlight,
+        featuresTitle: offersBlockEn.featuresTitle,
+        ctaText: offersBlockEn.ctaText,
+        features: offersBlockEn.features,
+      },
     ],
   })
 
-  payload.logger.info('— English locale patched for all 9 pages.')
+  payload.logger.info('\u2014 English locale patched for all 9 pages.')
 
   // ═══════════════════════════════════════════════════════════════════
   // STEP 4: Update globals (Vietnamese + English)
   // ═══════════════════════════════════════════════════════════════════
-  payload.logger.info('— Updating header (vi)...')
-  await payload.updateGlobal({
+  payload.logger.info('\u2014 Updating header (vi)...')
+  const headerVi = await payload.updateGlobal({
     slug: 'header',
     locale: 'vi',
     depth: 0,
@@ -1490,26 +1585,26 @@ export const seedHotelData = async ({
       logo: mid(1),
       logoWidth: 80,
       logoHeight: 80,
-      logoLink: '/hotel',
+      logoLink: '/',
       navItemsLeft: [
         {
           link: {
             type: 'reference',
-            label: 'Phòng Nghỉ',
+            label: 'Ph\u00f2ng Ngh\u1ec9',
             reference: { relationTo: 'pages', value: accommodationsPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Nhà Hàng & Quầy Bar',
+            label: 'Nh\u00e0 H\u00e0ng & Qu\u1ea7y Bar',
             reference: { relationTo: 'pages', value: restaurantsPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Thư Viện Ảnh',
+            label: 'Th\u01b0 Vi\u1ec7n \u1ea2nh',
             reference: { relationTo: 'pages', value: galleryPage.id },
           },
         },
@@ -1518,20 +1613,20 @@ export const seedHotelData = async ({
         {
           link: {
             type: 'reference',
-            label: 'Câu Chuyện',
+            label: 'C\u00e2u Chuy\u1ec7n',
             reference: { relationTo: 'pages', value: ourStoryPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Liên Hệ & Vị Trí',
+            label: 'Li\u00ean H\u1ec7 & V\u1ecb Tr\u00ed',
             reference: { relationTo: 'pages', value: contactPage.id },
           },
         },
       ],
       showCTA: true,
-      ctaText: 'Đặt Phòng',
+      ctaText: '\u0110\u1eb7t Ph\u00f2ng',
       ctaLink: '/booking',
       backgroundColor: '#ffffff',
       scrolledBackgroundColor: '#ffffff',
@@ -1544,7 +1639,10 @@ export const seedHotelData = async ({
     },
   })
 
-  payload.logger.info('— Updating header (en)...')
+  payload.logger.info('\u2014 Updating header (en)...')
+  // Use IDs from Vietnamese response to preserve localized label data
+  const enLeftLabels = ['Accommodations', 'Restaurants & Bars', 'Gallery']
+  const enRightLabels = ['Our Story', 'Contact & Location']
   await payload.updateGlobal({
     slug: 'header',
     locale: 'en',
@@ -1552,58 +1650,25 @@ export const seedHotelData = async ({
     context: { disableRevalidate: true },
     data: {
       ctaText: 'Book Your Stay',
-      navItemsLeft: [
-        {
-          link: {
-            type: 'reference',
-            label: 'Accommodations',
-            reference: { relationTo: 'pages', value: accommodationsPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Restaurants & Bars',
-            reference: { relationTo: 'pages', value: restaurantsPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Gallery',
-            reference: { relationTo: 'pages', value: galleryPage.id },
-          },
-        },
-      ],
-      navItemsRight: [
-        {
-          link: {
-            type: 'reference',
-            label: 'Our Story',
-            reference: { relationTo: 'pages', value: ourStoryPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Contact & Location',
-            reference: { relationTo: 'pages', value: contactPage.id },
-          },
-        },
-      ],
+      navItemsLeft: ((headerVi as any).navItemsLeft || []).map((item: any, i: number) =>
+        deepMergeBlock(item, { link: { label: enLeftLabels[i] } }),
+      ),
+      navItemsRight: ((headerVi as any).navItemsRight || []).map((item: any, i: number) =>
+        deepMergeBlock(item, { link: { label: enRightLabels[i] } }),
+      ),
     },
   })
 
-  payload.logger.info('— Updating footer (vi)...')
-  await payload.updateGlobal({
+  payload.logger.info('\u2014 Updating footer (vi)...')
+  const footerVi = await payload.updateGlobal({
     slug: 'footer',
     locale: 'vi',
     depth: 0,
     context: { disableRevalidate: true },
     data: {
-      subscribeTitle: 'Nhận tin tức & ưu đãi mới nhất',
-      subscribeSubtitle: 'Đăng ký nhận bản tin để cập nhật thông tin',
-      subscribeButtonText: 'Đăng Ký',
+      subscribeTitle: 'Nh\u1eadn tin t\u1ee9c & \u01b0u \u0111\u00e3i m\u1edbi nh\u1ea5t',
+      subscribeSubtitle: '\u0110\u0103ng k\u00fd nh\u1eadn b\u1ea3n tin \u0111\u1ec3 c\u1eadp nh\u1eadt th\u00f4ng tin',
+      subscribeButtonText: '\u0110\u0103ng K\u00fd',
       subscribeButtonLink: '/subscribe',
       logo: mid(1),
       addresses: [
@@ -1612,7 +1677,7 @@ export const seedHotelData = async ({
       ],
       phone: '+84 777 4340',
       email: 'Calanthehotel@gmail.com',
-      findUsText: 'Tìm chúng tôi',
+      findUsText: 'T\u00ecm ch\u00fang t\u00f4i',
       socialLinks: [
         { platform: 'instagram', url: 'https://www.youtube.com/' },
         { platform: 'facebook', url: 'https://www.youtube.com/' },
@@ -1621,40 +1686,40 @@ export const seedHotelData = async ({
         {
           link: {
             type: 'reference',
-            label: 'Phòng Nghỉ',
+            label: 'Ph\u00f2ng Ngh\u1ec9',
             reference: { relationTo: 'pages', value: accommodationsPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Nhà Hàng & Quầy Bar',
+            label: 'Nh\u00e0 H\u00e0ng & Qu\u1ea7y Bar',
             reference: { relationTo: 'pages', value: restaurantsPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Thư Viện Ảnh',
+            label: 'Th\u01b0 Vi\u1ec7n \u1ea2nh',
             reference: { relationTo: 'pages', value: galleryPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Câu Chuyện',
+            label: 'C\u00e2u Chuy\u1ec7n',
             reference: { relationTo: 'pages', value: ourStoryPage.id },
           },
         },
         {
           link: {
             type: 'reference',
-            label: 'Liên Hệ & Vị Trí',
+            label: 'Li\u00ean H\u1ec7 & V\u1ecb Tr\u00ed',
             reference: { relationTo: 'pages', value: contactPage.id },
           },
         },
       ],
-      copyrightText: '@2025 Calanthe Hotel. Mọi quyền được bảo lưu.',
+      copyrightText: '@2025 Calanthe Hotel. M\u1ecdi quy\u1ec1n \u0111\u01b0\u1ee3c b\u1ea3o l\u01b0u.',
       backgroundColor: '#ffffff',
       textColor: '#1a1a1a',
       borderColor: '#e5e5e5',
@@ -1666,7 +1731,8 @@ export const seedHotelData = async ({
     },
   })
 
-  payload.logger.info('— Updating footer (en)...')
+  payload.logger.info('\u2014 Updating footer (en)...')
+  const enFooterLabels = ['Accommodations', 'Restaurants & Bars', 'Gallery', 'Our Story', 'Contact & Location']
   await payload.updateGlobal({
     slug: 'footer',
     locale: 'en',
@@ -1678,45 +1744,17 @@ export const seedHotelData = async ({
       subscribeButtonText: 'Subscribe',
       findUsText: 'Find us',
       copyrightText: '@2025 Calanthe Hotel. All rights reserved.',
-      navLinks: [
-        {
-          link: {
-            type: 'reference',
-            label: 'Accommodations',
-            reference: { relationTo: 'pages', value: accommodationsPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Restaurants & Bars',
-            reference: { relationTo: 'pages', value: restaurantsPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Gallery',
-            reference: { relationTo: 'pages', value: galleryPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Our Story',
-            reference: { relationTo: 'pages', value: ourStoryPage.id },
-          },
-        },
-        {
-          link: {
-            type: 'reference',
-            label: 'Contact & Location',
-            reference: { relationTo: 'pages', value: contactPage.id },
-          },
-        },
-      ],
+      addresses: ((footerVi as any).addresses || []).map((item: any, i: number) =>
+        deepMergeBlock(item, [
+          { address: '12 Anchor Road, Sai Kung' },
+          { address: '8 Seashell Drive, Lantau Island' },
+        ][i] || {}),
+      ),
+      navLinks: ((footerVi as any).navLinks || []).map((item: any, i: number) =>
+        deepMergeBlock(item, { link: { label: enFooterLabels[i] } }),
+      ),
     },
   })
 
-  payload.logger.info('Seeded hotel data successfully! (vi + en) — 9 pages + header + footer')
+  payload.logger.info('Seeded hotel data successfully! (vi + en) \u2014 9 pages + header + footer')
 }
