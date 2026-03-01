@@ -691,8 +691,222 @@ export const seedHotelData = async ({
     },
   })
 
+  // ────────── Page 7: Ưu Đãi ──────────
+  const offersPage = await payload.create({
+    collection: 'pages',
+    locale: 'vi',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      title: 'Ưu Đãi',
+      slug: 'offers',
+      _status: 'published',
+      hero: { type: 'none' },
+      layout: [
+        {
+          blockType: 'hero',
+          subtitle: 'Trang chủ / Ưu Đãi',
+          name: 'Ưu Đãi Đặc Biệt',
+          tagline:
+            'Khám phá các gói ưu đãi độc quyền được chọn lọc kỹ lưỡng dành cho những vị khách trân trọng sự thoải mái và giá trị vượt trội.',
+          showCTA: false,
+          ctaText: 'Đặt Ngay',
+          ctaLink: '/booking',
+          height: 'small',
+          textPosition: 'center',
+          verticalAlign: 'center',
+          overlayOpacity: 'medium',
+          enableSlideshow: true,
+          slideshowSpeed: '5000',
+          heroImage: mimg(15),
+          enabled: true,
+        },
+        { ...offersBlockVi, image: mid(15) },
+        {
+          blockType: 'special-offers',
+          sectionTitle: 'Các Gói Ưu Đãi Khác',
+          columns: '3',
+          showNavigation: true,
+          offers: [
+            {
+              image: mid(9),
+              title: 'Gói Nghỉ Dưỡng Cuối Tuần',
+              description:
+                'Trọn gói 2 đêm bao gồm bữa sáng, spa 60 phút và trả phòng muộn đến 14:00.',
+              ctaText: 'Nhận Ưu Đãi',
+              ctaLink: '/booking',
+            },
+            {
+              image: mid(10),
+              title: 'Gói Trăng Mật',
+              description:
+                'Dành cho các cặp đôi — bao gồm phòng suite, bữa tối lãng mạn và trang trí phòng đặc biệt.',
+              ctaText: 'Nhận Ưu Đãi',
+              ctaLink: '/booking',
+            },
+            {
+              image: mid(11),
+              title: 'Gói Công Tác',
+              description:
+                'Giải pháp lý tưởng cho khách doanh nhân — WiFi tốc độ cao, không gian làm việc và bữa sáng nhanh.',
+              ctaText: 'Nhận Ưu Đãi',
+              ctaLink: '/booking',
+            },
+          ],
+          enabled: true,
+        },
+        {
+          blockType: 'subscribe',
+          title: 'Đăng Ký Nhận Ưu Đãi Sớm',
+          subtitle:
+            'Đăng ký bản tin để nhận thông báo về các chương trình khuyến mãi và ưu đãi độc quyền trước tất cả mọi người.',
+          placeholderText: 'Nhập email của bạn',
+          buttonText: 'Đăng Ký',
+          successMessage: 'Cảm ơn bạn đã đăng ký!',
+          benefits: [
+            { text: 'Nhận ưu đãi độc quyền trước tiên' },
+            { text: 'Giảm giá đặc biệt cho thành viên' },
+            { text: 'Cập nhật sự kiện và tin tức mới nhất' },
+          ],
+          layout: 'centered',
+          privacyText: 'Chúng tôi tôn trọng quyền riêng tư của bạn. Hủy đăng ký bất cứ lúc nào.',
+          enabled: true,
+        },
+      ],
+    },
+  })
+
+  // ────────── Page 8: Đăng Ký Bản Tin ──────────
+  const subscribePage = await payload.create({
+    collection: 'pages',
+    locale: 'vi',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      title: 'Đăng Ký Bản Tin',
+      slug: 'subscribe',
+      _status: 'published',
+      hero: { type: 'none' },
+      layout: [
+        {
+          blockType: 'hero',
+          subtitle: 'Trang chủ / Đăng Ký',
+          name: 'Đăng Ký Bản Tin',
+          tagline:
+            'Luôn cập nhật những ưu đãi mới nhất, sự kiện đặc biệt và nội dung độc quyền từ The Calanthe.',
+          showCTA: false,
+          ctaText: '',
+          ctaLink: '',
+          height: 'small',
+          textPosition: 'center',
+          verticalAlign: 'center',
+          overlayOpacity: 'medium',
+          enableSlideshow: true,
+          slideshowSpeed: '5000',
+          heroImage: mimg(6),
+          enabled: true,
+        },
+        {
+          blockType: 'subscribe',
+          title: 'Nhận Tin Tức & Ưu Đãi Mới Nhất',
+          subtitle:
+            'Đăng ký bản tin để cập nhật các ưu đãi, sự kiện và nội dung độc quyền mới nhất từ The Calanthe.',
+          placeholderText: 'Nhập địa chỉ email của bạn',
+          buttonText: 'Đăng Ký Ngay',
+          successMessage: 'Cảm ơn bạn đã đăng ký!',
+          benefits: [
+            { text: 'Ưu đãi độc quyền chỉ dành cho thành viên' },
+            { text: 'Thông báo sớm về sự kiện đặc biệt' },
+            { text: 'Mẹo du lịch và gợi ý điểm đến' },
+            { text: 'Cập nhật dịch vụ mới tại khách sạn' },
+          ],
+          layout: 'centered',
+          privacyText: 'Chúng tôi tôn trọng quyền riêng tư của bạn. Hủy đăng ký bất cứ lúc nào.',
+          enabled: true,
+        },
+        { ...offersBlockVi, image: mid(15) },
+      ],
+    },
+  })
+
+  // ────────── Page 9: Đặt Phòng ──────────
+  const bookingPage = await payload.create({
+    collection: 'pages',
+    locale: 'vi',
+    depth: 0,
+    context: { disableRevalidate: true },
+    data: {
+      title: 'Đặt Phòng',
+      slug: 'booking',
+      _status: 'published',
+      hero: { type: 'none' },
+      layout: [
+        {
+          blockType: 'hero',
+          subtitle: 'Trang chủ / Đặt Phòng',
+          name: 'Đặt Phòng',
+          tagline:
+            'Chọn ngày, loại phòng và số lượng khách để bắt đầu kỳ nghỉ tại The Calanthe.',
+          showCTA: false,
+          ctaText: '',
+          ctaLink: '',
+          height: 'small',
+          textPosition: 'center',
+          verticalAlign: 'center',
+          overlayOpacity: 'medium',
+          enableSlideshow: true,
+          slideshowSpeed: '5000',
+          heroImage: mimg(8),
+          enabled: true,
+        },
+        {
+          blockType: 'booking-form',
+          title: 'Đặt Phòng Tại The Calanthe',
+          subtitle:
+            'Trải nghiệm sự sang trọng và thoải mái tại The Calanthe. Chọn ngày và tùy chọn của bạn bên dưới.',
+          bookingUrl: '#',
+          buttonText: 'Kiểm Tra Phòng Trống',
+          roomTypes: [
+            { label: 'Phòng Deluxe', value: 'deluxe' },
+            { label: 'Phòng Premier', value: 'premier' },
+            { label: 'Junior Suite', value: 'junior-suite' },
+            { label: 'Cozy Retreat Suite', value: 'cozy-retreat' },
+          ],
+          infoCards: [
+            {
+              icon: 'clock',
+              title: 'Giờ Nhận / Trả Phòng',
+              description: 'Nhận phòng: 14:00 — Trả phòng: 12:00',
+            },
+            {
+              icon: 'shield',
+              title: 'Chính Sách Hủy',
+              description: 'Hủy miễn phí trước 48 giờ',
+            },
+            {
+              icon: 'star',
+              title: 'Cam Kết Giá Tốt Nhất',
+              description: 'Đặt trực tiếp để nhận giá ưu đãi nhất',
+            },
+            {
+              icon: 'phone',
+              title: 'Hỗ Trợ 24/7',
+              description: 'Gọi +84 777 4340 để được hỗ trợ',
+            },
+          ],
+          layout: 'split',
+          sideImage: mid(9),
+          maxGuests: 10,
+          maxRooms: 5,
+          enabled: true,
+        },
+        { ...offersBlockVi, image: mid(15) },
+      ],
+    },
+  })
+
   payload.logger.info(
-    `— Created 6 pages (vi): Main(${mainPage.id}), Accommodations(${accommodationsPage.id}), Restaurants(${restaurantsPage.id}), Gallery(${galleryPage.id}), Our Story(${ourStoryPage.id}), Contact(${contactPage.id})`,
+    `— Created 9 pages (vi): Main(${mainPage.id}), Accommodations(${accommodationsPage.id}), Restaurants(${restaurantsPage.id}), Gallery(${galleryPage.id}), Our Story(${ourStoryPage.id}), Contact(${contactPage.id}), Offers(${offersPage.id}), Subscribe(${subscribePage.id}), Booking(${bookingPage.id})`,
   )
 
   // ═══════════════════════════════════════════════════════════════════
@@ -1111,7 +1325,145 @@ export const seedHotelData = async ({
     ],
   })
 
-  payload.logger.info('— English locale patched for all 6 pages.')
+  // ──── Page 7 English: Offers ────
+  await updateEn(offersPage.id, {
+    title: 'Offers',
+    layout: [
+      {
+        blockType: 'hero',
+        subtitle: 'Home / Offers',
+        name: 'Special Offers',
+        tagline:
+          'Discover exclusive packages thoughtfully curated for guests who appreciate comfort and exceptional value.',
+        ctaText: 'Book Now',
+      },
+      { ...offersBlockEn },
+      {
+        blockType: 'special-offers',
+        sectionTitle: 'More Packages',
+        offers: [
+          {
+            title: 'Weekend Retreat Package',
+            description:
+              'A 2-night package including breakfast, 60-minute spa session, and late check-out until 2:00 PM.',
+            ctaText: 'Get The Offer',
+          },
+          {
+            title: 'Honeymoon Package',
+            description:
+              'Designed for couples — includes a suite, romantic dinner, and special room decoration.',
+            ctaText: 'Get The Offer',
+          },
+          {
+            title: 'Business Package',
+            description:
+              'Ideal for business travelers — high-speed WiFi, workspace, and express breakfast.',
+            ctaText: 'Get The Offer',
+          },
+        ],
+      },
+      {
+        blockType: 'subscribe',
+        title: 'Sign Up for Early Offers',
+        subtitle:
+          'Subscribe to our newsletter to be the first to know about promotions and exclusive deals.',
+        placeholderText: 'Enter your email',
+        buttonText: 'Subscribe',
+        successMessage: 'Thank you for subscribing!',
+        benefits: [
+          { text: 'Be the first to receive exclusive offers' },
+          { text: 'Special discounts for members' },
+          { text: 'Latest event and news updates' },
+        ],
+        privacyText: 'We respect your privacy. Unsubscribe at any time.',
+      },
+    ],
+  })
+
+  // ──── Page 8 English: Subscribe ────
+  await updateEn(subscribePage.id, {
+    title: 'Newsletter',
+    layout: [
+      {
+        blockType: 'hero',
+        subtitle: 'Home / Subscribe',
+        name: 'Newsletter',
+        tagline:
+          'Stay updated with the latest offers, special events, and exclusive content from The Calanthe.',
+        ctaText: '',
+      },
+      {
+        blockType: 'subscribe',
+        title: 'Get the Latest News & Offers',
+        subtitle:
+          'Subscribe to our newsletter to stay updated with the latest offers, events, and exclusive content from The Calanthe.',
+        placeholderText: 'Enter your email address',
+        buttonText: 'Subscribe Now',
+        successMessage: 'Thank you for subscribing!',
+        benefits: [
+          { text: 'Exclusive offers for members only' },
+          { text: 'Early notifications about special events' },
+          { text: 'Travel tips and destination suggestions' },
+          { text: 'Updates on new hotel services' },
+        ],
+        privacyText: 'We respect your privacy. Unsubscribe at any time.',
+      },
+      { ...offersBlockEn },
+    ],
+  })
+
+  // ──── Page 9 English: Booking ────
+  await updateEn(bookingPage.id, {
+    title: 'Book Your Stay',
+    layout: [
+      {
+        blockType: 'hero',
+        subtitle: 'Home / Booking',
+        name: 'Book Your Stay',
+        tagline:
+          'Select your dates, room type, and number of guests to begin your stay at The Calanthe.',
+        ctaText: '',
+      },
+      {
+        blockType: 'booking-form',
+        title: 'Book Your Stay at The Calanthe',
+        subtitle:
+          'Experience luxury and comfort at The Calanthe. Select your dates and preferences below.',
+        buttonText: 'Check Availability',
+        roomTypes: [
+          { label: 'Deluxe Room', value: 'deluxe' },
+          { label: 'Premier Room', value: 'premier' },
+          { label: 'Junior Suite', value: 'junior-suite' },
+          { label: 'Cozy Retreat Suite', value: 'cozy-retreat' },
+        ],
+        infoCards: [
+          {
+            icon: 'clock',
+            title: 'Check-in / Check-out',
+            description: 'Check-in: 2:00 PM — Check-out: 12:00 PM',
+          },
+          {
+            icon: 'shield',
+            title: 'Cancellation Policy',
+            description: 'Free cancellation up to 48 hours in advance',
+          },
+          {
+            icon: 'star',
+            title: 'Best Rate Guarantee',
+            description: 'Book direct for the best available rate',
+          },
+          {
+            icon: 'phone',
+            title: '24/7 Support',
+            description: 'Call +84 777 4340 for assistance',
+          },
+        ],
+      },
+      { ...offersBlockEn },
+    ],
+  })
+
+  payload.logger.info('— English locale patched for all 9 pages.')
 
   // ═══════════════════════════════════════════════════════════════════
   // STEP 4: Update globals (Vietnamese + English)
@@ -1366,5 +1718,5 @@ export const seedHotelData = async ({
     },
   })
 
-  payload.logger.info('Seeded hotel data successfully! (vi + en)')
+  payload.logger.info('Seeded hotel data successfully! (vi + en) — 9 pages + header + footer')
 }
