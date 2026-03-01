@@ -1023,14 +1023,19 @@ export const seedHotelData = async ({
           heroImage: mimg(6),
           enabled: true,
         },
-        ({
-          blockType: 'banner',
-          style: 'info',
-          content: richText(
-            'Chào mừng bạn đến với The Calanthe! Đặt phòng trực tiếp trên website để nhận ưu đãi tốt nhất và bữa sáng miễn phí.',
-          ),
+        {
+          blockType: 'description',
+          title: 'Chào Mừng Đến\u00a0The Calanthe',
+          leftText:
+            'Đặt phòng trực tiếp trên website để nhận ưu đãi tốt nhất và bữa sáng miễn phí cho kỳ nghỉ của bạn.',
+          ctaText: 'Đặt Ngay',
+          ctaLink: '/booking',
+          image1: mid(6),
+          image2: mid(7),
+          rightText:
+            'The Calanthe mang đến không gian nghỉ dưỡng yên bình, nơi mỗi chi tiết được chăm chút kỹ lưỡng để bạn cảm nhận sự thoải mái trọn vẹn.',
           enabled: true,
-        }) as any,
+        },
         {
           blockType: 'content',
           columns: [
@@ -1799,11 +1804,14 @@ export const seedHotelData = async ({
           'Everything you need to know about The Calanthe — our services, amenities, and commitments.',
         ctaText: 'Book Now',
       },
-      // banner
+      // description
       {
-        content: richText(
-          'Welcome to The Calanthe! Book directly on our website for the best rates and complimentary breakfast.',
-        ),
+        title: 'Welcome to\u00a0The Calanthe',
+        leftText:
+          'Book directly on our website for the best rates and complimentary breakfast for your stay.',
+        ctaText: 'Book Now',
+        rightText:
+          'The Calanthe offers a peaceful retreat where every detail is carefully crafted for your complete comfort.',
       },
       // content
       {
