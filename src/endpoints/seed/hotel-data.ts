@@ -47,7 +47,8 @@ export const seedHotelData = async ({
     pagination: false,
   })
   const mediaIds = new Set(existingMedia.docs.map((m) => m.id))
-  const mid = (id: number): any => (mediaIds.has(id) ? id : undefined)
+  const firstMediaId = existingMedia.docs[0]?.id
+  const mid = (id: number): any => (mediaIds.has(id) ? id : firstMediaId)
   const mimg = (id: number) => {
     const resolved = mid(id)
     return resolved !== undefined ? [{ image: resolved }] : []
