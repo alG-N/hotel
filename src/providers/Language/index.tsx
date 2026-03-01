@@ -46,6 +46,8 @@ export const LanguageProvider = ({ children }: { children: React.ReactNode }) =>
     if (typeof document !== 'undefined') {
       document.cookie = `payload-locale=${lang};path=/;max-age=${60 * 60 * 24 * 365};SameSite=Lax`
       document.documentElement.lang = lang
+      // Reload the page so server components re-fetch content in the new locale
+      window.location.reload()
     }
   }, [])
 

@@ -1,0 +1,782 @@
+{
+  "_meta": {
+    "description": "Extracted text/content data from backup.sql for seeding",
+    "source": "backup.sql",
+    "extractedAt": "2026-02-28",
+    "notes": {
+      "pages_blocks_booking_form": "NOT in backup - table does not exist",
+      "pages_blocks_subscribe": "NOT in backup - table does not exist",
+      "advertisement": "NOT in backup - table does not exist",
+      "pages_blocks_gallery": "EXISTS but EMPTY - no data rows",
+      "categories": "EXISTS but EMPTY - no data rows",
+      "header_nav_items": "EXISTS but EMPTY - no data rows",
+      "pages_blocks_rooms_grid_custom_categories": "EXISTS but EMPTY - no data rows",
+      "encoding": "Some Unicode chars show as ΓÇ¿ (non-breaking space), ΓÇö (em dash), ΓÇÖ (right single quote) due to UTF-8/cp1252 mismatch"
+    }
+  },
+
+  "pages": [
+    { "id": 1, "title": "Main", "slug": "hotel", "hero_type": "none", "hero_rich_text": null },
+    { "id": 2, "title": "Accommodations", "slug": "accommodations", "hero_type": "none", "hero_rich_text": null },
+    { "id": 3, "title": "Restaurants & Bars", "slug": "restaurants", "hero_type": "none", "hero_rich_text": null },
+    { "id": 4, "title": "Gallery", "slug": "gallery", "hero_type": "none", "hero_rich_text": null },
+    { "id": 5, "title": "Our Story", "slug": "our-story", "hero_type": "none", "hero_rich_text": null },
+    { "id": 6, "title": "Contact & Location", "slug": "co", "hero_type": "none", "hero_rich_text": null }
+  ],
+
+  "header": {
+    "id": 1,
+    "show_top_bar": true,
+    "contact_phone": "+84 777 4340",
+    "show_language_selector": true,
+    "show_currency_selector": true,
+    "logo_id": 1,
+    "logo_width": 80,
+    "logo_height": 80,
+    "logo_link": "/hotel",
+    "show_cta": true,
+    "cta_text": "Book Your Stay",
+    "cta_link": "/booking",
+    "background_color": "#ffffff",
+    "scrolled_background_color": "#ffffff",
+    "text_color": "dark",
+    "padding_size": "small",
+    "font_family": "system-ui, -apple-system, sans-serif",
+    "font_weight": "500",
+    "font_size": "14px",
+    "letter_spacing": "1px"
+  },
+
+  "header_currencies": [
+    { "_order": 1, "_parent_id": 1, "code": "usd", "label": "USD" },
+    { "_order": 2, "_parent_id": 1, "code": "vnd", "label": "VND" }
+  ],
+
+  "header_languages": [
+    { "_order": 1, "_parent_id": 1, "code": "en", "label": "ENG" },
+    { "_order": 2, "_parent_id": 1, "code": "vi", "label": "VIE" }
+  ],
+
+  "header_nav_items": [],
+
+  "header_nav_items_left": [
+    { "_order": 1, "_parent_id": 1, "link_type": "reference", "link_label": "Accommodations", "link_reference_page_id": 2 },
+    { "_order": 2, "_parent_id": 1, "link_type": "reference", "link_label": "Restaurants & Bars", "link_reference_page_id": 3 },
+    { "_order": 3, "_parent_id": 1, "link_type": "reference", "link_label": "Gallery", "link_reference_page_id": 4 }
+  ],
+
+  "header_nav_items_right": [
+    { "_order": 1, "_parent_id": 1, "link_type": "reference", "link_label": "Our Story", "link_reference_page_id": 5 },
+    { "_order": 2, "_parent_id": 1, "link_type": "reference", "link_label": "Contact & Location", "link_reference_page_id": 6 }
+  ],
+
+  "footer": {
+    "id": 1,
+    "subscribe_title": "Get the latest news & discounts",
+    "subscribe_subtitle": "Subscribe to our newsletter to stay on updated",
+    "subscribe_button_text": "Subscribe",
+    "subscribe_button_link": "/subscribe",
+    "logo_id": 1,
+    "phone": "+84 777 4340",
+    "email": "Calanthehotel@gmail.com",
+    "find_us_text": "Find us",
+    "copyright_text": "@2025 Calanthe hotel All rights Reserves",
+    "background_color": "#ffffff",
+    "text_color": "#1a1a1a",
+    "border_color": "#e5e5e5",
+    "subscribe_background_color": "#f5f5f5",
+    "title_font": "Georgia, serif",
+    "body_font": "system-ui, -apple-system, sans-serif",
+    "title_font_weight": "400",
+    "body_font_weight": "400"
+  },
+
+  "footer_addresses": [
+    { "_order": 1, "_parent_id": 1, "address": "12 Anchor Road, Sai Kung" },
+    { "_order": 2, "_parent_id": 1, "address": "8 Seashell Drive, Lantau Island" }
+  ],
+
+  "footer_nav_links": [
+    { "_order": 1, "_parent_id": 1, "link_type": "reference", "link_label": "Accommodations", "link_reference_page_id": 2 },
+    { "_order": 2, "_parent_id": 1, "link_type": "reference", "link_label": "Restaurants & Bars", "link_reference_page_id": 3 },
+    { "_order": 3, "_parent_id": 1, "link_type": "reference", "link_label": "Gallery", "link_reference_page_id": 4 },
+    { "_order": 4, "_parent_id": 1, "link_type": "reference", "link_label": "Our Story", "link_reference_page_id": 5 },
+    { "_order": 5, "_parent_id": 1, "link_type": "reference", "link_label": "Contact & Location", "link_reference_page_id": 6 }
+  ],
+
+  "footer_social_links": [
+    { "_order": 1, "_parent_id": 1, "platform": "instagram", "url": "https://www.youtube.com/" },
+    { "_order": 2, "_parent_id": 1, "platform": "facebook", "url": "https://www.youtube.com/" }
+  ],
+
+  "categories": [],
+
+  "pages_blocks_hero": [
+    {
+      "_order": 1, "_parent_id": 1, "_path": "layout",
+      "subtitle": "Welcome to",
+      "name": "The Calanthe",
+      "tagline": "Wake up to soft light, thoughtful details, and a sense of calm crafted for modern travelers who value balance and beauty",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "large",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [2, 3, 4, 5]
+    },
+    {
+      "_order": 1, "_parent_id": 2, "_path": "layout",
+      "subtitle": "Home / Accomodations",
+      "name": "Accomodations",
+      "tagline": "Our accommodations are designed with one purpose: exceptional rest.",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "small",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [8]
+    },
+    {
+      "_order": 1, "_parent_id": 3, "_path": "layout",
+      "subtitle": "Home / Restaurants & Bars",
+      "name": "Restaurants & Bars",
+      "tagline": "Dining at The Calanthe is designed to complement your stay. Every element is thoughtfully curated to feel relaxed, balanced, and unhurried.",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "small",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [16]
+    },
+    {
+      "_order": 1, "_parent_id": 4, "_path": "layout",
+      "subtitle": "Home / Gallery",
+      "name": "Gallery",
+      "tagline": "The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm ",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "small",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [24]
+    },
+    {
+      "_order": 1, "_parent_id": 5, "_path": "layout",
+      "subtitle": "Home / Story",
+      "name": "Our Story",
+      "tagline": "The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm that defines every stay.",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "small",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [25]
+    },
+    {
+      "_order": 1, "_parent_id": 6, "_path": "layout",
+      "subtitle": "Home / Contact & Location",
+      "name": "Contact & Location",
+      "tagline": "The Gallery offers a visual journey through the spaces and atmosphere of The Calanthe. Each image reflects the balance of design, comfort, and calm",
+      "show_cta": false,
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "height": "small",
+      "text_position": "center",
+      "vertical_align": "center",
+      "overlay_opacity": "medium",
+      "enable_slideshow": true,
+      "slideshow_speed": 5000,
+      "hero_image_ids": [30]
+    }
+  ],
+
+  "pages_blocks_description": [
+    {
+      "_order": 2, "_parent_id": 1, "_path": "layout",
+      "title": "A Refined Stay,\u00a0Thoughtfully Designed",
+      "left_text": "The Calanthe is a boutique hotel created for travelers who value calm, comfort, and intentional design.",
+      "cta_text": "More About Us",
+      "cta_link": "/accomi",
+      "image1_id": 6,
+      "image2_id": 7,
+      "right_text": "Every space is shaped to help you slow down and feel at ease. From soft materials to carefully curated details, The Calanthe balances modern elegance with a warm, welcoming atmosphere\u2014so your stay feels personal, not transactional."
+    }
+  ],
+
+  "pages_blocks_description_type2": [
+    {
+      "_order": 2, "_parent_id": 5, "_path": "layout",
+      "title": "Why The Calanthe\u00a0Exists?",
+      "paragraph1": "The Calanthe was created to answer a growing need for quieter, more intentional stays. As travel became faster and more transactional, we saw how often comfort, calm, and human connection were overlooked.",
+      "paragraph2": "We exist to offer an alternative\u2014one where guests can slow down, feel at ease, and experience hospitality without pressure or excess. The Calanthe is not about doing more. It is about doing what matters, better.",
+      "image_right1_id": 27,
+      "image_right2_id": 28
+    }
+  ],
+
+  "pages_blocks_accommodations_type2": [
+    {
+      "_order": 3, "_parent_id": 1, "_path": "layout",
+      "id": "697d0802651fd22265da70a4",
+      "title": "Designed Around How You Rest",
+      "cta_text": "More About Us",
+      "cta_link": "/accommodations"
+    }
+  ],
+
+  "pages_blocks_accommodations_type2_rooms": [
+    {
+      "_order": 1, "_parent_id": "697d0802651fd22265da70a4",
+      "name": "Deluxe Room",
+      "description": "Ideal for short stays and business travelers who value simplicity and quality.",
+      "button_text": "Book now",
+      "button_link": "/booking",
+      "features": [
+        { "icon": "bed", "text": "Queen or king-size bed with premium bedding." },
+        { "icon": "sofa", "text": "Work-friendly desk and comfortable seating." },
+        { "icon": "bath", "text": "Modern bathroom with walk-in shower." }
+      ],
+      "image_ids": [9]
+    },
+    {
+      "_order": 2, "_parent_id": "697d0802651fd22265da70a4",
+      "name": "Premier Room",
+      "description": "Designed for longer stays or guests who enjoy extra room to relax.",
+      "button_text": "Book now",
+      "button_link": "/booking",
+      "features": [
+        { "icon": "bed", "text": "Spacious sleeping area with lounge seating" },
+        { "icon": "sofa", "text": "Large windows for natural daylight" },
+        { "icon": "bath", "text": "Upgraded bathroom amenities" }
+      ],
+      "image_ids": [10]
+    },
+    {
+      "_order": 3, "_parent_id": "697d0802651fd22265da70a4",
+      "name": "Junior Suite",
+      "description": "Offered clearly defined living and resting zones, ideal for couples or extended stays.",
+      "button_text": "Book now",
+      "button_link": "/booking",
+      "features": [
+        { "icon": "bed", "text": "King-size bed with enhanced comfort features" },
+        { "icon": "sofa", "text": "Separate seating or living area" },
+        { "icon": "bath", "text": "Premium bath amenities and refined finishes" }
+      ],
+      "image_ids": [11]
+    }
+  ],
+
+  "pages_blocks_rooms_grid": [
+    {
+      "_order": 2, "_parent_id": 2, "_path": "layout",
+      "id": "697d0ba6651fd22265da70e4",
+      "enabled_categories": ["regular", "deluxe", "family", "suites"]
+    }
+  ],
+
+  "pages_blocks_rooms_grid_rooms": [
+    {
+      "_order": 1, "_parent_id": "697d0ba6651fd22265da70e4",
+      "id": "697d0baa651fd22265da70e6",
+      "category": "regular",
+      "name": "Deluxe Room",
+      "subtitle": "Ideal for short stays and business travelers who value simplicity and quality.",
+      "book_link": "/booking",
+      "amenities": [
+        { "icon": "bed", "text": "Queen or king-size bed with premium bedding." },
+        { "icon": "sofa", "text": "Work-friendly desk and comfortable seating." },
+        { "icon": "bath", "text": "Modern bathroom with walk-in shower." }
+      ],
+      "image_ids": [10]
+    },
+    {
+      "_order": 2, "_parent_id": "697d0ba6651fd22265da70e4",
+      "id": "697d0bc2651fd22265da70ea",
+      "category": "deluxe",
+      "name": "Premier Room",
+      "subtitle": "Designed for longer stays or guests who enjoy extra room to relax.",
+      "book_link": "/booking",
+      "amenities": [
+        { "icon": "bed", "text": "Spacious sleeping area with lounge seating" },
+        { "icon": "sofa", "text": "Large windows for natural daylight" },
+        { "icon": "bath", "text": "Upgraded bathroom amenities" }
+      ],
+      "image_ids": [11]
+    },
+    {
+      "_order": 3, "_parent_id": "697d0ba6651fd22265da70e4",
+      "id": "697d0bd3651fd22265da70ee",
+      "category": "family",
+      "name": "Junior Suite",
+      "subtitle": "Offered clearly defined living and resting zones, ideal for couples or extended stays.",
+      "book_link": "/booking",
+      "amenities": [
+        { "icon": "bed", "text": "King-size bed with enhanced comfort features" },
+        { "icon": "sofa", "text": "Separate seating or living area" },
+        { "icon": "bath", "text": "Premium bath amenities and refined finishes" }
+      ],
+      "image_ids": [9]
+    },
+    {
+      "_order": 4, "_parent_id": "697d0ba6651fd22265da70e4",
+      "id": "697d0be0651fd22265da70f2",
+      "category": "suites",
+      "name": "Cozy Retreat Suite",
+      "subtitle": "Offered clearly defined living and resting zones, ideal for couples or extended stays.",
+      "book_link": "/booking",
+      "amenities": [
+        { "icon": "bed", "text": "King-size bed with enhanced comfort features" },
+        { "icon": "sofa", "text": "Separate seating or living area" },
+        { "icon": "bath", "text": "Premium bath amenities and refined finishes" }
+      ],
+      "image_ids": [8]
+    },
+    {
+      "_order": 5, "_parent_id": "697d0ba6651fd22265da70e4",
+      "id": "697d0bee651fd22265da70f6",
+      "category": "suites",
+      "name": "Charming Junior Suite",
+      "subtitle": "Offered clearly defined living and resting zones, ideal for couples or extended stays.",
+      "book_link": "/booking",
+      "amenities": [
+        { "icon": "bed", "text": "King-size bed with enhanced comfort features" },
+        { "icon": "sofa", "text": "Separate seating or living area" },
+        { "icon": "bath", "text": "Premium bath amenities and refined finishes" }
+      ],
+      "image_ids": [10]
+    }
+  ],
+
+  "pages_blocks_our_services": [
+    {
+      "_order": 4, "_parent_id": 1, "_path": "layout",
+      "id": "697d09bb651fd22265da70c6",
+      "section_title": "Dining That Complements Your Stay",
+      "section_description": "Dining at The Calanthe is designed to complement your stay. Every element is thoughtfully curated to feel relaxed, balanced, and unhurried.",
+      "columns": 3
+    }
+  ],
+
+  "pages_blocks_our_services_services": [
+    {
+      "_order": 1, "_parent_id": "697d09bb651fd22265da70c6",
+      "service_image_id": 12,
+      "service_name": "Calm Space",
+      "service_description": "The restaurant space is warm, quiet, and intentionally designed. Soft lighting, natural materials, and an open layout create an atmosphere that feels welcoming at any time of day."
+    },
+    {
+      "_order": 2, "_parent_id": "697d09bb651fd22265da70c6",
+      "service_image_id": 13,
+      "service_name": "Balanced Drinks",
+      "service_description": "Our drinks menu is carefully selected with comfort in mind. From freshly brewed coffee and herbal teas to refreshing juices and light cocktails, each option is crafted to be smooth and approachable."
+    },
+    {
+      "_order": 3, "_parent_id": "697d09bb651fd22265da70c6",
+      "service_image_id": 14,
+      "service_name": "Thoughtful Foods",
+      "service_description": "The Calanthe\u2019s cuisine celebrates simplicity and quality. Fresh ingredients, refined preparation, and balanced flavors come together in dishes that feel familiar yet considered."
+    }
+  ],
+
+  "pages_blocks_photo_gallery": [
+    {
+      "_order": 5, "_parent_id": 1, "_path": "layout",
+      "id": "697d0a61651fd22265da70ce",
+      "title": "Experience The Calanth Through Every Detail",
+      "layout": "bento",
+      "load_more_text": "Load more",
+      "image_ids": [7, 6, 11, 12, 14, 12]
+    },
+    {
+      "_order": 2, "_parent_id": 4, "_path": "layout",
+      "id": "698038781d1792102dcf30a1",
+      "title": null,
+      "layout": "magazine",
+      "load_more_text": "Load more",
+      "image_ids": [27, 26, 25, 24, 22, 17, 14, 24, 28]
+    }
+  ],
+
+  "pages_blocks_offers": [
+    {
+      "_order": 6, "_parent_id": 1, "_path": "layout",
+      "title": "Exclusive Offers, Thoughtfully Curated",
+      "description": "Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.",
+      "price_highlight": "$89 per night",
+      "features_title": "What's Included:",
+      "section_style": "dark",
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "image_id": 15,
+      "image_position": "left",
+      "features": [
+        "Complimentary daily breakfast",
+        "Early check-in or late check-out (subject to availability)",
+        "Best rate guaranteed when booking direct"
+      ]
+    },
+    {
+      "_order": 3, "_parent_id": 2, "_path": "layout",
+      "title": "Exclusive Offers, Thoughtfully Curated",
+      "description": "Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.",
+      "price_highlight": "$89 per night",
+      "features_title": "What's Included:",
+      "section_style": "dark",
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "image_id": 15,
+      "image_position": "left",
+      "features": [
+        "Complimentary daily breakfast",
+        "Early check-in or late check-out (subject to availability)",
+        "Best rate guaranteed when booking direct"
+      ]
+    },
+    {
+      "_order": 5, "_parent_id": 3, "_path": "layout",
+      "title": "Exclusive Offers, Thoughtfully Curated",
+      "description": "Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.",
+      "price_highlight": "$89 per night",
+      "features_title": "What's Included:",
+      "section_style": "dark",
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "image_id": 15,
+      "image_position": "left",
+      "features": [
+        "Complimentary daily breakfast",
+        "Early check-in or late check-out (subject to availability)",
+        "Best rate guaranteed when booking direct"
+      ]
+    },
+    {
+      "_order": 3, "_parent_id": 4, "_path": "layout",
+      "title": "Exclusive Offers, Thoughtfully Curated",
+      "description": "Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.",
+      "price_highlight": "$89 per night",
+      "features_title": "What's Included:",
+      "section_style": "dark",
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "image_id": 15,
+      "image_position": "left",
+      "features": [
+        "Complimentary daily breakfast",
+        "Early check-in or late check-out (subject to availability)",
+        "Best rate guaranteed when booking direct"
+      ]
+    },
+    {
+      "_order": 3, "_parent_id": 6, "_path": "layout",
+      "title": "Exclusive Offers, Thoughtfully Curated",
+      "description": "Enjoy an exclusive special price from $89 per night when you book directly with The Calanthe. Thoughtfully curated for guests who appreciate comfort, calm, and exceptional value.",
+      "price_highlight": "$89 per night",
+      "features_title": "What's Included:",
+      "section_style": "dark",
+      "cta_text": "Book Now",
+      "cta_link": "/booking",
+      "image_id": 15,
+      "image_position": "left",
+      "features": [
+        "Complimentary daily breakfast",
+        "Early check-in or late check-out (subject to availability)",
+        "Best rate guaranteed when booking direct"
+      ]
+    }
+  ],
+
+  "pages_blocks_food_drink": [
+    {
+      "_order": 3, "_parent_id": 3, "_path": "layout",
+      "id": "697d129fb942722ffbcada36",
+      "title": "Foods & Drinks",
+      "featured_image_id": 20,
+      "featured_title": "Tranquil Haven",
+      "featured_description": "Experience the serene flavors of Tranquil Haven, a dish that combines delicate herbs with fresh, seasonal vegetables, all drizzled with a light citrus vinaigrette. This refreshing plate is designed to evoke a sense of calm and peace, perfect for a relaxing meal.",
+      "featured_link": null
+    }
+  ],
+
+  "pages_blocks_food_drink_side_items": [
+    {
+      "_order": 1, "_parent_id": "697d129fb942722ffbcada36",
+      "image_id": 21,
+      "title": "Gourmet Suite",
+      "description": "A perfect choice for quick getaways and professionals seeking comfort and elegance.",
+      "link": null
+    },
+    {
+      "_order": 2, "_parent_id": "697d129fb942722ffbcada36",
+      "image_id": 22,
+      "title": "Luxury Haven",
+      "description": "An excellent option for brief visits and business guests who appreciate straightforwardness and high standards.",
+      "link": null
+    },
+    {
+      "_order": 3, "_parent_id": "697d129fb942722ffbcada36",
+      "image_id": 23,
+      "title": "Opulent Retreat",
+      "description": "The ideal spot for short trips and corporate travelers who prioritize ease and quality.",
+      "link": null
+    }
+  ],
+
+  "pages_blocks_the_space": [
+    {
+      "_order": 2, "_parent_id": 3, "_path": "layout",
+      "id": "697d0ec3651fd22265da7124",
+      "section_title": "The Space",
+      "section_description": "Dining at The Calanthe is designed to complement your stay.",
+      "image_ids": [17, 18, 19]
+    }
+  ],
+
+  "pages_blocks_the_space_stats": [
+    {
+      "_order": 1, "_parent_id": "697d0ec3651fd22265da7124",
+      "icon": "grid",
+      "value": "120 m²",
+      "description": "Total indoor dining and bar area, designed for comfortable circulation and visual openness."
+    },
+    {
+      "_order": 2, "_parent_id": "697d0ec3651fd22265da7124",
+      "icon": "zones",
+      "value": "48 Seats",
+      "description": "A balanced mix of intimate tables and relaxed communal seating, ensuring privacy without isolation."
+    },
+    {
+      "_order": 3, "_parent_id": "697d0ec3651fd22265da7124",
+      "icon": "seats",
+      "value": "3 Distinct Zones",
+      "description": "Dining area, bar counter, and lounge seating\u2014each with its own atmosphere, flowing naturally throughout the day."
+    }
+  ],
+
+  "pages_blocks_location": [
+    {
+      "_order": 2, "_parent_id": 6, "_path": "layout",
+      "address1_label": "Address 1",
+      "address1": "12 Anchor Road, Sai Kung",
+      "address2_label": "Address 2",
+      "address2": "8 Seashell Drive, Lantau Island",
+      "hotline_label": "Hotline",
+      "hotline": "+84 777 4340",
+      "email_label": "Email",
+      "email": "Calanthehotel@gmail.com",
+      "cta_text": "Contact Us",
+      "cta_link": "/contact",
+      "map_image_id": 31
+    }
+  ],
+
+  "pages_blocks_special_offers": [
+    {
+      "_order": 4, "_parent_id": 3, "_path": "layout",
+      "id": "697d1781112a3e63e5c6e632",
+      "section_title": "Special Offers",
+      "columns": 3,
+      "show_navigation": true
+    }
+  ],
+
+  "pages_blocks_special_offers_offers": [
+    {
+      "_order": 1, "_parent_id": "697d1781112a3e63e5c6e632",
+      "image_id": 23,
+      "title": "Gourmet Suite",
+      "description": "A perfect choice for quick getaways and professionals seeking comfort and elegance.",
+      "cta_text": "Get The Offer",
+      "cta_link": "/offers"
+    },
+    {
+      "_order": 2, "_parent_id": "697d1781112a3e63e5c6e632",
+      "image_id": 22,
+      "title": "Luxury Haven",
+      "description": "An excellent option for brief visits and business guests who appreciate straightforwardness and high standards.",
+      "cta_text": "Get The Offer",
+      "cta_link": "/offers"
+    },
+    {
+      "_order": 3, "_parent_id": "697d1781112a3e63e5c6e632",
+      "image_id": 21,
+      "title": "Opulent Retreat",
+      "description": "The ideal spot for short trips and corporate travelers who prioritize ease and quality.",
+      "cta_text": "Get The Offer",
+      "cta_link": "/offers"
+    }
+  ],
+
+  "pages_blocks_content_image": [
+    {
+      "_order": 4, "_parent_id": 5, "_path": "layout",
+      "image_position": "right",
+      "show_border": true,
+      "title": "Experiences That Feel\u00a0Personal and Lasting",
+      "description": "At The Calanthe, success is measured by how guests feel, not how much is added. We focus on outcomes that matter.",
+      "highlight_section_title": "What we achieve",
+      "image_id": 28,
+      "cta_text": "",
+      "cta_link": null,
+      "highlight_section_items": [
+        "Restful environments that support better sleep",
+        "Seamless stays through intuitive design and service",
+        "A sense of calm that guests carry with them beyond checkout"
+      ]
+    }
+  ],
+
+  "pages_blocks_vision": [
+    {
+      "_order": 3, "_parent_id": 5, "_path": "layout",
+      "main_title": "Redefining Comfort\u00a0Through Simplicity",
+      "main_description": "Our vision is to become a destination for travelers who value clarity, balance, and meaningful design. We aim to redefine comfort\u2014not as luxury for display, but as an experience that genuinely supports rest and well-being."
+    }
+  ],
+
+  "pages_blocks_vision_cards": [
+    {
+      "_order": 1, "_parent_id": "697d1a21112a3e63e5c6e65e",
+      "icon": "eye",
+      "style": "dark",
+      "title": "Our Vision",
+      "description": "We aim to redefine comfort\u2014not as luxury for display, but as an experience that genuinely supports rest and well-being."
+    },
+    {
+      "_order": 2, "_parent_id": "697d1a21112a3e63e5c6e65e",
+      "icon": "target",
+      "style": "light",
+      "title": "Our Goal",
+      "description": "Create spaces that feel natural and effortless. Deliver consistent, thoughtful service. Build a hotel experience that feels personal, not generic"
+    }
+  ],
+
+  "pages_blocks_designed": [
+    {
+      "_order": 5, "_parent_id": 5, "_path": "layout",
+      "id": "697d1a93112a3e63e5c6e66c",
+      "title": "Designed With Intention",
+      "description": "The Calanthe\u2019s features are not added for impact\u2014they are designed for purpose."
+    }
+  ],
+
+  "pages_blocks_designed_features": [
+    {
+      "_order": 1, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "book",
+      "title": "Thoughtfully Designed Rooms",
+      "description": "Every room is carefully planned to support rest and privacy."
+    },
+    {
+      "_order": 2, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "smile",
+      "title": "Human-Centered Layouts",
+      "description": "Spaces are designed around how people move and use them."
+    },
+    {
+      "_order": 3, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "volume-off",
+      "title": "Quiet Comfort & Sound Control",
+      "description": "Acoustic considerations are integrated throughout the hotel."
+    },
+    {
+      "_order": 4, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "utensils",
+      "title": "Calm Dining Experience",
+      "description": "Our restaurant and bar are designed for unhurried moments."
+    },
+    {
+      "_order": 5, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "palette",
+      "title": "Consistent Design Language",
+      "description": "Every detail follows a cohesive design approach"
+    },
+    {
+      "_order": 6, "_parent_id": "697d1a93112a3e63e5c6e66c",
+      "icon": "accessibility",
+      "title": "Accessible & Inclusive Spaces",
+      "description": "Accessibility is considered from the start, not added later."
+    }
+  ],
+
+  "pages_blocks_collaboration": [
+    {
+      "_order": 6, "_parent_id": 5, "_path": "layout",
+      "id": "697d1ae9112a3e63e5c6e67a",
+      "title": "Working With\u00a0Like-Minded Creators",
+      "description": "We collaborate with partners who share our values of quality, responsibility, and thoughtful design."
+    }
+  ],
+
+  "pages_blocks_collaboration_partners": [
+    {
+      "_order": 1, "_parent_id": "697d1ae9112a3e63e5c6e67a",
+      "name": "a",
+      "logo_id": 32,
+      "link": ""
+    }
+  ],
+
+  "pages_blocks_gallery": [],
+
+  "_page_block_layout_summary": {
+    "_description": "Block order per page (_order field = position in layout)",
+    "page_1_Main": [
+      { "_order": 1, "block": "hero", "subtitle": "Welcome to" },
+      { "_order": 2, "block": "description", "title": "A Refined Stay" },
+      { "_order": 3, "block": "accommodations_type2", "title": "Designed Around How You Rest" },
+      { "_order": 4, "block": "our_services", "title": "Dining That Complements Your Stay" },
+      { "_order": 5, "block": "photo_gallery", "title": "Experience The Calanth Through Every Detail" },
+      { "_order": 6, "block": "offers", "title": "Exclusive Offers, Thoughtfully Curated" }
+    ],
+    "page_2_Accommodations": [
+      { "_order": 1, "block": "hero", "subtitle": "Home / Accomodations" },
+      { "_order": 2, "block": "rooms_grid", "note": "5 rooms with categories" },
+      { "_order": 3, "block": "offers", "title": "Exclusive Offers, Thoughtfully Curated" }
+    ],
+    "page_3_Restaurants": [
+      { "_order": 1, "block": "hero", "subtitle": "Home / Restaurants & Bars" },
+      { "_order": 2, "block": "the_space", "title": "The Space" },
+      { "_order": 3, "block": "food_drink", "title": "Foods & Drinks" },
+      { "_order": 4, "block": "special_offers", "title": "Special Offers" },
+      { "_order": 5, "block": "offers", "title": "Exclusive Offers, Thoughtfully Curated" }
+    ],
+    "page_4_Gallery": [
+      { "_order": 1, "block": "hero", "subtitle": "Home / Gallery" },
+      { "_order": 2, "block": "photo_gallery", "layout": "magazine" },
+      { "_order": 3, "block": "offers", "title": "Exclusive Offers, Thoughtfully Curated" }
+    ],
+    "page_5_Our_Story": [
+      { "_order": 1, "block": "hero", "subtitle": "Home / Story" },
+      { "_order": 2, "block": "description_type2", "title": "Why The Calanthe Exists?" },
+      { "_order": 3, "block": "vision", "title": "Redefining Comfort Through Simplicity" },
+      { "_order": 4, "block": "content_image", "title": "Experiences That Feel Personal and Lasting" },
+      { "_order": 5, "block": "designed", "title": "Designed With Intention" },
+      { "_order": 6, "block": "collaboration", "title": "Working With Like-Minded Creators" }
+    ],
+    "page_6_Contact_Location": [
+      { "_order": 1, "block": "hero", "subtitle": "Home / Contact & Location" },
+      { "_order": 2, "block": "location", "cta_text": "Contact Us" },
+      { "_order": 3, "block": "offers", "title": "Exclusive Offers, Thoughtfully Curated" }
+    ]
+  }
+}
