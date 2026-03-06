@@ -11,6 +11,7 @@ import { T } from '@/providers/Language/T'
 import { getLocale } from '@/utilities/getLocale'
 
 export const revalidate = 600
+export const dynamic = 'force-dynamic'
 
 export default async function Page() {
   const payload = await getPayload({ config: configPromise })
