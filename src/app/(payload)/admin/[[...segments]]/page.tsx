@@ -15,10 +15,22 @@ type Args = {
   }>
 }
 
-export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> =>
-  generatePageMetadata({ config, params, searchParams })
+export const dynamic = 'force-dynamic'
 
-const Page = ({ params, searchParams }: Args) =>
-  RootPage({ config, params, searchParams, importMap })
+export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> => {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return Promise.resolve({ title: 'Admin' })
+  }
+
+  return generatePageMetadata({ config, params, searchParams })
+}
+
+const Page = ({ params, searchParams }: Args) => {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return null
+  }
+
+  return RootPage({ config, params, searchParams, importMap })
+}
 
 export default Page

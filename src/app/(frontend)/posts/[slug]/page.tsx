@@ -86,16 +86,30 @@ export default async function Post({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return generateMeta({ doc: null })
+  }
+
   const { slug = '' } = await paramsPromise
   const locale = await getLocale()
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const post = await queryPostBySlug({ slug: decodedSlug, locale })
+  let post: Post | null = null
+
+  try {
+    post = await queryPostBySlug({ slug: decodedSlug, locale })
+  } catch {
+    post = null
+  }
 
   return generateMeta({ doc: post })
 }
 
 const queryPostBySlug = cache(async ({ slug, locale }: { slug: string; locale?: PayloadLocale }) => {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return null
+  }
+
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })

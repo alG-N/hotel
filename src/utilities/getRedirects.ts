@@ -3,16 +3,24 @@ import { getPayload } from 'payload'
 import { unstable_cache } from 'next/cache'
 
 export async function getRedirects(depth = 1) {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return []
+  }
+
   const payload = await getPayload({ config: configPromise })
 
-  const { docs: redirects } = await payload.find({
-    collection: 'redirects',
-    depth,
-    limit: 0,
-    pagination: false,
-  })
+  try {
+    const { docs: redirects } = await payload.find({
+      collection: 'redirects',
+      depth,
+      limit: 0,
+      pagination: false,
+    })
 
-  return redirects
+    return redirects
+  } catch {
+    return []
+  }
 }
 
 /**
