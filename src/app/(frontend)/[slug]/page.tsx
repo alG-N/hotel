@@ -88,6 +88,10 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return generateMeta({ doc: homeStatic })
+  }
+
   const { slug = 'home' } = await paramsPromise
   const locale = await getLocale()
   // Decode to support slugs with special characters
@@ -101,6 +105,10 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 const queryPageBySlug = cache(async ({ slug, locale }: { slug: string; locale?: PayloadLocale }) => {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return slug === 'home' ? homeStatic : null
+  }
+
   const { isEnabled: draft } = await draftMode()
 
   const payload = await getPayload({ config: configPromise })
