@@ -17,20 +17,28 @@ type Args = {
 
 export const dynamic = 'force-dynamic'
 
-export const generateMetadata = ({ params, searchParams }: Args): Promise<Metadata> => {
+export const generateMetadata = async ({ params, searchParams }: Args): Promise<Metadata> => {
   if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
-    return Promise.resolve({ title: 'Admin' })
+    return { title: 'Admin' }
   }
 
-  return generatePageMetadata({ config, params, searchParams })
+  try {
+    return await generatePageMetadata({ config, params, searchParams })
+  } catch {
+    return { title: 'Admin' }
+  }
 }
 
-const NotFound = ({ params, searchParams }: Args) => {
+const NotFound = async ({ params, searchParams }: Args) => {
   if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
     return null
   }
 
-  return NotFoundPage({ config, params, searchParams, importMap })
+  try {
+    return await NotFoundPage({ config, params, searchParams, importMap })
+  } catch {
+    return null
+  }
 }
 
 export default NotFound
