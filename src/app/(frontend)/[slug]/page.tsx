@@ -78,6 +78,11 @@ export default async function Page({ params: paramsPromise }: Args) {
   }
 
   const { hero, layout } = page
+  const isStaticHomeFallback =
+    decodedSlug === 'home' &&
+    page.slug === 'home' &&
+    (!layout || layout.length === 0) &&
+    (!hero || hero.type === 'none')
 
   return (
     <article className="bg-white">
@@ -88,6 +93,14 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       {hero && hero.type && hero.type !== 'none' && <RenderHero {...hero} />}
+      {isStaticHomeFallback && (
+        <section className="container py-24 text-center">
+          <h1 className="text-3xl font-semibold">The Calanthe Hotel</h1>
+          <p className="mt-4 text-base text-neutral-700">
+            The website is running. Content will appear after database initialization and seeding.
+          </p>
+        </section>
+      )}
       <RenderBlocks blocks={layout} />
     </article>
   )

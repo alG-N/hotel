@@ -31,13 +31,27 @@ export const generateMetadata = async ({ params, searchParams }: Args): Promise<
 
 const Page = async ({ params, searchParams }: Args) => {
   if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
-    return null
+    return (
+      <main style={{ minHeight: '100vh', padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Admin Temporarily Unavailable</h1>
+        <p style={{ marginTop: '0.75rem' }}>
+          Database schema is not initialized yet. Run migrations/seed, then reload `/admin`.
+        </p>
+      </main>
+    )
   }
 
   try {
     return await RootPage({ config, params, searchParams, importMap })
   } catch {
-    return null
+    return (
+      <main style={{ minHeight: '100vh', padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Admin Temporarily Unavailable</h1>
+        <p style={{ marginTop: '0.75rem' }}>
+          Database schema is not initialized yet. Run migrations/seed, then reload `/admin`.
+        </p>
+      </main>
+    )
   }
 }
 

@@ -31,13 +31,21 @@ export const generateMetadata = async ({ params, searchParams }: Args): Promise<
 
 const NotFound = async ({ params, searchParams }: Args) => {
   if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
-    return null
+    return (
+      <main style={{ minHeight: '100vh', padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Admin Temporarily Unavailable</h1>
+      </main>
+    )
   }
 
   try {
     return await NotFoundPage({ config, params, searchParams, importMap })
   } catch {
-    return null
+    return (
+      <main style={{ minHeight: '100vh', padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 700 }}>Admin Temporarily Unavailable</h1>
+      </main>
+    )
   }
 }
 

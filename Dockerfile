@@ -54,26 +54,18 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV PAYLOAD_CONFIG_PATH=src/payload.config.ts
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Remove this line if you do not have this folder
-COPY --from=builder /app/public ./public
+# Copy full app so runtime can execute Payload CLI migrations and seed script.
+COPY --from=builder --chown=nextjs:nodejs /app ./
 
-# Create media directory with write permissions for uploads
-RUN mkdir -p ./public/media && chown -R nextjs:nodejs ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+# Ensure uploads directory exists with proper permissions.
+RUN mkdir -p ./public/media && chown -R nextjs:nodejs ./public ./.next
 
 USER nextjs
 
@@ -81,6 +73,5 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# Initialize schema and seed initial data once, then start Next.js.
+CMD sh -c "node ./node_modules/payload/dist/bin/index.js migrate && node ./node_modules/payload/dist/bin/index.js run ./src/scripts/seedIfEmpty.ts && HOSTNAME=0.0.0.0 node ./node_modules/next/dist/bin/next start -p $PORT"
