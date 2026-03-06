@@ -73,5 +73,5 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-# Initialize schema and seed initial data once, then start Next.js.
-CMD sh -c "node ./node_modules/payload/dist/bin/index.js migrate && node ./node_modules/payload/dist/bin/index.js run ./src/scripts/seedIfEmpty.ts && HOSTNAME=0.0.0.0 node ./node_modules/next/dist/bin/next start -p $PORT"
+# Initialize schema and seed initial data once, then start the standalone Next server.
+CMD sh -c "node ./node_modules/payload/dist/bin/index.js migrate && node ./node_modules/payload/dist/bin/index.js run ./src/scripts/seedIfEmpty.ts && PORT=${PORT:-3000} HOSTNAME=0.0.0.0 node ./.next/standalone/server.js"
