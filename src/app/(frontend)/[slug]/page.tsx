@@ -59,10 +59,14 @@ export default async function Page({ params: paramsPromise }: Args) {
   const url = '/' + decodedSlug
   let page: RequiredDataFromCollectionSlug<'pages'> | null
 
-  page = await queryPageBySlug({
-    slug: decodedSlug,
-    locale,
-  })
+  try {
+    page = await queryPageBySlug({
+      slug: decodedSlug,
+      locale,
+    })
+  } catch {
+    page = decodedSlug === 'home' ? homeStatic : null
+  }
 
   // Remove this code once your website is seeded
   if (!page && slug === 'home') {
@@ -98,10 +102,16 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
   const locale = await getLocale()
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
-  const page = await queryPageBySlug({
-    slug: decodedSlug,
-    locale,
-  })
+  let page: RequiredDataFromCollectionSlug<'pages'> | null = null
+
+  try {
+    page = await queryPageBySlug({
+      slug: decodedSlug,
+      locale,
+    })
+  } catch {
+    page = decodedSlug === 'home' ? homeStatic : null
+  }
 
   return generateMeta({ doc: page })
 }

@@ -8,7 +8,13 @@ import { FooterClient } from './Component.client'
 
 export async function Footer() {
   const locale = await getLocale()
-  const footerData: FooterType = await getCachedGlobal('footer', 1, locale)()
+  let footerData: FooterType | null = null
+
+  try {
+    footerData = await getCachedGlobal('footer', 1, locale)()
+  } catch {
+    return null
+  }
 
   return <FooterClient data={footerData} />
 }

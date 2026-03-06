@@ -6,7 +6,13 @@ import { AdvertisementClient } from './Component.client'
 
 export async function AdvertisementProvider() {
   const locale = await getLocale()
-  const adData: Advertisement = await getCachedGlobal('advertisement', 1, locale)()
+  let adData: Advertisement | null = null
+
+  try {
+    adData = await getCachedGlobal('advertisement', 1, locale)()
+  } catch {
+    return null
+  }
 
   // If nothing is enabled, render nothing
   const anyEnabled =
