@@ -32,6 +32,7 @@ ARG NEXT_PUBLIC_SERVER_URL
 ENV PAYLOAD_SECRET=$PAYLOAD_SECRET
 ENV DATABASE_URL=$DATABASE_URL
 ENV NEXT_PUBLIC_SERVER_URL=$NEXT_PUBLIC_SERVER_URL
+ENV SKIP_STATIC_BUILD_DB=true
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry

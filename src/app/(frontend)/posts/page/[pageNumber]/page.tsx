@@ -75,6 +75,10 @@ export async function generateMetadata({ params: paramsPromise }: Args): Promise
 }
 
 export async function generateStaticParams() {
+  if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
+    return []
+  }
+
   const payload = await getPayload({ config: configPromise })
   const { totalDocs } = await payload.count({
     collection: 'posts',
