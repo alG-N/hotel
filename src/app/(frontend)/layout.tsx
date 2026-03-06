@@ -18,6 +18,8 @@ import { getServerSideURL } from '@/utilities/getURL'
 export const dynamic = 'force-dynamic'
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const skipBuildDB = process.env.SKIP_STATIC_BUILD_DB === 'true'
+
   return (
     <html className={cn(GeistSans.variable, GeistMono.variable)} lang="vi" suppressHydrationWarning>
       <head>
@@ -27,12 +29,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <AdvertisementProvider />
-          <Header />
+          {!skipBuildDB && <AdvertisementProvider />}
+          {!skipBuildDB && <Header />}
           <main style={{ paddingTop: 'var(--header-height, 120px)' }}>
             {children}
           </main>
-          <Footer />
+          {!skipBuildDB && <Footer />}
         </Providers>
       </body>
     </html>

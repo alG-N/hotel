@@ -16,6 +16,8 @@ import { getLocale, type PayloadLocale } from '@/utilities/getLocale'
 import PageClient from './page.client'
 import { LivePreviewListener } from '@/components/LivePreviewListener'
 
+export const dynamic = 'force-dynamic'
+
 export async function generateStaticParams() {
   if (process.env.SKIP_STATIC_BUILD_DB === 'true') {
     return []
