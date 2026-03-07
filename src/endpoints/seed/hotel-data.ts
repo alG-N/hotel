@@ -58,6 +58,32 @@ export const seedHotelData = async ({
     depth: 0,
     pagination: false,
   })
+
+  // If there are no media records, create a placeholder so required upload
+  // fields can be satisfied.  The placeholder is a 1×1 transparent PNG
+  // represented as a data-URL-less DB-only record (no file on disk).
+  if (existingMedia.docs.length === 0) {
+    payload.logger.info('— No media found, creating placeholder media record...')
+    const placeholder = await payload.create({
+      collection: 'media',
+      data: {
+        alt: 'Placeholder',
+      } as any,
+      filePath: undefined as any,
+      file: {
+        data: Buffer.from(
+          'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==',
+          'base64',
+        ),
+        mimetype: 'image/png',
+        name: 'placeholder.png',
+        size: 68,
+      },
+      context: { disableRevalidate: true },
+    })
+    existingMedia.docs.push(placeholder)
+  }
+
   const mediaIds = new Set(existingMedia.docs.map((m) => m.id))
   const firstMediaId = existingMedia.docs[0]?.id
   const mid = (id: number): any => (mediaIds.has(id) ? id : firstMediaId)
