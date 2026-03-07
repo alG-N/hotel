@@ -66,11 +66,11 @@ const run = async (): Promise<void> => {
   console.log('[SEED] Seed completed: initial data inserted.')
 }
 
-run()
-  .then(() => {
-    process.exit(0)
-  })
-  .catch((error) => {
-    console.error('Seed failed:', error)
-    process.exit(1)
-  })
+// Top-level await so `payload run` (which does `await import(thisFile)`)
+// blocks until the seed work is fully complete before the CLI exits.
+try {
+  await run()
+} catch (error) {
+  console.error('Seed failed:', error)
+  process.exit(1)
+}
