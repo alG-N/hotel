@@ -228,6 +228,7 @@ export interface Page {
     | DescriptionType2BlockType
     | BookingFormBlockType
     | SubscribeBlockType
+    | OffersPageBlockType
   )[];
   meta?: {
     title?: string | null;
@@ -3486,6 +3487,123 @@ export interface SubscribeBlockType {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersPageBlockType".
+ */
+export interface OffersPageBlockType {
+  sectionTitle?: string | null;
+  sectionDescription?: string | null;
+  offers?:
+    | {
+        image?: (number | null) | Media;
+        /**
+         * VD: "Phổ biến", "Mới", "Giới hạn"
+         */
+        badge?: string | null;
+        title: string;
+        subtitle?: string | null;
+        description?: string | null;
+        features?:
+          | {
+              text: string;
+              id?: string | null;
+            }[]
+          | null;
+        ctaText?: string | null;
+        ctaLink?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  columns?: ('1' | '2' | '3') | null;
+  layout?: ('cards' | 'alternating') | null;
+  tTitle?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('24px' | '32px' | '40px' | '48px' | '56px' | '64px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  tBody?: {
+    font?:
+      | (
+          | 'Georgia, serif'
+          | "'Playfair Display', serif"
+          | "'Times New Roman', serif"
+          | "'Merriweather', serif"
+          | "'Lora', serif"
+          | 'system-ui, -apple-system, sans-serif'
+          | "'Inter', sans-serif"
+          | "'Roboto', sans-serif"
+          | "'Open Sans', sans-serif"
+          | "'Lato', sans-serif"
+        )
+      | null;
+    size?: ('12px' | '14px' | '16px' | '18px' | '20px' | '24px') | null;
+    weight?: ('300' | '400' | '500' | '600' | '700' | '800') | null;
+    lh?: ('1.2' | '1.5' | '1.75' | '2') | null;
+    ls?: ('-0.5px' | '0' | '0.5px' | '1px' | '2px') | null;
+    color?: string | null;
+  };
+  /**
+   * Tắt để ẩn block này khỏi trang (không cần xóa)
+   */
+  enabled?: boolean | null;
+  bgStyle?:
+    | (
+        | 'transparent'
+        | 'white'
+        | 'black'
+        | 'gray-50'
+        | 'gray-100'
+        | 'gray-200'
+        | 'gray-300'
+        | 'gray-800'
+        | 'gray-900'
+        | 'cream-light'
+        | 'cream'
+        | 'beige'
+        | 'ivory'
+        | 'brand'
+        | 'brown-dark'
+        | 'chocolate'
+        | 'espresso'
+        | 'navy'
+        | 'slate'
+        | 'teal'
+        | 'olive'
+        | 'sage'
+        | 'forest'
+        | 'gold'
+        | 'burgundy'
+        | 'terracotta'
+        | 'blush'
+        | 'custom'
+      )
+    | null;
+  bgCustom?: string | null;
+  /**
+   * Chọn "Tự động" để màu chữ tự điều chỉnh theo màu nền
+   */
+  txtStyle?: ('auto' | 'dark' | 'light') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'offers-page';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -3812,6 +3930,7 @@ export interface PagesSelect<T extends boolean = true> {
         'description-type2'?: T | DescriptionType2BlockTypeSelect<T>;
         'booking-form'?: T | BookingFormBlockTypeSelect<T>;
         subscribe?: T | SubscribeBlockTypeSelect<T>;
+        'offers-page'?: T | OffersPageBlockTypeSelect<T>;
       };
   meta?:
     | T
@@ -4962,6 +5081,60 @@ export interface SubscribeBlockTypeSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "OffersPageBlockType_select".
+ */
+export interface OffersPageBlockTypeSelect<T extends boolean = true> {
+  sectionTitle?: T;
+  sectionDescription?: T;
+  offers?:
+    | T
+    | {
+        image?: T;
+        badge?: T;
+        title?: T;
+        subtitle?: T;
+        description?: T;
+        features?:
+          | T
+          | {
+              text?: T;
+              id?: T;
+            };
+        ctaText?: T;
+        ctaLink?: T;
+        id?: T;
+      };
+  columns?: T;
+  layout?: T;
+  tTitle?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  tBody?:
+    | T
+    | {
+        font?: T;
+        size?: T;
+        weight?: T;
+        lh?: T;
+        ls?: T;
+        color?: T;
+      };
+  enabled?: T;
+  bgStyle?: T;
+  bgCustom?: T;
+  txtStyle?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -5433,6 +5606,7 @@ export interface Header {
   logoLink?: string | null;
   navItemsLeft?:
     | {
+        enabled?: boolean | null;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -5453,6 +5627,7 @@ export interface Header {
     | null;
   navItemsRight?:
     | {
+        enabled?: boolean | null;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -5549,6 +5724,7 @@ export interface Footer {
     | null;
   navLinks?:
     | {
+        enabled?: boolean | null;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -5713,6 +5889,7 @@ export interface HeaderSelect<T extends boolean = true> {
   navItemsLeft?:
     | T
     | {
+        enabled?: T;
         link?:
           | T
           | {
@@ -5727,6 +5904,7 @@ export interface HeaderSelect<T extends boolean = true> {
   navItemsRight?:
     | T
     | {
+        enabled?: T;
         link?:
           | T
           | {
@@ -5796,6 +5974,7 @@ export interface FooterSelect<T extends boolean = true> {
   navLinks?:
     | T
     | {
+        enabled?: T;
         link?:
           | T
           | {
