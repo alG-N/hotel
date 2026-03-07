@@ -64,8 +64,14 @@ RUN adduser --system --uid 1001 nextjs
 # Copy full app so runtime can execute Payload CLI migrations and seed script.
 COPY --from=builder --chown=nextjs:nodejs /app ./
 
+# The standalone server resolves static files relative to __dirname
+# (.next/standalone/), so we must copy .next/static and public into it.
+RUN cp -r ./.next/static ./.next/standalone/.next/static && \
+    cp -r ./public ./.next/standalone/public
+
 # Ensure uploads directory exists with proper permissions.
-RUN mkdir -p ./public/media && chown -R nextjs:nodejs ./public ./.next
+RUN mkdir -p ./public/media ./.next/standalone/public/media && \
+    chown -R nextjs:nodejs ./public ./.next
 
 USER nextjs
 
