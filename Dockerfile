@@ -73,12 +73,11 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-# push:true in payload.config.ts auto-syncs schema on Payload init, so
-# migrations are not needed.  The seed script calls getPayload() which
-# triggers the schema push, then inserts initial data if the DB is empty.
-# We call payload's bin.js (not dist/bin/index.js) so tsx is registered.
+# In production, push:true is skipped (NODE_ENV=production). Instead, the
+# postgres adapter runs prodMigrations automatically during db.connect().
+# The seed script calls getPayload() which triggers the migration, then seeds.
 CMD sh -c "set -e; \
-  echo '[BOOT] Running seed-if-empty (also pushes DB schema via push:true)...'; \
+  echo '[BOOT] Running seed-if-empty (triggers prodMigrations + seeds data)...'; \
   node ./node_modules/payload/bin.js run ./src/scripts/seedIfEmpty.ts 2>&1; \
   echo '[BOOT] Seed step finished.'; \
   echo '[BOOT] Starting standalone server...'; \
