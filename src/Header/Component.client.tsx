@@ -11,7 +11,7 @@ import { Logo } from '@/components/Logo/Logo'
 import { Media } from '@/components/Media'
 import { CMSLink } from '@/components/Link'
 import { TopBannerAd } from '@/globals/Advertisement/TopBannerAd'
-import { Phone, ChevronDown } from 'lucide-react'
+import { Phone, ChevronDown, Menu, X } from 'lucide-react'
 
 interface ThemeColors {
   backgroundColor: string
@@ -40,6 +40,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
   const [isScrolled, setIsScrolled] = useState(false)
   const [showLangMenu, setShowLangMenu] = useState(false)
   const [showCurrencyMenu, setShowCurrencyMenu] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { language, setLanguage, t } = useLanguage()
   const [selectedCurrency, setSelectedCurrency] = useState('USD')
   const { headerTheme, setHeaderTheme } = useHeaderTheme()
@@ -47,6 +48,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
 
   useEffect(() => {
     setHeaderTheme(null)
+    setMobileMenuOpen(false)
   }, [pathname, setHeaderTheme])
 
   useEffect(() => {
@@ -71,8 +73,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
   const showCurrencySelector = data?.showCurrencySelector ?? true
   const languages = data?.languages || [{ code: 'en', label: 'ENG' }, { code: 'vi', label: 'VN' }]
   const currencies = data?.currencies || [{ code: 'usd', label: 'USD' }, { code: 'vnd', label: 'VND' }]
-  const navItemsLeft = data?.navItemsLeft || []
-  const navItemsRight = data?.navItemsRight || []
+  const navItemsLeft = (data?.navItemsLeft || []).filter((item: any) => item.enabled !== false)
+  const navItemsRight = (data?.navItemsRight || []).filter((item: any) => item.enabled !== false)
   const showCTA = data?.showCTA ?? true
   const ctaTextRaw = data?.ctaText || 'Book Your Stay'
   const ctaText = t('Đặt Phòng', ctaTextRaw)
@@ -157,7 +159,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
 
       {/* Top Bar */}
       {showTopBar && (
-        <div className={`border-b ${borderColorClass}`}>
+        <div className={`border-b ${borderColorClass} hidden md:block`}>
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-center py-2 text-sm" style={{ fontFamily }}>
               {/* Contact Phone */}
@@ -254,8 +256,17 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
       <div className={`border-b ${borderColorClass}`}>
         <div className={`container mx-auto px-4 ${paddingClass}`}>
           <div className="flex justify-between items-center">
-            {/* Left Navigation */}
-            <nav className="flex-1 flex justify-start">
+            {/* Mobile Menu Button */}
+            <button
+              className="lg:hidden flex items-center justify-center w-10 h-10"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+
+            {/* Left Navigation (desktop) */}
+            <nav className="flex-1 hidden lg:flex justify-start">
               <ul className="flex items-center gap-6 lg:gap-8">
                 {navItemsLeft.map(({ link }, i) => (
                   <li key={i}>
@@ -271,7 +282,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
             </nav>
 
             {/* Center Logo */}
-            <Link href={logoLink} className="flex-shrink-0 mx-8">
+            <Link href={logoLink} className="flex-shrink-0 mx-4 lg:mx-8">
               {data?.logo && typeof data.logo === 'object' ? (
                 <div style={{ width: `${logoWidth}px`, height: `${logoHeight}px` }}>
                   <Media
@@ -284,8 +295,8 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
               )}
             </Link>
 
-            {/* Right Navigation + CTA */}
-            <nav className="flex-1 flex justify-end items-center">
+            {/* Right Navigation + CTA (desktop) */}
+            <nav className="flex-1 hidden lg:flex justify-end items-center">
               <ul className="flex items-center gap-6 lg:gap-8">
                 {navItemsRight.map(({ link }, i) => (
                   <li key={i}>
@@ -316,9 +327,67 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data, themeColors, a
                 )}
               </ul>
             </nav>
+
+            {/* Mobile CTA */}
+            {showCTA && (
+              <Link
+                href={ctaLink}
+                className={`lg:hidden tracking-wide uppercase px-3 py-1.5 border text-xs transition-colors ${
+                  isLightBg
+                    ? 'border-gray-800 text-gray-800 hover:bg-gray-800 hover:text-white'
+                    : 'border-white text-white hover:bg-white hover:text-gray-800'
+                }`}
+                style={navTextStyleNoColor}
+              >
+                {ctaText}
+              </Link>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+        <div
+          className="lg:hidden border-b"
+          style={{
+            backgroundColor: currentBgColor === 'transparent' ? '#ffffff' : currentBgColor,
+            borderColor: isLightBg ? '#e5e7eb' : 'rgba(255,255,255,0.2)',
+          }}
+        >
+          <div className="container mx-auto px-4 py-4">
+            <ul className="flex flex-col gap-3">
+              {navItemsLeft.map(({ link }, i) => (
+                <li key={`left-${i}`}>
+                  <CMSLink
+                    {...link}
+                    appearance="inline"
+                    className="tracking-wide uppercase transition-colors hover:opacity-70 block py-1"
+                    style={navTextStyle}
+                  />
+                </li>
+              ))}
+              {navItemsRight.map(({ link }, i) => (
+                <li key={`right-${i}`}>
+                  <CMSLink
+                    {...link}
+                    appearance="inline"
+                    className="tracking-wide uppercase transition-colors hover:opacity-70 block py-1"
+                    style={navTextStyle}
+                  />
+                </li>
+              ))}
+            </ul>
+            {/* Mobile top bar info */}
+            {showTopBar && (
+              <div className="mt-4 pt-3 border-t flex items-center gap-2 text-sm" style={{ fontFamily, borderColor: isLightBg ? '#e5e7eb' : 'rgba(255,255,255,0.2)' }}>
+                <Phone className="w-4 h-4" />
+                <span>{contactPhone}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </header>
   )
 }

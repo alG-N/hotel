@@ -153,6 +153,12 @@ export const Header: GlobalConfig = {
           type: 'array',
           label: 'Menu bên trái',
           fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Hiển thị',
+              defaultValue: true,
+            },
             link({
               appearances: false,
             }),
@@ -180,6 +186,12 @@ export const Header: GlobalConfig = {
           type: 'array',
           label: 'Menu bên phải',
           fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Hiển thị',
+              defaultValue: true,
+            },
             link({
               appearances: false,
             }),

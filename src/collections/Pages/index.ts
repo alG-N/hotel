@@ -27,6 +27,7 @@ import { CollaborationBlock } from '../../blocks/CollaborationBlock/config'
 import { DescriptionType2Block } from '../../blocks/DescriptionType2Block/config'
 import { BookingFormBlock } from '../../blocks/BookingFormBlock/config'
 import { SubscribeBlock } from '../../blocks/SubscribeBlock/config'
+import { OffersPageBlock } from '../../blocks/OffersPageBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -120,6 +121,7 @@ export const Pages: CollectionConfig<'pages'> = {
                 DescriptionType2Block,
                 BookingFormBlock,
                 SubscribeBlock,
+                OffersPageBlock,
               ],
               required: true,
               admin: {

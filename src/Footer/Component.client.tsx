@@ -52,7 +52,7 @@ export function FooterClient({ data }: FooterClientProps) {
   const email = data?.email || 'Calanthehotel@gmail.com'
   const findUsText = data?.findUsText || t('Tìm chúng tôi', 'Find us')
   const socialLinks = data?.socialLinks || []
-  const navLinks = data?.navLinks || []
+  const navLinks = (data?.navLinks || []).filter((item: any) => item.enabled !== false)
   const copyrightText = data?.copyrightText || t('@2025 Calanthe hotel. Bảo lưu mọi quyền.', '@2025 Calanthe hotel All rights Reserved')
 
   // Style settings

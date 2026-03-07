@@ -135,6 +135,12 @@ export const Footer: GlobalConfig = {
           type: 'array',
           label: 'Menu Links',
           fields: [
+            {
+              name: 'enabled',
+              type: 'checkbox',
+              label: 'Hiển thị',
+              defaultValue: true,
+            },
             link({
               appearances: false,
             }),

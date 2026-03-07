@@ -27,6 +27,7 @@ import { CollaborationBlockComponent } from '@/blocks/CollaborationBlock/Compone
 import { DescriptionType2BlockComponent } from '@/blocks/DescriptionType2Block/Component'
 import { BookingFormBlockComponent } from '@/blocks/BookingFormBlock/Component'
 import { SubscribeBlockComponent } from '@/blocks/SubscribeBlock/Component'
+import { OffersPageBlockComponent } from '@/blocks/OffersPageBlock/Component'
 
 const blockComponents = {
   // Default blocks
@@ -55,6 +56,7 @@ const blockComponents = {
   'description-type2': DescriptionType2BlockComponent,
   'booking-form': BookingFormBlockComponent,
   subscribe: SubscribeBlockComponent,
+  'offers-page': OffersPageBlockComponent,
 }
 
 export const RenderBlocks: React.FC<{

@@ -838,32 +838,89 @@ export const seedHotelData = async ({
         },
         { ...offersBlockVi, image: mid(15) },
         {
-          blockType: 'special-offers',
-          sectionTitle: 'Các Gói Ưu Đãi Khác',
-          columns: '3',
-          showNavigation: true,
+          blockType: 'offers-page',
+          sectionTitle: 'Các Gói Ưu Đãi',
+          sectionDescription: 'Khám phá những gói ưu đãi đặc biệt được thiết kế riêng cho kỳ nghỉ hoàn hảo của bạn.',
+          columns: '2',
+          layout: 'alternating',
           offers: [
             {
               image: mid(9),
+              badge: 'Phổ biến',
               title: 'Gói Nghỉ Dưỡng Cuối Tuần',
+              subtitle: 'Từ $199 / 2 đêm',
               description:
                 'Trọn gói 2 đêm bao gồm bữa sáng, spa 60 phút và trả phòng muộn đến 14:00.',
-              ctaText: 'Nhận Ưu Đãi',
+              features: [
+                { text: 'Bữa sáng miễn phí mỗi ngày' },
+                { text: 'Spa thư giãn 60 phút' },
+                { text: 'Trả phòng muộn đến 14:00' },
+              ],
+              ctaText: 'Đặt Ngay',
               ctaLink: '/booking',
             },
             {
               image: mid(10),
+              badge: 'Lãng mạn',
               title: 'Gói Trăng Mật',
+              subtitle: 'Từ $299 / 2 đêm',
               description:
                 'Dành cho các cặp đôi — bao gồm phòng suite, bữa tối lãng mạn và trang trí phòng đặc biệt.',
-              ctaText: 'Nhận Ưu Đãi',
+              features: [
+                { text: 'Phòng suite view đẹp' },
+                { text: 'Bữa tối lãng mạn cho 2 người' },
+                { text: 'Trang trí phòng đặc biệt' },
+                { text: 'Welcome drink khi nhận phòng' },
+              ],
+              ctaText: 'Đặt Ngay',
               ctaLink: '/booking',
             },
             {
               image: mid(11),
+              badge: 'Doanh nhân',
               title: 'Gói Công Tác',
+              subtitle: 'Từ $129 / đêm',
               description:
                 'Giải pháp lý tưởng cho khách doanh nhân — WiFi tốc độ cao, không gian làm việc và bữa sáng nhanh.',
+              features: [
+                { text: 'WiFi tốc độ cao miễn phí' },
+                { text: 'Không gian làm việc riêng' },
+                { text: 'Bữa sáng nhanh mỗi ngày' },
+                { text: 'Dịch vụ giặt ủi ưu đãi' },
+              ],
+              ctaText: 'Đặt Ngay',
+              ctaLink: '/booking',
+            },
+          ],
+          enabled: true,
+        },
+        {
+          blockType: 'special-offers',
+          sectionTitle: 'Ưu Đãi Theo Mùa',
+          columns: '3',
+          showNavigation: true,
+          offers: [
+            {
+              image: mid(23),
+              title: 'Gourmet Suite',
+              description:
+                'Lựa chọn hoàn hảo cho kỳ nghỉ ngắn và chuyên gia tìm kiếm sự thoải mái và sang trọng.',
+              ctaText: 'Nhận Ưu Đãi',
+              ctaLink: '/booking',
+            },
+            {
+              image: mid(22),
+              title: 'Luxury Haven',
+              description:
+                'Lựa chọn tuyệt vời cho chuyến thăm ngắn và khách doanh nhân trân trọng sự đơn giản và tiêu chuẩn cao.',
+              ctaText: 'Nhận Ưu Đãi',
+              ctaLink: '/booking',
+            },
+            {
+              image: mid(21),
+              title: 'Opulent Retreat',
+              description:
+                'Điểm đến lý tưởng cho chuyến đi ngắn và khách công tác ưu tiên sự tiện lợi và chất lượng.',
               ctaText: 'Nhận Ưu Đãi',
               ctaLink: '/booking',
             },
@@ -1683,26 +1740,74 @@ export const seedHotelData = async ({
         ctaText: offersBlockEn.ctaText,
         features: offersBlockEn.features,
       },
-      // special-offers
+      // offers-page
       {
-        sectionTitle: 'More Packages',
+        sectionTitle: 'Our Packages',
+        sectionDescription: 'Discover specially designed packages for your perfect getaway.',
         offers: [
           {
+            badge: 'Popular',
             title: 'Weekend Retreat Package',
+            subtitle: 'From $199 / 2 nights',
             description:
               'A 2-night package including breakfast, 60-minute spa session, and late check-out until 2:00 PM.',
-            ctaText: 'Get The Offer',
+            features: [
+              { text: 'Complimentary daily breakfast' },
+              { text: '60-minute relaxation spa' },
+              { text: 'Late check-out until 2:00 PM' },
+            ],
+            ctaText: 'Book Now',
           },
           {
+            badge: 'Romantic',
             title: 'Honeymoon Package',
+            subtitle: 'From $299 / 2 nights',
             description:
-              'Designed for couples \u2014 includes a suite, romantic dinner, and special room decoration.',
+              'Designed for couples — includes a suite, romantic dinner, and special room decoration.',
+            features: [
+              { text: 'Suite with beautiful view' },
+              { text: 'Romantic dinner for two' },
+              { text: 'Special room decoration' },
+              { text: 'Welcome drink upon check-in' },
+            ],
+            ctaText: 'Book Now',
+          },
+          {
+            badge: 'Business',
+            title: 'Business Package',
+            subtitle: 'From $129 / night',
+            description:
+              'Ideal for business travelers — high-speed WiFi, workspace, and express breakfast.',
+            features: [
+              { text: 'Complimentary high-speed WiFi' },
+              { text: 'Private workspace' },
+              { text: 'Express breakfast daily' },
+              { text: 'Discounted laundry service' },
+            ],
+            ctaText: 'Book Now',
+          },
+        ],
+      },
+      // special-offers
+      {
+        sectionTitle: 'Seasonal Offers',
+        offers: [
+          {
+            title: 'Gourmet Suite',
+            description:
+              'A perfect choice for quick getaways and professionals seeking comfort and elegance.',
             ctaText: 'Get The Offer',
           },
           {
-            title: 'Business Package',
+            title: 'Luxury Haven',
             description:
-              'Ideal for business travelers \u2014 high-speed WiFi, workspace, and express breakfast.',
+              'An excellent option for brief visits and business guests who appreciate straightforwardness and high standards.',
+            ctaText: 'Get The Offer',
+          },
+          {
+            title: 'Opulent Retreat',
+            description:
+              'The ideal spot for short trips and corporate travelers who prioritize ease and quality.',
             ctaText: 'Get The Offer',
           },
         ],
@@ -2093,7 +2198,7 @@ export const seedHotelData = async ({
     context: { disableRevalidate: true },
     data: {
       // Top Banner
-      topBannerEnabled: false,
+      topBannerEnabled: true,
       topBannerText: 'Đặt ngay giảm 20% cho lần lưu trú đầu tiên!',
       topBannerLink: '/offers',
       topBannerCtaText: 'Đặt Ngay',
@@ -2101,7 +2206,7 @@ export const seedHotelData = async ({
       topBannerTextColor: '#ffffff',
       topBannerDismissible: true,
       // Popup
-      popupEnabled: false,
+      popupEnabled: true,
       popupImage: mid(15),
       popupTitle: 'Ưu Đãi Đặc Biệt',
       popupDescription:
@@ -2113,7 +2218,7 @@ export const seedHotelData = async ({
       popupTextColor: '#1a1a1a',
       popupShowOnce: true,
       // Floating Bar
-      floatingBarEnabled: false,
+      floatingBarEnabled: true,
       floatingBarText: 'Giới hạn: Gói Spa từ $99',
       floatingBarCtaText: 'Đặt Ngay',
       floatingBarCtaLink: '/booking',
@@ -2121,7 +2226,7 @@ export const seedHotelData = async ({
       floatingBarTextColor: '#ffffff',
       floatingBarDismissible: true,
       // Slide-in
-      slideInEnabled: false,
+      slideInEnabled: true,
       slideInImage: mid(9),
       slideInTitle: 'Nghỉ Cuối Tuần',
       slideInDescription: 'Ở 2 đêm, tặng 1 đêm',
