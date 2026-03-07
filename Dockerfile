@@ -73,5 +73,12 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-# Initialize schema and seed initial data once, then start the standalone Next server.
-CMD sh -c "set -e; echo '[BOOT] Migration status before migrate:'; node ./node_modules/payload/dist/bin/index.js migrate:status || true; echo '[BOOT] Starting migration step...'; node ./node_modules/payload/dist/bin/index.js migrate; echo '[BOOT] Migration step finished.'; echo '[BOOT] Migration status after migrate:'; node ./node_modules/payload/dist/bin/index.js migrate:status || true; echo '[BOOT] Starting seed-if-empty step...'; node ./node_modules/payload/dist/bin/index.js run ./src/scripts/seedIfEmpty.ts; echo '[BOOT] Seed-if-empty step finished.'; echo '[BOOT] Starting standalone server...'; PORT=${PORT:-3000} HOSTNAME=0.0.0.0 node ./.next/standalone/server.js"
+# push:true in payload.config.ts auto-syncs schema on Payload init, so
+# migrations are not needed.  The seed script calls getPayload() which
+# triggers the schema push, then inserts initial data if the DB is empty.
+CMD sh -c "set -e; \
+  echo '[BOOT] Running seed-if-empty (also pushes DB schema via push:true)...'; \
+  node ./node_modules/tsx/dist/cli.mjs ./src/scripts/seedIfEmpty.ts 2>&1; \
+  echo '[BOOT] Seed step finished.'; \
+  echo '[BOOT] Starting standalone server...'; \
+  PORT=${PORT:-3000} HOSTNAME=0.0.0.0 node ./.next/standalone/server.js"
