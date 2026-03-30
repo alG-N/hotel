@@ -1,50 +1,107 @@
-# Payload Website Template
+# Hotel — Next.js + PayloadCMS
 
-This is the official [Payload Website Template](https://github.com/payloadcms/payload/blob/main/templates/website). Use it to power websites, blogs, or portfolios from small to enterprise. This repo includes a fully-working backend, enterprise-grade admin panel, and a beautifully designed, production-ready website.
+Website cho khách sạn, xây dựng trên **Next.js 15** + **Payload CMS 3.x**, database **PostgreSQL**, media lưu trên **S3 (Supabase)**.
 
-This template is right for you if you are working on:
+---
 
-- A personal or enterprise-grade website, blog, or portfolio
-- A content publishing platform with a fully featured publication workflow
-- Exploring the capabilities of Payload
+## Stack
 
-Core features:
+| Layer | Tech |
+|---|---|
+| Frontend / SSR | Next.js 15 (App Router) |
+| CMS / Admin | Payload CMS 3.x |
+| Database | PostgreSQL 16 |
+| Media storage | S3-compatible (Supabase Storage) |
+| Package manager | pnpm |
+| Deploy | Railway |
 
-- [Pre-configured Payload Config](#how-it-works)
-- [Authentication](#users-authentication)
-- [Access Control](#access-control)
-- [Layout Builder](#layout-builder)
-- [Draft Preview](#draft-preview)
-- [Live Preview](#live-preview)
-- [On-demand Revalidation](#on-demand-revalidation)
-- [SEO](#seo)
-- [Search](#search)
-- [Redirects](#redirects)
-- [Jobs and Scheduled Publishing](#jobs-and-scheduled-publish)
-- [Website](#website)
+---
 
-## Quick Start
+## Setup nhanh (local)
 
-To spin up this example locally, follow these steps:
-
-### Clone
-
-If you have not done so already, you need to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
-
-Use the `create-payload-app` CLI to clone this template directly to your machine:
+### 1. Clone & cài dependencies
 
 ```bash
-pnpx create-payload-app my-project -t website
+git clone <repo-url>
+cd hotel
+pnpm install
 ```
 
-### Development
+### 2. Tạo file `.env`
 
-1. First [clone the repo](#clone) if you have not done so already
-1. `cd my-project && cp .env.example .env` to copy the example environment variables
-1. `pnpm install && pnpm dev` to install dependencies and start the dev server
-1. open `http://localhost:3000` to open the app in your browser
+```bash
+cp .env.example .env
+```
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+Điền vào các giá trị sau trong `.env`:
+
+```env
+DATABASE_URL=postgresql://postgres:123456@localhost:5432/hotel
+
+PAYLOAD_SECRET=<random-string-dài>
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
+CRON_SECRET=<random-string>
+PREVIEW_SECRET=<random-string>
+
+# S3 (Supabase Storage)
+S3_ENDPOINT=https://<PROJECT_REF>.supabase.co/storage/v1/s3
+S3_REGION=ap-southeast-1
+S3_BUCKET=media
+S3_ACCESS_KEY_ID=<key>
+S3_SECRET_ACCESS_KEY=<secret>
+```
+
+### 3. Khởi động PostgreSQL (Docker)
+
+```bash
+docker-compose up -d
+```
+
+### 4. Chạy dev server
+
+```bash
+pnpm dev
+```
+
+Mở [http://localhost:3000](http://localhost:3000) — lần đầu sẽ được yêu cầu tạo tài khoản admin.
+
+---
+
+## Migrate data từ backup
+
+Project dùng PostgreSQL nên migrate data bằng file `.sql` dump.
+
+### Restore từ `backup.sql`
+
+```bash
+# Đảm bảo container đang chạy
+docker-compose up -d
+
+# Restore vào DB
+docker exec -i hotel-postgres psql -U postgres -d hotel < backup.sql
+```
+
+> Nếu muốn dùng bản trước khi localize, thay bằng `backup_before_localization.sql`.
+
+### Export data hiện tại (tạo backup mới)
+
+```bash
+docker exec hotel-postgres pg_dump -U postgres hotel > backup.sql
+```
+
+---
+
+## Build & Deploy
+
+```bash
+# Build production
+pnpm build
+
+# Start production server
+pnpm start
+```
+
+Deploy trên Railway: push code lên, Railway sẽ tự build từ `Dockerfile`. Đảm bảo đã set đủ env vars trên Railway dashboard.
 
 ## How it works
 

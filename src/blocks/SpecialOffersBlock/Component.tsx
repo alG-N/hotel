@@ -39,19 +39,6 @@ interface SpecialOffersBlockProps {
   tBody?: TypographySettings
 }
 
-/**
- * SPECIAL OFFERS BLOCK COMPONENT
- * 
- * Layout:
- * ┌─────────────────────────────────────────────┐
- * │  Special Offers                    [←] [→] │
- * ├─────────────┬─────────────┬─────────────────┤
- * │   [Image]   │   [Image]   │    [Image]      │
- * │   Title     │   Title     │    Title        │
- * │   Desc      │   Desc      │    Desc         │
- * │   [CTA]     │   [CTA]     │    [CTA]        │
- * └─────────────┴─────────────┴─────────────────┘
- */
 export function SpecialOffersBlockComponent({
   sectionTitle: sectionTitleProp = 'Special Offers',
   offers = [],
